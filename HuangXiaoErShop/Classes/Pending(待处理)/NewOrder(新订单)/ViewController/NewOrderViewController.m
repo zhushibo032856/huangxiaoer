@@ -136,7 +136,7 @@
             [model setValuesForKeysWithDictionary:dataDic];
             [self.dataArray addObject:model];
 
-            self->_isAuto = model.isAuto;
+            _isAuto = model.isAuto;
             if (model.isAuto == 1) {
                 [self.AutoSwitch setOn:YES animated:YES];
             }else if (model.isAuto == 2){

@@ -8,6 +8,8 @@
 //750  1334
 #import "LoginViewController.h"
 
+
+
 static CGFloat const lineHeight = 0.8f;
 
 @interface LoginViewController ()
@@ -24,6 +26,8 @@ static CGFloat const lineHeight = 0.8f;
 
 @implementation LoginViewController
 
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -38,6 +42,7 @@ static CGFloat const lineHeight = 0.8f;
 //        [user setValue:string forKey:@"AFNetwork"];
 //        [user synchronize];
 //    }];
+
     
     self.view.userInteractionEnabled = YES;
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fingerTapped:)];

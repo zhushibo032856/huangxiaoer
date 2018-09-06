@@ -34,7 +34,7 @@
 		1874A080213E25BD0095BE7C /* NSString+AvoidCrash.m in Sources */ = {isa = PBXBuildFile; fileRef = 1874A075213E25BD0095BE7C /* NSString+AvoidCrash.m */; };
 		1893F88121181CA300B09582 /* CreatQRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1893F88021181CA300B09582 /* CreatQRViewController.m */; };
 		18D66FC62119A42200701C7C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D66FC52119A42200701C7C /* AVFoundation.framework */; };
-		18D66FC82119A42C00701C7C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D66FC72119A42C00701C7C /* UserNotifications.framework */; };
+		18D66FC82119A42C00701C7C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D66FC72119A42C00701C7C /* UserNotifications.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		18DFCA14210EEA5A00796DF6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DFCA13210EEA5A00796DF6 /* AppDelegate.m */; };
 		18DFCA1A210EEA5A00796DF6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18DFCA18210EEA5A00796DF6 /* Main.storyboard */; };
 		18DFCA1C210EEA6600796DF6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18DFCA1B210EEA6600796DF6 /* Assets.xcassets */; };
@@ -42,12 +42,8 @@
 		18DFCA22210EEA6600796DF6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DFCA21210EEA6600796DF6 /* main.m */; };
 		18DFCA2C210EEA6600796DF6 /* HuangXiaoErShopTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DFCA2B210EEA6600796DF6 /* HuangXiaoErShopTests.m */; };
 		18DFCA37210EEA6600796DF6 /* HuangXiaoErShopUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DFCA36210EEA6600796DF6 /* HuangXiaoErShopUITests.m */; };
-		18E380FB2137BEAE008A2D70 /* UMAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E380EE2137BEAE008A2D70 /* UMAnalytics.framework */; };
 		18E380FC2137BEAE008A2D70 /* SecurityEnvSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E380F12137BEAE008A2D70 /* SecurityEnvSDK.framework */; };
-		18E380FD2137BEAE008A2D70 /* UTDID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E380F22137BEAE008A2D70 /* UTDID.framework */; };
 		18E380FE2137BEAE008A2D70 /* UMCommonLog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 18E380F52137BEAE008A2D70 /* UMCommonLog.bundle */; };
-		18E380FF2137BEAE008A2D70 /* UMCommonLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E380F62137BEAE008A2D70 /* UMCommonLog.framework */; };
-		18E381002137BEAE008A2D70 /* UMCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E380FA2137BEAE008A2D70 /* UMCommon.framework */; };
 		18E381022137BEDB008A2D70 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E381012137BEDB008A2D70 /* libz.tbd */; };
 		18E381042137BEEE008A2D70 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E381032137BEEE008A2D70 /* libsqlite3.tbd */; };
 		18E381062137BEFA008A2D70 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E381052137BEFA008A2D70 /* CoreTelephony.framework */; };
@@ -181,6 +177,8 @@
 		18ED4A4C21199F2D007DC4C1 /* ProvinceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18ED4A1E21199F2D007DC4C1 /* ProvinceModel.m */; };
 		18ED4A4D21199F2D007DC4C1 /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18ED4A2221199F2D007DC4C1 /* EditViewController.m */; };
 		18ED4A4E21199F2D007DC4C1 /* SettlementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18ED4A2421199F2D007DC4C1 /* SettlementViewController.m */; };
+		18EE54D8213E7CB100B08AE7 /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EE54D7213E7CB100B08AE7 /* Bugly.framework */; };
+		18EE54DA213E7CE400B08AE7 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 18EE54D9213E7CE400B08AE7 /* libc++.tbd */; };
 		18F4E3D8210FFDFD008B0425 /* BaseTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F4E3D7210FFDFD008B0425 /* BaseTabBarController.m */; };
 		18F4E3DB210FFE2B008B0425 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F4E3DA210FFE2B008B0425 /* BaseViewController.m */; };
 		18F4E3DE210FFED3008B0425 /* BaseTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F4E3DD210FFED3008B0425 /* BaseTableView.m */; };
@@ -535,6 +533,8 @@
 		18ED4A2221199F2D007DC4C1 /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
 		18ED4A2321199F2D007DC4C1 /* SettlementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettlementViewController.h; sourceTree = "<group>"; };
 		18ED4A2421199F2D007DC4C1 /* SettlementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettlementViewController.m; sourceTree = "<group>"; };
+		18EE54D7213E7CB100B08AE7 /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bugly.framework; sourceTree = "<group>"; };
+		18EE54D9213E7CE400B08AE7 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		18F4E3D6210FFDFD008B0425 /* BaseTabBarController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTabBarController.h; sourceTree = "<group>"; };
 		18F4E3D7210FFDFD008B0425 /* BaseTabBarController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseTabBarController.m; sourceTree = "<group>"; };
 		18F4E3D9210FFE2B008B0425 /* BaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
@@ -557,6 +557,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18EE54DA213E7CE400B08AE7 /* libc++.tbd in Frameworks */,
 				1874A05D213E1C260095BE7C /* UIKit.framework in Frameworks */,
 				1874A05B213E1BF90095BE7C /* Foundation.framework in Frameworks */,
 				1874A059213E1BB50095BE7C /* CoreFoundation.framework in Frameworks */,
@@ -565,13 +566,10 @@
 				18E381042137BEEE008A2D70 /* libsqlite3.tbd in Frameworks */,
 				18E381022137BEDB008A2D70 /* libz.tbd in Frameworks */,
 				18D66FC82119A42C00701C7C /* UserNotifications.framework in Frameworks */,
-				18E381002137BEAE008A2D70 /* UMCommon.framework in Frameworks */,
 				18E380FC2137BEAE008A2D70 /* SecurityEnvSDK.framework in Frameworks */,
 				18D66FC62119A42200701C7C /* AVFoundation.framework in Frameworks */,
 				B568481C95952C03C72062ED /* libPods-HuangXiaoErShop.a in Frameworks */,
-				18E380FB2137BEAE008A2D70 /* UMAnalytics.framework in Frameworks */,
-				18E380FD2137BEAE008A2D70 /* UTDID.framework in Frameworks */,
-				18E380FF2137BEAE008A2D70 /* UMCommonLog.framework in Frameworks */,
+				18EE54D8213E7CB100B08AE7 /* Bugly.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2071,6 +2069,7 @@
 		18F4E3CC210FFA0F008B0425 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				18EE54D7213E7CB100B08AE7 /* Bugly.framework */,
 				1874A05E213E25BD0095BE7C /* AvoidCrash */,
 				18E380EC2137BEAE008A2D70 /* analytics */,
 				18E380F72137BEAE008A2D70 /* common */,
@@ -2150,6 +2149,7 @@
 		2EDE44C02B4DC98AFECDD65C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18EE54D9213E7CE400B08AE7 /* libc++.tbd */,
 				1874A05C213E1C260095BE7C /* UIKit.framework */,
 				1874A05A213E1BF90095BE7C /* Foundation.framework */,
 				1874A058213E1BB50095BE7C /* CoreFoundation.framework */,
@@ -2695,6 +2695,7 @@
 					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools/thirdparties/thirdparties_ios_1.0.5",
 					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools/umcommonlog/umcommonlog_ios_1.0.0",
 					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools/common/common_ios_1.5.2/normal",
+					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/HuangXiaoErShop/Classes/Public/PrefixHeader.pch";
@@ -2704,7 +2705,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.aladdin.hxeshopApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aladdin.NBPushCert;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2729,6 +2730,7 @@
 					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools/thirdparties/thirdparties_ios_1.0.5",
 					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools/umcommonlog/umcommonlog_ios_1.0.0",
 					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools/common/common_ios_1.5.2/normal",
+					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/HuangXiaoErShop/Classes/Public/PrefixHeader.pch";
@@ -2738,7 +2740,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.aladdin.hxeshopApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aladdin.NBPushCert;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2752,6 +2754,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W5U8BWD4MB;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools",
+				);
 				INFOPLIST_FILE = HuangXiaoErShopTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2771,6 +2777,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W5U8BWD4MB;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools",
+				);
 				INFOPLIST_FILE = HuangXiaoErShopTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2789,6 +2799,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W5U8BWD4MB;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools",
+				);
 				INFOPLIST_FILE = HuangXiaoErShopUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2807,6 +2821,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W5U8BWD4MB;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/HuangXiaoErShop/Classes/Tools",
+				);
 				INFOPLIST_FILE = HuangXiaoErShopUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
