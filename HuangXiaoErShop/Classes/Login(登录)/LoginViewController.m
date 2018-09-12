@@ -172,7 +172,7 @@ static CGFloat const lineHeight = 0.8f;
     [manager POST:[NSString stringWithFormat:@"%@/appcommercialUser/login",HXELOGIN] parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-    //    NSLog(@"%@",responseObject);
+        NSLog(@"%@",responseObject);
         
         if ([responseObject[@"status"] integerValue] == 200) {
            
@@ -196,6 +196,12 @@ static CGFloat const lineHeight = 0.8f;
         
         [MBProgressHUD showMessage:@"登录失败，请重新登录"];
         [[AppDelegate mainAppDelegate] showLoginView];
+        
+        if (error.code == -1) {
+            [MBProgressHUD showError:@"未知网络地址"];
+        }else if (error.code == -1001){
+            [MBProgressHUD showError:@"请求超时"];
+        }
     }];
     
 }

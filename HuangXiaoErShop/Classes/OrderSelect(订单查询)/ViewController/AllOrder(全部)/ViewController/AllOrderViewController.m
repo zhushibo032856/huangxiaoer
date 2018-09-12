@@ -231,7 +231,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
 
 
     /* 用户名 */
-    UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(lable.frame) + 15, 100, 15)];
+    UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(lable.frame) + 15, kScreenWidth * 0.6, 15)];
     if (kStringIsEmpty(model.nickName)) {
         nameLable.text = [NSString stringWithFormat:@"黄小二"];
     }else{

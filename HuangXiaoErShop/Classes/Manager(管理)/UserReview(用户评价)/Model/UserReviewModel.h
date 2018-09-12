@@ -10,7 +10,7 @@
 
 @interface UserReviewModel : NSObject
 
-@property (nonatomic, copy) UIImage *images;
+@property (nonatomic, copy) NSString *userImage;
 @property (nonatomic, copy) NSString *nickName;
 @property (nonatomic, copy) NSString *phone;
 @property (nonatomic, copy) NSString *createTime;

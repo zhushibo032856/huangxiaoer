@@ -145,9 +145,9 @@
     if (!_undercarriageButton) {
         _undercarriageButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [_undercarriageButton.layer setCornerRadius:5.0];
-    //    [_undercarriageButton.layer setBorderWidth:1.0];
+        [_undercarriageButton.layer setBorderWidth:1.0];
         [_undercarriageButton setTag:600];
-     //   [_undercarriageButton.layer setBorderColor:kColor(255, 210, 0).CGColor];
+        [_undercarriageButton.layer setBorderColor:kColor(255, 210, 0).CGColor];
         [_undercarriageButton setTitle:@"上架" forState:UIControlStateNormal];
         [_undercarriageButton addTarget:self action:@selector(RightButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         _undercarriageButton.titleLabel.font = [UIFont systemFontOfSize:13];

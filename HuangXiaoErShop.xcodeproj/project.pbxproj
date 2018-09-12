@@ -33,6 +33,7 @@
 		1874A07F213E25BD0095BE7C /* NSObject+AvoidCrash.m in Sources */ = {isa = PBXBuildFile; fileRef = 1874A073213E25BD0095BE7C /* NSObject+AvoidCrash.m */; };
 		1874A080213E25BD0095BE7C /* NSString+AvoidCrash.m in Sources */ = {isa = PBXBuildFile; fileRef = 1874A075213E25BD0095BE7C /* NSString+AvoidCrash.m */; };
 		1893F88121181CA300B09582 /* CreatQRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1893F88021181CA300B09582 /* CreatQRViewController.m */; };
+		18A7E3542142152000523676 /* ImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A7E3532142151F00523676 /* ImageModel.m */; };
 		18D66FC62119A42200701C7C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D66FC52119A42200701C7C /* AVFoundation.framework */; };
 		18D66FC82119A42C00701C7C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D66FC72119A42C00701C7C /* UserNotifications.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		18DFCA14210EEA5A00796DF6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DFCA13210EEA5A00796DF6 /* AppDelegate.m */; };
@@ -257,6 +258,8 @@
 		1874A075213E25BD0095BE7C /* NSString+AvoidCrash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+AvoidCrash.m"; sourceTree = "<group>"; };
 		1893F87F21181CA300B09582 /* CreatQRViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreatQRViewController.h; sourceTree = "<group>"; };
 		1893F88021181CA300B09582 /* CreatQRViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreatQRViewController.m; sourceTree = "<group>"; };
+		18A7E3522142151F00523676 /* ImageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageModel.h; sourceTree = "<group>"; };
+		18A7E3532142151F00523676 /* ImageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageModel.m; sourceTree = "<group>"; };
 		18D66FC52119A42200701C7C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		18D66FC72119A42C00701C7C /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		18DFCA0F210EEA5A00796DF6 /* HuangXiaoErShop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HuangXiaoErShop.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -987,6 +990,8 @@
 			children = (
 				18ED4899211930AA007DC4C1 /* QRModel.h */,
 				18ED489A211930AA007DC4C1 /* QRModel.m */,
+				18A7E3522142151F00523676 /* ImageModel.h */,
+				18A7E3532142151F00523676 /* ImageModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2450,6 +2455,7 @@
 				18ED498E21198329007DC4C1 /* JiaoHaoTableViewCell.m in Sources */,
 				18ED489E211930C5007DC4C1 /* QRTableViewCell.m in Sources */,
 				18ED489521193082007DC4C1 /* QRImageViewController.m in Sources */,
+				18A7E3542142152000523676 /* ImageModel.m in Sources */,
 				18ED4A2E21199F2D007DC4C1 /* DishesManagerTableViewCell.m in Sources */,
 				1874A079213E25BD0095BE7C /* NSAttributedString+AvoidCrash.m in Sources */,
 				18ED48AC21193148007DC4C1 /* SetUpViewController.m in Sources */,
@@ -2705,7 +2711,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.aladdin.NBPushCert;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aladdin.hxeshopApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2740,7 +2746,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.aladdin.NBPushCert;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aladdin.hxeshopApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

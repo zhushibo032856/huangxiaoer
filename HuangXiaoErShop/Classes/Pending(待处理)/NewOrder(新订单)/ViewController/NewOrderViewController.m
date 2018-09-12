@@ -318,7 +318,7 @@
         
         if ([responseObject[@"status"] integerValue] == 200) {
            
-
+           [self setRefresh];
         }else{
             [MBProgressHUD showError:responseObject[@"msg"]];
         }
@@ -450,7 +450,6 @@
 
 - (void)getdata{
     
-    [SVProgressHUD showWithStatus:@"加载中..."];
     NSDate *date =[NSDate date];
     NSDateFormatter *format=[[NSDateFormatter alloc] init];
     
@@ -514,7 +513,6 @@
                 }
             }
              [self.tableView reloadData];
-            [SVProgressHUD dismiss];
 
         }else if ([responseObject[@"status"] integerValue] == 301){
             [self.tableView.mj_header endRefreshing];

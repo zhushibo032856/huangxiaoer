@@ -8,6 +8,7 @@
 
 #import "QRImageViewController.h"
 #import "QRModel.h"
+#import "ImageModel.h"
 
 @interface QRImageViewController ()
 
@@ -52,7 +53,8 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self creatAutoLayout];
-    [self requestDataForQR];
+  //  [self requestDataForQR];
+    
     // Do any additional setup after loading the view.
 }
 
@@ -109,7 +111,14 @@
     messageLable.textAlignment = NSTextAlignmentCenter;
     [bachView addSubview:messageLable];
     
+  //  NSLog(@"%@",self.imageModel);
+    
     self.qrImageView = [[UIImageView alloc]initWithFrame:CGRectMake(kScreenWidth * 0.2 , 20, kScreenWidth * 0.6, 1722 * kScreenWidth * 0.6 / 1240)];
+    NSString *string = self.model.machineNum;
+ //   NSLog(@"%@",string);
+    
+    [_qrImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://hxefile.oss-cn-hangzhou.aliyuncs.com/qr/%@.png",string]]];
+    
     [bachView addSubview:self.qrImageView];
     
     self.keepButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -155,7 +164,7 @@
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        //   NSLog(@"%@",responseObject);
+           NSLog(@"%@",responseObject);
         if ([responseObject[@"status"] integerValue] == 200) {
             [self.qrImageView sd_setImageWithURL:responseObject[@"data"]];
         }else{
@@ -168,6 +177,10 @@
     }];
     
 }
+
+
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

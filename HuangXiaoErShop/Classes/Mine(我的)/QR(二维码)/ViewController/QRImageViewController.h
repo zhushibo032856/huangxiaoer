@@ -8,9 +8,12 @@
 
 #import "BaseViewController.h"
 @class QRModel;
+@class ImageModel;
 
 @interface QRImageViewController : BaseViewController
 
 @property (nonatomic, strong) QRModel *model;
+
+@property (nonatomic, strong) ImageModel *imageModel;
 
 @end

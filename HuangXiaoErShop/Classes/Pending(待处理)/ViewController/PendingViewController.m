@@ -25,7 +25,7 @@
     [self setNavigationController];
     
     NSMutableArray *testArray = [NSMutableArray array];
-    NSArray *titleArr = @[@"新订单",@"叫号",@"取消订单",@"退款"];
+    NSArray *titleArr = @[@"新订单",@"叫号",@"取消订单",@"拒单"];
     for (int i = 0; i < 4; i++) {
         [testArray addObject:[NSString stringWithFormat:@"%@",titleArr[i]]];
     }

@@ -260,7 +260,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
         UITapGestureRecognizer *tapGestureRecognizer1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scanBigImageClick1:)];
         [cell.imageViewTwo addGestureRecognizer:tapGestureRecognizer1];
         //让UIImageView和它的父类开启用户交互属性
-        [cell.imageViewTwo setUserInteractionEnabled:YES];
+    //    [cell.imageViewTwo setUserInteractionEnabled:YES];
         
         return cell;
     }else if (indexPath.section == 1){

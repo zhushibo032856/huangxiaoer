@@ -89,7 +89,7 @@
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        //   NSLog(@"%@",responseObject);
+           NSLog(@"%@",responseObject);
         if ([responseObject[@"status"] integerValue] == 200) {
             [self.qrImageView sd_setImageWithURL:responseObject[@"data"]];
         }else{

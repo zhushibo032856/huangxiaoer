@@ -240,12 +240,22 @@ static NSString * const reviewCell = @"reviewTableviewCell";
     UserReviewTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reviewCell forIndexPath:indexPath];
     
     UserReviewModel *model = self.dataArray[indexPath.row];
-    NSString *string = [NSString stringWithFormat:@"%@",model.images];
-    NSLog(@"%@",model.images);
+    NSString *string = [NSString stringWithFormat:@"%@",model.userImage];
+    NSLog(@"%@",model.userImage);
     [cell.userImage sd_setImageWithURL:[NSURL URLWithString:string] placeholderImage:[UIImage imageNamed:@"userName"]];
     
+    
+    if (kStringIsEmpty(model.nickName)) {
+        cell.userNameLable.text = @"匿名用户";
+    }else{
     cell.userNameLable.text = model.nickName;
-    cell.userNumberLable.text = [[NSString stringWithFormat:@"%@",model.phone]stringByReplacingCharactersInRange:NSMakeRange(3, 5) withString:@"*****"];
+    }
+    
+    if (kStringIsEmpty(model.phone)) {
+        cell.userNumberLable.text = @"";
+    }else{
+        cell.userNumberLable.text = [[NSString stringWithFormat:@"%@",model.phone]stringByReplacingCharactersInRange:NSMakeRange(3, 5) withString:@"*****"];
+    }
     cell.timeLable.text = [[NSString stringWithFormat:@"%@",model.createTime]substringWithRange:NSMakeRange(0, 10)];
     cell.assessLable.text = model.content;
     

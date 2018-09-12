@@ -498,9 +498,11 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
             
             
         }else if (indexPath.row == 6){
-//            BusinessanalysisViewController *businessVC = [BusinessanalysisViewController new];
-//            [self.navigationController pushViewController:businessVC animated:YES];
-            [MBProgressHUD showError:@"该功能暂未开放"];
+            self.hidesBottomBarWhenPushed = YES;
+            BusinessanalysisViewController *businessVC = [BusinessanalysisViewController new];
+            [self.navigationController pushViewController:businessVC animated:YES];
+            self.hidesBottomBarWhenPushed = NO;
+    //        [MBProgressHUD showError:@"该功能暂未开放"];
         }else{
             
             [MBProgressHUD showError:@"该功能暂未开放"];

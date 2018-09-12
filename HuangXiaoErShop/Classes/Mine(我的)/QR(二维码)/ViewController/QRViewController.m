@@ -8,6 +8,7 @@
 
 #import "QRViewController.h"
 #import "QRModel.h"
+#import "ImageModel.h"
 #import "QRTableViewCell.h"
 #import "BindingViewController.h"
 #import "QRImageViewController.h"
@@ -17,6 +18,8 @@
 @property (nonatomic, strong) UITableView *QRTableView;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
+
+@property (nonatomic, strong) NSMutableArray *imageDataArray;
 
 @end
 
@@ -29,6 +32,13 @@ static NSString * const QRcell = @"QRTableViewCell";
         _dataArray = [NSMutableArray arrayWithCapacity:0];
     }
     return _dataArray;
+}
+
+- (NSMutableArray *)imageDataArray{
+    if (!_imageDataArray) {
+        _imageDataArray = [NSMutableArray arrayWithCapacity:0];
+    }
+    return _imageDataArray;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -63,6 +73,8 @@ static NSString * const QRcell = @"QRTableViewCell";
     self.view.backgroundColor = kColor(240, 240, 240);
     [self requestData];
     [self creatAutoLauout];
+    
+ //   [self requestAllImageData];
     // Do any additional setup after loading the view.
 }
 - (void)creatAutoLauout{
@@ -86,8 +98,6 @@ static NSString * const QRcell = @"QRTableViewCell";
     shopNameLable.textAlignment = NSTextAlignmentRight;
     shopNameLable.textColor = kColor(210, 210, 210);
     [heaadView addSubview:shopNameLable];
-    
-    //    _QRTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 60, kScreenWidth, kScreenHeight - 120 - 64) style:UITableViewStylePlain];
     
     
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -171,10 +181,45 @@ static NSString * const QRcell = @"QRTableViewCell";
     
 }
 
+- (void)requestAllImageData{
+    
+    NSDictionary *partner = @{
+                              @"id": KUSERSHOPID,
+                              @"token": KUSERID
+                              };
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json", @"text/javascript",@"text/html", nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/findMachineNum_QrCodeById",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"%@",responseObject);
+        if ([responseObject[@"status"] integerValue] == 200) {
+            NSMutableArray *arr = responseObject[@"data"];
+            for (NSDictionary *dic in arr) {
+                ImageModel *model = [[ImageModel alloc]init];
+                [model setValuesForKeysWithDictionary:dic];
+                [self.imageDataArray addObject:model];
+            }
+            NSLog(@"%@",self.imageDataArray);
+        }else{
+            [MBProgressHUD showError:responseObject[@"msg"]];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+}
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
         self.hidesBottomBarWhenPushed = YES;
         QRImageViewController *imageVC = [[QRImageViewController alloc]init];
         imageVC.model = self.dataArray[indexPath.row];
+    //    imageVC.imageModel = self.imageDataArray[indexPath.row];
         [self.navigationController pushViewController:imageVC animated:YES];
 //    [MBProgressHUD showError:@"该功能暂未开放"];
     

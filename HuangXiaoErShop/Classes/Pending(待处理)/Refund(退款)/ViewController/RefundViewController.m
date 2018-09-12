@@ -118,6 +118,7 @@
     TuiKuanCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TuiKuanCell" forIndexPath:indexPath];
     cell.index = indexPath.section;
     [cell cellViewsValueWithModel:model];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     __weak typeof(self)weakSelf = self;
     cell.block = ^(NSInteger index, NSInteger btnTag) {
         
@@ -257,7 +258,7 @@
                               @"createTime":createTime,
                               @"token":KUSERID,
                               @"isPay":@"2",
-                              @"orderStatus":@"1",
+                              @"orderStatus":@"3",
                               @"page":@(_thePage),
                               @"size":@"20",
                               };
