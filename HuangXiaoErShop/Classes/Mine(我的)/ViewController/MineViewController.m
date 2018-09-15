@@ -176,7 +176,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        //   NSLog(@"%@",responseObject);
+      //     NSLog(@"%@",responseObject);
         
         if ([responseObject[@"status"] integerValue] == 200) {
             [self.dataArray removeAllObjects];
@@ -199,7 +199,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
             [user setObject:dic[@"userName"] forKey:@"userName"];
             [user synchronize];
             
-//            [self submitTokenToSocket];
+            [self submitTokenToSocket];
             
             [self creatHeadViewLayout];
             
@@ -332,7 +332,6 @@ NSLog(@"****%@****%@****%@****%@****%@****%@****%@****%@****%@",KUSERID,KUSERIMA
             [user removeObjectForKey:@"userName"];
             [user removeObjectForKey:@"phone"];
             [user removeObjectForKey:@"password"];
-            [user removeObjectForKey:@"deviceToken"];
             [user synchronize];
             NSLog(@"%@%@%@%@%@%@%@%@%@",KUSERID,KUSERIMAGEURL,KUSERNAME,KUSERADDRESS,KUSERSHOPID,KUSERUSERNAME,KUSERPHONE,KUSERPASSWORD,KDEVICETOKEN);
         }

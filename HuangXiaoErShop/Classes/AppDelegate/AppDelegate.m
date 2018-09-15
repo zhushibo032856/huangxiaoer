@@ -27,6 +27,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
 
+    application.applicationIconBadgeNumber = 0;
     
     [Bugly startWithAppId:@"db2d271985"];
     
@@ -96,9 +97,38 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary * _Nonnull)userInfo fetchCompletionHandler:(void (^ _Nonnull)(UIBackgroundFetchResult))completionHandler{
 
     NSLog(@"didReceiveRemoteNotification:%@",userInfo);
+    NSDictionary *extrasDic = userInfo[@"extras"];
     
+    NSLog(@"%@",extrasDic);
+    NSString *shopID = extrasDic[@"shopid"];
+    NSString *customer = extrasDic[@"customerid"];
+    NSString *status = extrasDic[@"status"];
+    NSString *msgData = extrasDic[@"msgData"];
+    //    NSLog(@"%@",status);
+    NSString *userID = [NSString stringWithFormat:@"%@", KUSERSHOPID];
+    if ([userID isEqualToString:shopID]) {
+        if (customer == nil || [customer isEqual: @""]) {
+            if ([status integerValue] == 10000 || [status integerValue] == 10001) {
+                [self playVoice];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"noti1" object:nil];
+            }else if ([status integerValue] == 10005){
+                [self playVoice];
+            }else if ([status integerValue] == 10012){
+                [self playAutoVoice:msgData];
+                //  [self playVoice];
+            }
+        }
+    }
 
     application.applicationIconBadgeNumber = 0;
+
+    
+    
+//    if ([UIApplication sharedApplication].applicationIconBadgeNumber == 0) {
+//        [UIApplication sharedApplication].applicationIconBadgeNumber = 1;
+//    }else {
+//        [UIApplication sharedApplication].applicationIconBadgeNumber += 1;
+//    }
     /*
      UIApplicationStateActive 应用程序处于前台
      UIApplicationStateBackground 应用程序在后台，用户从通知中心点击消息将程序从后台调至前台
@@ -110,14 +140,15 @@
 
         //应用程序在前台
         [self playVoice];
-        //  [self playAutoVoice];
+        //[self playAutoVoice];
     }else if(application.applicationState == UIApplicationStateBackground){
 
         //其他两种情况，一种在后台程序没有被杀死，另一种是在程序已经杀死。用户点击推送的消息进入app的情况处理。
-        //    NSLog(@"应用程序在后台");
+
 
     }else{
         //   NSLog(@"用用程序处于关闭状态");
+
     }
     completionHandler(UIBackgroundFetchResultNewData);
 }
@@ -169,6 +200,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+    application.applicationIconBadgeNumber = 0;
 }
 
 

@@ -452,22 +452,28 @@
     
     NSDate *date =[NSDate date];
     NSDateFormatter *format=[[NSDateFormatter alloc] init];
-    
-    [format setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-    NSString *dateStr = [format stringFromDate:date];
+    [format setDateFormat:@"yyyy-MM-dd"];
 
-    NSString *currentTime = [[NSString stringWithFormat:@"%@", date]substringWithRange:NSMakeRange(0, 10)];
+
+    NSTimeZone *zone = [NSTimeZone systemTimeZone]; // 获得系统的时区
+    NSTimeInterval time = [zone secondsFromGMTForDate:date];// 以秒为单位返回当前时间与系统格林尼治时间的差
+    NSDate *dateNow = [date dateByAddingTimeInterval:time];// 然后把差的时间加上,就是当前系统准确的时间
+
     NSString *string = @" 00:00:00";
-    NSString *createTime = [NSString stringWithFormat:@"%@""%@",currentTime,string];
 
-    NSDate *lastDay = [NSDate dateWithTimeInterval:-24*60*60 sinceDate:date];
-    NSString *lastTime = [[NSString stringWithFormat:@"%@",lastDay]substringWithRange:NSMakeRange(0, 10)];
+    NSDate *lastDay = [NSDate dateWithTimeInterval:-24*60*60 sinceDate:dateNow];
+    NSString *lastTime = [format stringFromDate:lastDay];
     NSString *startTime = [NSString stringWithFormat:@"%@%@",lastTime,string];
 
-    NSDate *nextDay = [NSDate dateWithTimeInterval:24*60*60 sinceDate:date];//后一天
-    NSString *nextTime = [[NSString stringWithFormat:@"%@",nextDay]substringWithRange:NSMakeRange(0, 10)];
+    NSLog(@"%@",lastTime);
+    
+    NSDate *nextDay = [NSDate dateWithTimeInterval:24*60*60 sinceDate:dateNow];//后一天
+    NSString *nextTime = [format stringFromDate:nextDay];
     NSString *endTime = [NSString stringWithFormat:@"%@%@",nextTime,string];
 
+    NSLog(@"%@",nextTime);
+    
+    
     NSDictionary *partner = @{
                               @"endTime": endTime,
                               @"startTime": startTime,
@@ -476,7 +482,7 @@
                               @"size":@"20",
                               };
     
-    //NSLog(@"%@",partner);
+  //  NSLog(@"%@",partner);
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];

@@ -172,7 +172,7 @@ static CGFloat const lineHeight = 0.8f;
     [manager POST:[NSString stringWithFormat:@"%@/appcommercialUser/login",HXELOGIN] parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"%@",responseObject);
+    //    NSLog(@"%@",responseObject);
         
         if ([responseObject[@"status"] integerValue] == 200) {
            
