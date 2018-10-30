@@ -8,16 +8,15 @@
 
 #import "AppDelegate.h"
 #import "BaseTabBarController.h"
-#import <AVFoundation/AVFoundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 #import <UserNotifications/UserNotifications.h>
+#import <AVFoundation/AVFoundation.h>
+#import <IQKeyboardManager.h>
 
 #import <Bugly/Bugly.h>
 
 
 @interface AppDelegate ()<UIApplicationDelegate,UNUserNotificationCenterDelegate>
-
-@property (strong, nonatomic)AVPlayer *myPlayer;//播放器
-@property (strong, nonatomic)AVPlayerItem *item;//播放单元
 
 @end
 
@@ -41,6 +40,13 @@
     
     [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge categories:nil]];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
+    
+//    IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
+//    manager.enable = YES; // 控制整个功能是否启用。
+//    manager.shouldResignOnTouchOutside =YES; // 控制点击背景是否收起键盘
+//    manager.shouldToolbarUsesTextFieldTintColor =YES; // 控制键盘上的工具条文字颜色是否用户自定义
+//    manager.enableAutoToolbar =YES; // 控制是否显示键盘上的工具条
+//    manager.toolbarManageBehaviour =IQAutoToolbarByTag; // 最新版
     
     
     return YES;
@@ -97,38 +103,33 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary * _Nonnull)userInfo fetchCompletionHandler:(void (^ _Nonnull)(UIBackgroundFetchResult))completionHandler{
 
     NSLog(@"didReceiveRemoteNotification:%@",userInfo);
-    NSDictionary *extrasDic = userInfo[@"extras"];
+//    NSDictionary *extrasDic = userInfo[@"extras"];
     
-    NSLog(@"%@",extrasDic);
-    NSString *shopID = extrasDic[@"shopid"];
-    NSString *customer = extrasDic[@"customerid"];
-    NSString *status = extrasDic[@"status"];
-    NSString *msgData = extrasDic[@"msgData"];
-    //    NSLog(@"%@",status);
-    NSString *userID = [NSString stringWithFormat:@"%@", KUSERSHOPID];
-    if ([userID isEqualToString:shopID]) {
-        if (customer == nil || [customer isEqual: @""]) {
-            if ([status integerValue] == 10000 || [status integerValue] == 10001) {
-                [self playVoice];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"noti1" object:nil];
-            }else if ([status integerValue] == 10005){
-                [self playVoice];
-            }else if ([status integerValue] == 10012){
-                [self playAutoVoice:msgData];
-                //  [self playVoice];
-            }
-        }
-    }
+//    NSLog(@"%@",extrasDic);
+//    NSString *shopID = extrasDic[@"shopid"];
+//    NSString *customer = extrasDic[@"customerid"];
+//    NSString *status = extrasDic[@"status"];
+//    NSString *msgData = extrasDic[@"msgData"];
+//    //    NSLog(@"%@",status);
+//    NSString *userID = [NSString stringWithFormat:@"%@", KUSERSHOPID];
+//    if ([userID isEqualToString:shopID]) {
+//        if (customer == nil || [customer isEqual: @""]) {
+//            if ([status integerValue] == 10000 || [status integerValue] == 10001) {
+//                [self playVoice];
+//                [[NSNotificationCenter defaultCenter] postNotificationName:@"noti1" object:nil];
+//            }else if ([status integerValue] == 10005){
+//                [self playVoice];
+//            }else if ([status integerValue] == 10012){
+//                [self playAutoVoice:msgData];
+//                //  [self playVoice];
+//            }
+//        }
+//    }
 
     application.applicationIconBadgeNumber = 0;
 
     
-    
-//    if ([UIApplication sharedApplication].applicationIconBadgeNumber == 0) {
-//        [UIApplication sharedApplication].applicationIconBadgeNumber = 1;
-//    }else {
-//        [UIApplication sharedApplication].applicationIconBadgeNumber += 1;
-//    }
+
     /*
      UIApplicationStateActive 应用程序处于前台
      UIApplicationStateBackground 应用程序在后台，用户从通知中心点击消息将程序从后台调至前台
@@ -139,7 +140,7 @@
     if (application.applicationState == UIApplicationStateActive) {
 
         //应用程序在前台
-        [self playVoice];
+         [self playVoice];
         //[self playAutoVoice];
     }else if(application.applicationState == UIApplicationStateBackground){
 
@@ -153,19 +154,23 @@
     completionHandler(UIBackgroundFetchResultNewData);
 }
 - (void)playVoice{
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
-    [session setActive:YES error:nil];
 
-    NSString *audioPath = [[NSBundle mainBundle] pathForResource:@"dd" ofType:@"mp3"];
-    NSURL *audioUrl = [NSURL fileURLWithPath:audioPath];
-    _myPlayer = [[AVPlayer alloc]initWithURL:audioUrl];
-    if (_myPlayer == NULL)
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"dd" ofType:@"mp3"];
+    //定义一个SystemSoundID
+    SystemSoundID soundID;
+    //判断路径是否存在
     {
-        return;
+        //创建一个音频文件的播放系统声音服务器
+        OSStatus error = AudioServicesCreateSystemSoundID((__bridge CFURLRef _Nonnull)([NSURL fileURLWithPath:path]), &soundID);
+        //判断是否有错误
+        if (error != kAudioServicesNoError) {
+            NSLog(@"%d",(int)error);
+        }
     }
-    [_myPlayer setVolume:1];
-    [_myPlayer play];
+    //播放声音和振动
+    AudioServicesPlayAlertSoundWithCompletion(soundID, ^{
+        //播放成功回调
+    });
 }
 - (void)playAutoVoice:(NSString *)msgData{
     //初始化语音播报

@@ -18,6 +18,7 @@
 #import "SetUpViewController.h"
 #import "CreatQRViewController.h"
 #import "QRViewController.h"
+#import "AppointmentDateViewController.h"
 
 @interface MineViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -71,8 +72,9 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     [super viewDidLoad];
     
     
+    
     _mineTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, kScreenHeight / 5, kScreenWidth, kScreenHeight / 5 * 4) style:UITableViewStyleGrouped];
-    _mineTableView.scrollEnabled = NO;
+  //  _mineTableView.scrollEnabled = NO;
     [_mineTableView registerClass:[MineTableViewCell class] forCellReuseIdentifier:mineCell];
     [_mineTableView registerClass:[MineOneTableViewCell class] forCellReuseIdentifier:mineOneCell];
     [_mineTableView registerClass:[MineTwoTableViewCell class] forCellReuseIdentifier:mineTwoCell];
@@ -239,7 +241,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     if (section == 0) {
         return 1;
     } else if (section == 1){
-        return 5;
+        return 6;
     }
     return 1;
 }
@@ -281,7 +283,12 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
             cellOne.voiceLable.text = @"店铺收款码";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"codeImage"]];
-        }else{
+        }else if(indexPath.row == 4){
+            cellOne.voiceLable.text = @"预约时间";
+            cellOne.voiceSwitch.hidden = YES;
+            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"yuyueTime"]];
+        }
+        else{
             cellOne.voiceLable.text = @"意见反馈";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"Suggestions"]];
@@ -330,8 +337,9 @@ NSLog(@"****%@****%@****%@****%@****%@****%@****%@****%@****%@",KUSERID,KUSERIMA
             [user removeObjectForKey:@"shopAddress"];
             [user removeObjectForKey:@"shopId"];
             [user removeObjectForKey:@"userName"];
-            [user removeObjectForKey:@"phone"];
-            [user removeObjectForKey:@"password"];
+            [user removeObjectForKey:@"dateTime"];
+//            [user removeObjectForKey:@"phone"];
+//            [user removeObjectForKey:@"password"];
             [user synchronize];
             NSLog(@"%@%@%@%@%@%@%@%@%@",KUSERID,KUSERIMAGEURL,KUSERNAME,KUSERADDRESS,KUSERSHOPID,KUSERUSERNAME,KUSERPHONE,KUSERPASSWORD,KDEVICETOKEN);
         }
@@ -376,6 +384,11 @@ NSLog(@"****%@****%@****%@****%@****%@****%@****%@****%@****%@",KUSERID,KUSERIMA
             [self.navigationController pushViewController:qrVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
         }else if (indexPath.row == 4){
+            self.hidesBottomBarWhenPushed=YES;
+            AppointmentDateViewController *appointmentVC = [[AppointmentDateViewController alloc]init];
+            [self.navigationController pushViewController:appointmentVC animated:YES];
+            self.hidesBottomBarWhenPushed = NO;
+        }else if (indexPath.row == 5){
             self.hidesBottomBarWhenPushed = YES;
             SuggestionsViewController *suggestVC = [[SuggestionsViewController alloc]init];
             [self.navigationController pushViewController:suggestVC animated:YES];

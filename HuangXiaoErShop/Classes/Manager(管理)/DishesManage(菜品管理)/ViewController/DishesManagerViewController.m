@@ -1,3 +1,4 @@
+
 //
 //  DishesManagerViewController.m
 //  HXEshop
@@ -248,6 +249,9 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
         cell.selectedBackgroundView = [[UIView alloc]initWithFrame:cell.frame];
         cell.selectedBackgroundView.backgroundColor = kColor(255, 255, 255);
         cell.dishesLable.text = model.name;
+        NSInteger selectedIndex = 0;
+        NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
+        [tableView selectRowAtIndexPath:selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
         return cell;
         // 右边的
     } else {
@@ -405,7 +409,7 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if ([responseObject[@"status"] integerValue] == 200) {
-            if (self->_thePage == 1) {
+            if (_thePage == 1) {
                 [self.leftDataArr removeAllObjects];
                 [self.rightDataArr removeAllObjects];
                 [self.rightArr removeAllObjects];
@@ -430,7 +434,7 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
             for (RightDataModel *model in arr) {
                 [self.rightArr addObject:model];
             }
-            if (self->_thePage == 1) {
+            if (_thePage == 1) {
                 [self.leftTableView.mj_header endRefreshing];
                 [self.rightTableView.mj_header endRefreshing];
             }else{

@@ -208,7 +208,7 @@ static NSString * const scavengCell = @"ScavengingTableViewCell";
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if ([responseObject[@"status"] integerValue] == 200) {
-            if (self->_thePage == 1) {
+            if (_thePage == 1) {
                 [self.dataArray removeAllObjects];
             }
             NSDictionary *dataDic = responseObject[@"data"];
@@ -218,7 +218,7 @@ static NSString * const scavengCell = @"ScavengingTableViewCell";
                 [model setValuesForKeysWithDictionary:dic];
                 [self.dataArray addObject:model];
             }
-            if (self->_thePage == 1) {
+            if (_thePage == 1) {
                 [self.tableView.mj_header endRefreshing];
             }else{
                 if (arr.count == 0) {

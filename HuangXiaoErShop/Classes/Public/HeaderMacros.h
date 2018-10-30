@@ -16,7 +16,7 @@
 /** Pods Header */
 #import "AFNetworking.h"
 #import "SDWebImage/UIImageView+WebCache.h"
-#import "MJRefresh/MJRefresh.h"
+#import <MJRefresh.h>
 #import "MBProgressHUD/MBProgressHUD.h"
 #import "SDAutoLayout.h"
 #import "Masonry.h"

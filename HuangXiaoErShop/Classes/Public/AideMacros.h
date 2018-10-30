@@ -104,6 +104,8 @@
 #define KUSERSHOPID        [kUserDefaults valueForKey:@"shopId"]//商户ID
 #define KUSERUSERNAME      [kUserDefaults valueForKey:@"userName"]//用户名
 #define KDEVICETOKEN       [kUserDefaults valueForKey:@"deviceToken"]//deviceToken
+#define KDATETIME          [kUserDefaults valueForKey:@"dateTime"]//商户预约时间
+
 
 /** UserDefaults */
 #define kUserDefaults       [NSUserDefaults standardUserDefaults]
