@@ -105,7 +105,7 @@
 #define KUSERUSERNAME      [kUserDefaults valueForKey:@"userName"]//用户名
 #define KDEVICETOKEN       [kUserDefaults valueForKey:@"deviceToken"]//deviceToken
 #define KDATETIME          [kUserDefaults valueForKey:@"dateTime"]//商户预约时间
-
+#define KBLUETOOTH         [kUserDefaults valueForKey:@"blueTooth"]//商户连接过的打印机
 
 /** UserDefaults */
 #define kUserDefaults       [NSUserDefaults standardUserDefaults]

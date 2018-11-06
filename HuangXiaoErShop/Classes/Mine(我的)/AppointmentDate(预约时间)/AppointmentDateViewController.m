@@ -289,7 +289,7 @@ static CGFloat const heightButton = 40.0;
     [manager GET:string parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
       //    NSLog(@"%@",responseObject);
         
-        if ([responseObject[@"sta   tus"] integerValue] == 200) {
+        if ([responseObject[@"status"] integerValue] == 200) {
            
             NSDictionary *dataDic = responseObject[@"data"];
             NSString *string = [dataDic objectForKey:@"bookTime"];
@@ -300,7 +300,7 @@ static CGFloat const heightButton = 40.0;
                 _dataArray = [self ergodicGetStringWithString:dataString];
                 NSLog(@"****%lu",(unsigned long)_dataArray.count);
                 
-                [self creatAutoLayoutWithDateArrayount:_dataArray.count];
+               [self creatAutoLayoutWithDateArrayount:_dataArray.count];
                 
             }else{
                 NSString *dataString = [self turnToArrWithString:string];

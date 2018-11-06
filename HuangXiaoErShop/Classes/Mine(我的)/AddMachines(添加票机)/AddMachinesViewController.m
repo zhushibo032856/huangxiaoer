@@ -44,8 +44,6 @@
 }
 - (void)setNavigationController{
     
-    //   [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"backcolor"] forBarMetrics:UIBarMetricsDefault];
-    
     self.navigationItem.title = @"票机管理";
     
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18],NSForegroundColorAttributeName:[UIColor whiteColor]}] ;
@@ -221,7 +219,7 @@
         _pinPaiTF.placeholder = @"请选择品牌名称";
         __weak typeof(self) weakSelf = self;
         _pinPaiTF.tapAcitonBlock = ^{
-            [BRStringPickerView showStringPickerWithTitle:@"名称" dataSource:@[@"风驰", @"飞印"] defaultSelValue:@"风驰" isAutoSelect:YES resultBlock:^(id selectValue) {
+            [BRStringPickerView showStringPickerWithTitle:@"名称" dataSource:@[@"风驰", @"飞印(旧)",@"飞印(新)"] defaultSelValue:@"风驰" isAutoSelect:YES resultBlock:^(id selectValue) {
                 weakSelf.pinPaiTF.text = selectValue;
             }];
         };
@@ -252,8 +250,10 @@
     NSString *pinPaiString = [NSString string];
     if ([self.pinPaiTF.text isEqualToString:@"风驰"]) {
         pinPaiString = [NSString stringWithFormat:@"FC"];
-    }else{
+    }else if ([self.pinPaiTF.text isEqualToString:@"飞印(旧)"]){
         pinPaiString = [NSString stringWithFormat:@"FY"];
+    }else{
+        pinPaiString = [NSString stringWithFormat:@"FYNEW"];
     }
     
     
@@ -264,7 +264,7 @@
                               @"token": KUSERID,
                               @"type": categoryString
                               };
-    
+    NSLog(@"%@",partner);
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -273,7 +273,7 @@
     [manager POST:[NSString stringWithFormat:@"%@/appprint/bind",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        //   NSLog(@"%@",responseObject);
+           NSLog(@"%@",responseObject);
         
         if ([responseObject[@"status"] integerValue] == 200) {
             [MBProgressHUD showSuccess:responseObject[@"msg"]];

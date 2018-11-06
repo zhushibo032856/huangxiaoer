@@ -13,8 +13,10 @@
 #import <AVFoundation/AVFoundation.h>
 #import <IQKeyboardManager.h>
 
-#import <Bugly/Bugly.h>
+#import "PostOrderModel.h"
 
+#import <Bugly/Bugly.h>
+#import "ConnecterManager.h"
 
 @interface AppDelegate ()<UIApplicationDelegate,UNUserNotificationCenterDelegate>
 
@@ -41,13 +43,12 @@
     [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge categories:nil]];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
     
-//    IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
-//    manager.enable = YES; // 控制整个功能是否启用。
-//    manager.shouldResignOnTouchOutside =YES; // 控制点击背景是否收起键盘
-//    manager.shouldToolbarUsesTextFieldTintColor =YES; // 控制键盘上的工具条文字颜色是否用户自定义
-//    manager.enableAutoToolbar =YES; // 控制是否显示键盘上的工具条
-//    manager.toolbarManageBehaviour =IQAutoToolbarByTag; // 最新版
-    
+    IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
+    manager.enable = YES; // 控制整个功能是否启用。
+    manager.shouldResignOnTouchOutside =YES; // 控制点击背景是否收起键盘
+    manager.shouldToolbarUsesTextFieldTintColor =YES; // 控制键盘上的工具条文字颜色是否用户自定义
+    manager.enableAutoToolbar =YES; // 控制是否显示键盘上的工具条
+    manager.toolbarManageBehaviour =IQAutoToolbarByTag; // 最新版
     
     return YES;
 }
@@ -88,6 +89,8 @@
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     [user setValue:deviceTokenStr forKey:@"deviceToken"];
     [user synchronize];
+    
+    
 
 }
 
@@ -102,39 +105,25 @@
 //
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary * _Nonnull)userInfo fetchCompletionHandler:(void (^ _Nonnull)(UIBackgroundFetchResult))completionHandler{
 
-    NSLog(@"didReceiveRemoteNotification:%@",userInfo);
-//    NSDictionary *extrasDic = userInfo[@"extras"];
+ //   NSLog(@"didReceiveRemoteNotification:%@",userInfo);
     
-//    NSLog(@"%@",extrasDic);
-//    NSString *shopID = extrasDic[@"shopid"];
-//    NSString *customer = extrasDic[@"customerid"];
-//    NSString *status = extrasDic[@"status"];
-//    NSString *msgData = extrasDic[@"msgData"];
-//    //    NSLog(@"%@",status);
-//    NSString *userID = [NSString stringWithFormat:@"%@", KUSERSHOPID];
-//    if ([userID isEqualToString:shopID]) {
-//        if (customer == nil || [customer isEqual: @""]) {
-//            if ([status integerValue] == 10000 || [status integerValue] == 10001) {
-//                [self playVoice];
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"noti1" object:nil];
-//            }else if ([status integerValue] == 10005){
-//                [self playVoice];
-//            }else if ([status integerValue] == 10012){
-//                [self playAutoVoice:msgData];
-//                //  [self playVoice];
-//            }
-//        }
-//    }
-
+    NSDictionary *dataDic = userInfo[@"data"];
+    
+  //  NSLog(@"%@",dataDic);
+  //  NSString *status = dataDic[@"status"];
+    
+    NSString *orderNum = dataDic[@"orderNum"];
+    
+    
+    if (!kStringIsEmpty(orderNum)) {
+        
+     [self requestDataWithOrderID:orderNum];
+        
+    }
+    
+    
     application.applicationIconBadgeNumber = 0;
 
-    
-
-    /*
-     UIApplicationStateActive 应用程序处于前台
-     UIApplicationStateBackground 应用程序在后台，用户从通知中心点击消息将程序从后台调至前台
-     UIApplicationStateInactive 用用程序处于关闭状态(不在前台也不在后台)，用户通过点击通知中心的消息将客户端从关闭状态调至前台
-     */
 
     //应用程序在前台给一个提示特别消息
     if (application.applicationState == UIApplicationStateActive) {
@@ -155,7 +144,7 @@
 }
 - (void)playVoice{
 
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"dd" ofType:@"mp3"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"dd" ofType:@"caf"];
     //定义一个SystemSoundID
     SystemSoundID soundID;
     //判断路径是否存在
@@ -186,10 +175,169 @@
     utterance.volume = 1;
     [av speakUtterance:utterance];
 }
+#pragma mark  根据订单号查询订单信息
+- (void)requestDataWithOrderID:(NSString *)orderID{
+    
+    NSDictionary *partner = @{
+                              @"orderNum": orderID,
+                              @"token": KUSERID
+                              };
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    
+    [manager POST:@"http://bei.51hxe.com:9007/appordersr/findOrderByOrderNums" parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if ([responseObject[@"status"] integerValue] == 200) {
+            
+            NSDictionary *dic = responseObject[@"data"];
+            NSLog(@"%@",dic);
+            BOOL x = [responseObject[@"data"] isKindOfClass:[NSDictionary class]];
+            
+            if (x == 1) {
+                [Manager write:[self escCommandWithOrderDic:dic] progress:^(NSUInteger total, NSUInteger progress) {
+                    
+                } receCallBack:^(NSData * _Nullable data) {
+                    
+                }];
+            }else{
+             //   NSString *data = responseObject[@"data"];
+                [MBProgressHUD showError:@"订单数据为空"];
+            }
+            
+            
+        }else{
+            
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"%@",error);
+    }];
+    
+}
+#pragma mark
+- (NSData *)escCommandWithOrderDic:(NSDictionary *)dic{
+    
+    
+    EscCommand *command = [[EscCommand alloc]init];
+    [command addInitializePrinter];
+    
+    NSInteger x = [dic[@"isPay"] integerValue];
+    
+    if (x == 2) {
+        [command addPrintAndFeedLines:1];
+        [command addPrintMode:0x0];
+        [command addText:@"****"];
+        
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:@"  黄小二  "];
+        [command addSetJustification:1];
+        
+        [command addPrintMode:0x0];
+        [command addText:@"****\n\n"];
+    }else if (x == 1){
+        [command addPrintAndFeedLines:1];
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:@"黄小二【未支付单】\n"];
+    }else if(x == 3 || x ==4){
+        
+        NSString *refuse = dic[@""];
+        
+        
+        
+        
+        [command addPrintAndFeedLines:1];
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:@"黄小二【退款单】\n"];
+        
+        [command addPrintMode:0x0];
+        [command addText:@"-------------------------------\n"];
+        
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:[NSString stringWithFormat:@"%@\n",refuse]];
+        
+        [command addPrintMode:0x0];
+        [command addText:@"-------------------------------\n"];
+    }
+    
+    
+    NSString *shopSign = dic[@"shopSign"];
+    NSString *diningName = dic[@"diningName"];
+    [command addPrintMode:0x0];
+    [command addText:[NSString stringWithFormat:@"%@(%@)\n",shopSign,diningName]];
+    [command addSetJustification:0];
+    
+    [command addPrintMode:0x0];
+    [command addText:@"-------------------------------\n"];
+    [command addSetJustification:0];
+    
+    NSString *takeNum = dic[@"takeNum"];
 
+    [command addText:@"叫号:"];
+    [command addPrintMode:0x16 | 0x32];
+    [command addText:[NSString stringWithFormat:@"%@\n",takeNum]];
+    
+    [command addPrintMode:0x0];
+    [command addText:@"预约时间:\n"];
+    
+    NSString *useDate = dic[@"useDate"];
+    if (kStringIsEmpty(useDate)) {
+        NSLog(@"数据为空");
+    }else{
+        NSString *dateString = [useDate substringWithRange:NSMakeRange(5, 11)];
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:[NSString stringWithFormat:@"%@\n",dateString]];
+    }
+    
+    
+    [command addPrintMode:0x0];
+    [command addText:@"-------------------------------\n"];
+    
+    NSArray *orderArr = dic[@"goodsList"];
+    NSMutableArray *orderDetailArr = [NSMutableArray arrayWithCapacity:0];
+    [command addPrintMode:0x16];
+    for (NSDictionary *dic in orderArr) {
+        PostOrderModel *model = [[PostOrderModel alloc]init];
+        [model setValuesForKeysWithDictionary:dic];
+        [orderDetailArr addObject:model];
+    }
+    
+    for (int i = 0; i < orderDetailArr.count; i ++) {
+        PostOrderModel *model = orderDetailArr[i];
+        [command addText:[NSString stringWithFormat:@"%@    X%@\n",model.goodsName,model.goodsNum]];
+    }
+    
+    [command addPrintMode:0x0];
+    [command addText:@"-------------------------------\n"];
+    
+    
+    NSString *des = dic[@"des"];
+    [command addText:[NSString stringWithFormat:@"备注:%@",des]];
+    [command addText:@"\n-------------------------------\n"];
+    
+    
+    NSString *totalFee = dic[@"totalFee"];
+    [command addText:[NSString stringWithFormat:@"订单价格:%@元",totalFee]];
+    [command addText:@"\n-------------------------------\n"];
+    
+    NSString *nickName = dic[@"nickName"];
+    [command addText:[NSString stringWithFormat:@"%@\n",nickName]];
+    
+    NSString *phone = dic[@"phone"];
+    [command addText:[NSString stringWithFormat:@"%@\n",phone]];
+    
+    NSString *orderNum = dic[@"orderNum"];
+    [command addText:[NSString stringWithFormat:@"订单号:%@\n\n\n\n",orderNum]];
+    
+    
+    return [command getCommand];
+    
+  
 
-
-
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

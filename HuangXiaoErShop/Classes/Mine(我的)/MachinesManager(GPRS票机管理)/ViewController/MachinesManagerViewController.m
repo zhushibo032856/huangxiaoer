@@ -12,6 +12,7 @@
 #import "AddMachinesViewController.h"
 #import "MachinesModel.h"
 #import "MachinesDetailViewController.h"
+#import "BlueToothViewController.h"
 
 @interface MachinesManagerViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -50,8 +51,11 @@ static NSString *const addCell = @"addMachinesCell";
     
 }
 - (void)setNavigationController{
+    
     self.navigationItem.title = @"票机管理";
+    
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18],NSForegroundColorAttributeName:[UIColor whiteColor]}] ;
+    
 }
 - (void)leftBarBtnClicked:(UIButton *)btn
 {
@@ -124,10 +128,10 @@ static NSString *const addCell = @"addMachinesCell";
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSLog(@"%@",responseObject);
+    //    NSLog(@"%@",responseObject);
         
         if ([responseObject[@"status"] integerValue] == 200) {
-            if (self->_thePage == 1) {
+            if (_thePage == 1) {
                 [self.dataSource removeAllObjects];
             }
             NSArray *arr = responseObject[@"data"];
@@ -136,7 +140,7 @@ static NSString *const addCell = @"addMachinesCell";
                 [model setValuesForKeysWithDictionary:dic];
                 [self.dataSource addObject:model];
             }
-            if (self->_thePage == 1) {
+            if (_thePage == 1) {
                 [self.tableview.mj_header endRefreshing];
             }else{
                 if (arr.count == 0) {
@@ -231,11 +235,11 @@ static NSString *const addCell = @"addMachinesCell";
             [self.navigationController pushViewController:addVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
         }else{
-            [MBProgressHUD showSuccess:@"该功能暂未开放"];
-            //            self.hidesBottomBarWhenPushed = YES;
-            //            BlueToothViewController *blueToothVC = [BlueToothViewController new];
-            //            [self.navigationController pushViewController:blueToothVC animated:YES];
-            //            self.hidesBottomBarWhenPushed = NO;
+        //    [MBProgressHUD showSuccess:@"该功能暂未开放"];
+                        self.hidesBottomBarWhenPushed = YES;
+                        BlueToothViewController *blueToothVC = [BlueToothViewController new];
+                        [self.navigationController pushViewController:blueToothVC animated:YES];
+                        self.hidesBottomBarWhenPushed = NO;
         }
         
     }

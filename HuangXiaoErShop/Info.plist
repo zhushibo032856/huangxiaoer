@@ -27,6 +27,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>此App在使用蓝牙功能时，需要您的同意</string>
 	<key>NSCameraUsageDescription</key>
 	<string>此App会在上传菜品服务中访问您的相机权限，需要您的同意</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
@@ -35,6 +37,7 @@
 	<string>此App会在上传菜品服务中访问您的相册权限，需要您的同意</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>bluetooth-central</string>
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>

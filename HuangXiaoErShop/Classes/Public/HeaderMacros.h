@@ -32,7 +32,14 @@
 #import "BirthdayView.h"
 #import "UIColor+Util.h"
 
-
+/** SDK Header */
+#import "BLEConnecter.h"
+#import "Connecter.h"
+#import "ConnecterBlock.h"
+#import "EscCommand.h"
+#import "EthernetConnecter.h"
+#import "TscCommand.h"
+#define Manager [ConnecterManager sharedInstance]
 /** Macros Header */
 #import "OtherMacros.h"
 #import "AideMacros.h"

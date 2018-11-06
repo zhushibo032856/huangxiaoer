@@ -374,7 +374,7 @@ NSLog(@"****%@****%@****%@****%@****%@****%@****%@****%@****%@",KUSERID,KUSERIMA
             [self.navigationController pushViewController:setUpVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
         }else if (indexPath.row == 2){
-            //  self.hidesBottomBarWhenPushed=YES;
+         //   self.hidesBottomBarWhenPushed=YES;
             MachinesManagerViewController *macVC = [[MachinesManagerViewController alloc]init];
             [self.navigationController pushViewController:macVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
