@@ -8,6 +8,7 @@
 
 #import "DetailBlueToothViewController.h"
 #import "ConnecterManager.h"
+#import "BLEConnecter.h"
 
 @interface DetailBlueToothViewController ()
 
@@ -70,10 +71,23 @@
     nameLable.text = _peripheral.name;
     [backView addSubview:nameLable];
     
+    CBPeripheralState state = _peripheral.state;
+    NSLog(@"%ld",(long)state);
     _connState = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.7, 10, kScreenWidth * 0.25, 30)];
     _connState.textAlignment = NSTextAlignmentRight;
-    _connState.text = @"已连接";
-    _connState.textColor = [UIColor greenColor];
+    
+    if (state == 2) {
+        _connState.text = @"已连接";
+        _connState.textColor = [UIColor greenColor];
+    }else if(state == 1){
+        _connState.text = @"断开连接";
+        _connState.textColor = [UIColor redColor];
+    }else{
+        _connState.text = @"连接失败";
+        _connState.textColor = [UIColor redColor];
+    }
+    
+    
     [backView addSubview:_connState];
     
     UIButton *printButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -86,24 +100,39 @@
     [printButton setTitle:@"打印测试" forState:UIControlStateNormal];
     
     [self.view addSubview:printButton];
+    
+    
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    closeButton.frame = CGRectMake(10, 140, kScreenWidth - 20, 40);
+    closeButton.layer.cornerRadius = 20;
+    closeButton.layer.masksToBounds = YES;
+    [closeButton setBackgroundColor:[UIColor whiteColor]];
+    [closeButton setTintColor:[UIColor redColor]];
+    [closeButton setTitle:@"断开连接" forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(closerPrint) forControlEvents:UIControlEventTouchUpInside];
+  //  [self.view addSubview:closeButton];
+}
+
+- (void)closerPrint{
+    if (_peripheral != nil) {
+        [Manager closePeripheral:_peripheral];
+    }
+    
 }
 
 - (void)printDataWithButton{
     
     [Manager write:[self escCommand] progress:^(NSUInteger total, NSUInteger progress) {
-        CGFloat p = (CGFloat)progress / (CGFloat)total;
-        [SVProgressHUD showProgress:p status:@"发送中..."];
+        [MBProgressHUD showSuccess:@"打印中"];
     } receCallBack:^(NSData * _Nullable data) {
-        [SVProgressHUD dismiss];
+
     }];
     
 }
 -(NSData *)escCommand{
     
     int x = arc4random() % 3;
-    NSLog(@"%d",x);
-    
-    // int x = 2;
+
     EscCommand *command = [[EscCommand alloc]init];
     [command addInitializePrinter];
     

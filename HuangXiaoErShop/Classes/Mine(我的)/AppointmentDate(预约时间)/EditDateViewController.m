@@ -81,8 +81,8 @@
     NSString *string = _dateString;
     NSArray *dateArr = [string componentsSeparatedByString:@"~"];
     _startTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 10, kScreenWidth * 0.4, 35)];
-    
-    _startTF.placeholder = dateArr.firstObject;
+
+    _startTF.text = dateArr.firstObject;
     _startTF.textAlignment = NSTextAlignmentRight;
     _startTF.enabled = NO;
     [_backView addSubview:_startTF];
@@ -92,7 +92,8 @@
     [_backView addSubview:line];
     
     _stopTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 55, kScreenWidth * 0.4, 35)];
-    _stopTF.placeholder = dateArr.lastObject;
+  //  _stopTF.placeholder = dateArr.lastObject;
+    _stopTF.text = dateArr.lastObject;
     _stopTF.enabled = NO;
     _stopTF.textAlignment = NSTextAlignmentRight;
     [_backView addSubview:_stopTF];
@@ -191,10 +192,7 @@
     NSDate *stopDate = [NSDate date];
     stopDate = [dateFormatter dateFromString:[NSString stringWithFormat:@"%@:00",self.stopTF.text]];
 
-    if (kStringIsEmpty(self.startTF.text) || kStringIsEmpty(self.stopTF.text)) {
-        [MBProgressHUD showError:@"数据不能为空"];
-        return;
-    }else{
+    
         CGFloat startX = [[self.startTF.text substringWithRange:NSMakeRange(0, 2)] integerValue];
         CGFloat startY = [[self.startTF.text substringWithRange:NSMakeRange(3, 2)] integerValue];
         
@@ -265,10 +263,9 @@
             
             [self uploadDateWithDateString:doString];
         }
-        
-    }
-    self.startTF.text = @"";
-    self.stopTF.text = @"";
+    
+ //   self.startTF.text = @"";
+  //  self.stopTF.text = @"";
     
 }
 
@@ -314,13 +311,13 @@
                               @"sysUserId": KUSERSHOPID,
                               @"token": KUSERID
                               };
-    //   NSLog(@"%@",partner);
+ //   NSLog(@"%@",partner);
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
-    [manager POST:@"http://bei.51hxe.com:9002/appcommercial/updateUserBookTime" parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/updateUserBookTime",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
      //   NSLog(@"%@",responseObject);

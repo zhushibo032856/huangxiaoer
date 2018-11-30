@@ -98,9 +98,11 @@
     [self jieDanZhuangTai];
     
     [self setRefresh];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setRefresh) name:@"noti1" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setRefresh) name:@"postnote" object:nil];
+
 }
 - (void)setRefresh {
+    
     _thePage = 1;
     __block typeof(self)weakself = self;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -209,6 +211,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+
     OrderLayoutModel *model = self.layoutArr[indexPath.section];
     return model.cellHei;
     
@@ -243,8 +246,11 @@
         [self isJieDanWithStastu:status orderNum:model.orderNum index:index];
     }else if (btnTag == 300){
         status = @"4";
+//        if ([model.isPay integerValue] != 2) {
+//            [MBProgressHUD showError:@"当前订单不允许叫号"];
+//        }else{
         [self jiaohaoWithUserID:model.tb_customer_id OrderNum:model.orderNum index:index Stastu:status butTag:300];
-        
+        //}
     }else if (btnTag == 400){
         [self callNumberWithPhone:model.phone];
     }
@@ -277,7 +283,7 @@
     [manager POST:[NSString stringWithFormat:@"%@/appordersr/orderremind",HXEORDER] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"%@",responseObject);
+     //   NSLog(@"%@",responseObject);
         if ([responseObject[@"status"] integerValue] != 400) {
             [MBProgressHUD showSuccess:@"叫号成功"];
            
@@ -326,7 +332,7 @@
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
-        
+        NSLog(@"%@",error);
     }];
     
     
@@ -465,13 +471,13 @@
     NSString *lastTime = [format stringFromDate:lastDay];
     NSString *startTime = [NSString stringWithFormat:@"%@%@",lastTime,string];
 
-    NSLog(@"%@",lastTime);
+ //   NSLog(@"%@",lastTime);
     
     NSDate *nextDay = [NSDate dateWithTimeInterval:24*60*60 sinceDate:dateNow];//后一天
     NSString *nextTime = [format stringFromDate:nextDay];
     NSString *endTime = [NSString stringWithFormat:@"%@%@",nextTime,string];
 
-    NSLog(@"%@",nextTime);
+ //   NSLog(@"%@",nextTime);
     
     
     NSDictionary *partner = @{
@@ -496,6 +502,7 @@
         if ([responseObject[@"status"] integerValue] == 200){
             if (_thePage == 1) {
                 [self.dataSource removeAllObjects];
+                [self.layoutArr removeAllObjects];
             }
             NSDictionary *dataDic = responseObject[@"data"];
             NSArray *arr = dataDic[@"rows"];
@@ -518,8 +525,8 @@
                     [self.tableView.mj_footer endRefreshing];
                 }
             }
-             [self.tableView reloadData];
-
+            
+               [self.tableView reloadData];
         }else if ([responseObject[@"status"] integerValue] == 301){
             [self.tableView.mj_header endRefreshing];
             [[AppDelegate mainAppDelegate] showLoginView];

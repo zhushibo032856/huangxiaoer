@@ -273,8 +273,9 @@
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
       //  NSLog(@"findallall---%@",responseObject);
         if ([responseObject[@"status"] integerValue] == 200){
-            if (self->_thePage == 1) {
+            if (_thePage == 1) {
                 [self.dataSource removeAllObjects];
+                [self.layoutArr removeAllObjects];
             }
             NSDictionary *dataDic = responseObject[@"data"];
             NSArray *arr = dataDic[@"rows"];
@@ -288,7 +289,7 @@
                 [self.layoutArr addObject:layoutModel];
                 
             }
-            if (self->_thePage == 1) {
+            if (_thePage == 1) {
                 [self.tableView.mj_header endRefreshing];
             }else{
                 if (arr.count == 0) {

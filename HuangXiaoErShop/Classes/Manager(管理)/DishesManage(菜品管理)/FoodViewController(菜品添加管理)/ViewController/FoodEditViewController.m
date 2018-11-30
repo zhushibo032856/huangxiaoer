@@ -18,6 +18,7 @@
 @property (nonatomic, strong) UITextField *activeTF;//真实价格
 @property (nonatomic, strong) BRTextField *cateGoryTF;//分类
 @property (nonatomic, strong) UIImageView *foodImage;//图片
+@property (nonatomic, strong) UITextField *packTF;//餐盒费
 
 @property (nonatomic, strong) UIButton *keepButton;
 
@@ -150,7 +151,7 @@
     lable.text = @"菜品规格";
     [self.view addSubview:lable];
     
-    UIView *twoView = [[UIView alloc]initWithFrame:CGRectMake(10, 220, kScreenWidth - 20, 150)];
+    UIView *twoView = [[UIView alloc]initWithFrame:CGRectMake(10, 220, kScreenWidth - 20, 200)];
     twoView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:twoView];
     
@@ -184,6 +185,8 @@
     categoryLable.text = @"分类";
     [twoView addSubview:categoryLable];
     
+    
+    
     [self setupCategoryTF:twoView];
     
     for (int i = 0; i < self.cateDataArr.count; i ++) {
@@ -194,8 +197,21 @@
     }
     [twoView addSubview:self.cateGoryTF];
     
+    UILabel *lineLableFour = [[UILabel alloc]initWithFrame:CGRectMake(10, 150, kScreenWidth - 40, 1)];
+    lineLableFour.backgroundColor = kColor(240, 240, 240);
+    [twoView addSubview:lineLableFour];
+    
+    UILabel *packLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 160, 100, 30)];
+    packLable.text = @"餐盒费";
+    [twoView addSubview:packLable];
+    
+    self.packTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 160, kScreenWidth * 0.4, 30)];
+    self.packTF.text = [NSString stringWithFormat:@"%@",model.packFee];
+    self.packTF.textAlignment = NSTextAlignmentRight;
+    [twoView addSubview:self.packTF];
+    
     self.keepButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.keepButton.frame = CGRectMake(10, 380, kScreenWidth - 20, 40);
+    self.keepButton.frame = CGRectMake(10, 430, kScreenWidth - 20, 40);
     [self.keepButton setTitle:@"删除" forState:UIControlStateNormal];
     [self.keepButton setTintColor:[UIColor redColor]];
     [self.keepButton addTarget:self action:@selector(deleateButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -383,9 +399,13 @@
     if (kStringIsEmpty(self.nameTF.text) || kStringIsEmpty(model.imageUrl) || kStringIsEmpty(self.priceTF.text) || kStringIsEmpty(self.cateGoryTF.text) || kStringIsEmpty(self.activeTF.text)) {
         [MBProgressHUD showError:@"图片或者数据不能为空"];
     }else if (kStringIsEmpty(self.uploadImageUrl)) {
-        [self requsetDataUploadImageUrl:model.imageUrl Name:self.nameTF.text Price:self.priceTF.text activePrice:self.activeTF.text CateGoryID:cateID FoodID:model.id];
+        
+        [self requsetDataUploadImageUrl:model.imageUrl Name:self.nameTF.text Price:self.priceTF.text activePrice:self.activeTF.text CateGoryID:cateID FoodID:model.id packFee:self.packTF.text];
+        
     }else{
-        [self requsetDataUploadImageUrl:self.uploadImageUrl Name:self.nameTF.text Price:self.priceTF.text activePrice:self.activeTF.text CateGoryID:cateID FoodID:model.id];
+       
+        [self requsetDataUploadImageUrl:self.uploadImageUrl Name:self.nameTF.text Price:self.priceTF.text activePrice:self.activeTF.text CateGoryID:cateID FoodID:model.id packFee:self.packTF.text];
+        
     }
 }
 
@@ -396,10 +416,12 @@
                       activePrice:(NSString *)activePrice
                     CateGoryID:(NSString *)categoryID
                            FoodID:(NSInteger)foodId
+                          packFee:(NSString *)packfee
 {
     NSDictionary *partner = @{
                               @"id": @(foodId),
                               @"des": @"无",
+                              @"packFee": packfee,
                               @"imageUrl": imageUrl,
                               @"name": name,
                               @"productCount": @"-1",
@@ -433,6 +455,7 @@
         self.priceTF.text = @"";
         self.cateGoryTF.text = @"";
         self.activeTF.text = @"";
+        self.packTF.text = @"";
         [self.foodImage setImage:[UIImage imageNamed:@"addBackImage"]];
 }
 

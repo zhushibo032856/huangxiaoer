@@ -49,7 +49,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
-    //   [self isUpdataApp:@"1367090731"];
+     //  [self isUpdataApp:@"1367090731"];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -98,10 +98,10 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
 - (void)submitTokenToSocket{
 
     if (kStringIsEmpty(KDEVICETOKEN)) {
-        [MBProgressHUD showError:@"注册deviceToken失败"];
+     //   [MBProgressHUD showError:@"注册deviceToken失败"];
         return;
     }
-    NSLog(@"%@",KDEVICETOKEN);
+  //  NSLog(@"%@",KDEVICETOKEN);
     NSString *string = [NSString stringWithFormat:@"%@",KUSERSHOPID];
     if (kStringIsEmpty(string)) {
         return;
@@ -116,7 +116,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
                               @"sys_user_id": KUSERSHOPID,
                               @"token": KUSERID
                               };
-    NSLog(@"%@",partner);
+  //  NSLog(@"%@",partner);
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -125,7 +125,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     [manager POST:[NSString stringWithFormat:@"%@/appcommercial/addcommericalpush",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
 
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"%@",responseObject);
+ //       NSLog(@"%@",responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 
     }];
@@ -140,16 +140,15 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     [_headView addSubview:imageView];
     [self.view addSubview:_headView];
     
-    _shopPhotoView = [[UIImageView alloc]initWithFrame:CGRectMake(25, CGRectGetHeight(_headView.frame) / 3 + 10, CGRectGetHeight(_headView.frame) / 3 + 20, CGRectGetHeight(_headView.frame) / 3 + 20)];
+    _shopPhotoView = [[UIImageView alloc]initWithFrame:CGRectMake(20, CGRectGetHeight(_headView.frame) / 3 + 10, CGRectGetHeight(_headView.frame) / 3 + 30, CGRectGetWidth(_shopPhotoView.frame) / 4 * 3)];
     _shopPhotoView.layer.masksToBounds = YES;
-    _shopPhotoView.layer.cornerRadius = CGRectGetHeight(_shopPhotoView.frame) / 2;
+    _shopPhotoView.layer.cornerRadius = 6;
     [_shopPhotoView sd_setImageWithURL:[NSURL URLWithString:self.userImageUrl] placeholderImage:[UIImage imageNamed:@"userName"]];
     [_headView addSubview:_shopPhotoView];
     
     _nameLable = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_shopPhotoView.frame) + 20, CGRectGetHeight(_headView.frame) / 3 + 10, kScreenWidth - _shopPhotoView.frame.size.width - 20, 30)];
     _nameLable.text = self.userName;
-    //  _nameLable.backgroundColor = [UIColor redColor];
-    _nameLable.font = [UIFont systemFontOfSize:20];
+    [_nameLable setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20]];
     _nameLable.textAlignment = NSTextAlignmentLeft;
     [_headView addSubview:_nameLable];
     
@@ -241,7 +240,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     if (section == 0) {
         return 1;
     } else if (section == 1){
-        return 6;
+        return 5;
     }
     return 1;
 }
@@ -268,22 +267,24 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     }else if (indexPath.section == 1){
         MineOneTableViewCell *cellOne = [tableView dequeueReusableCellWithIdentifier:mineOneCell forIndexPath:indexPath];
         cellOne.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        if (indexPath.row == 0) {
-            cellOne.voiceLable.text = @"语音播报";
-            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"voiceImage"]];
-        }else if(indexPath.row == 1){
+//        if (indexPath.row == 0) {
+//            cellOne.voiceLable.text = @"语音播报";
+//            cellOne.accessoryType = UITableViewCellAccessoryNone;
+//            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"voiceImage"]];
+//        }else
+            if(indexPath.row == 0){
             cellOne.voiceLable.text = @"商户信息";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"shopMessage"]];
-        }else if(indexPath.row == 2){
+        }else if(indexPath.row == 1){
             cellOne.voiceLable.text = @"票机管理";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"piaoji"]];
-        }else if(indexPath.row == 3){
+        }else if(indexPath.row == 2){
             cellOne.voiceLable.text = @"店铺收款码";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"codeImage"]];
-        }else if(indexPath.row == 4){
+        }else if(indexPath.row == 3){
             cellOne.voiceLable.text = @"预约时间";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"yuyueTime"]];
@@ -308,7 +309,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     NSDictionary *partner = @{
                               @"token":KUSERID
                               };
-NSLog(@"****%@****%@****%@****%@****%@****%@****%@****%@****%@",KUSERID,KUSERIMAGEURL,KUSERNAME,KUSERADDRESS,KUSERSHOPID,KUSERUSERNAME,KUSERPHONE,KUSERPASSWORD,KDEVICETOKEN);
+
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -320,16 +321,7 @@ NSLog(@"****%@****%@****%@****%@****%@****%@****%@****%@****%@",KUSERID,KUSERIMA
         //   NSLog(@"%@",responseObject);
         if ([responseObject[@"status"] integerValue] == 200) {
           //  [MBProgressHUD showSuccess:@"退出成功"];
-
-//            [UIView beginAnimations:@"exitApplication" context:nil];
-//            [UIView setAnimationDuration:0.5];
-//            [UIView setAnimationDelegate:self];
-//            [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:[AppDelegate mainAppDelegate].window cache:NO];
-//            [UIView setAnimationDidStopSelector:@selector(animationFinished:finished:context:)];
-//            [AppDelegate mainAppDelegate].window.bounds = CGRectMake(0, 0, 0, 0);
-//            [UIView commitAnimations];
-//
-            
+   
             NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
             [user removeObjectForKey:@"data"];
             [user removeObjectForKey:@"imageurl"];
@@ -338,10 +330,11 @@ NSLog(@"****%@****%@****%@****%@****%@****%@****%@****%@****%@",KUSERID,KUSERIMA
             [user removeObjectForKey:@"shopId"];
             [user removeObjectForKey:@"userName"];
             [user removeObjectForKey:@"dateTime"];
+ //           [user removeObjectForKey:@"blueTooth"];
 //            [user removeObjectForKey:@"phone"];
 //            [user removeObjectForKey:@"password"];
             [user synchronize];
-            NSLog(@"%@%@%@%@%@%@%@%@%@",KUSERID,KUSERIMAGEURL,KUSERNAME,KUSERADDRESS,KUSERSHOPID,KUSERUSERNAME,KUSERPHONE,KUSERPASSWORD,KDEVICETOKEN);
+
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
@@ -368,27 +361,27 @@ NSLog(@"****%@****%@****%@****%@****%@****%@****%@****%@****%@",KUSERID,KUSERIMA
         [self.navigationController pushViewController:editShopMessageVC animated:YES];
         self.hidesBottomBarWhenPushed = NO;
     }else if (indexPath.section == 1){
-        if (indexPath.row == 1){
+        if (indexPath.row == 0){
             self.hidesBottomBarWhenPushed = YES;
             SetUpViewController *setUpVC = [SetUpViewController new];
             [self.navigationController pushViewController:setUpVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
-        }else if (indexPath.row == 2){
+        }else if (indexPath.row == 1){
          //   self.hidesBottomBarWhenPushed=YES;
             MachinesManagerViewController *macVC = [[MachinesManagerViewController alloc]init];
             [self.navigationController pushViewController:macVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
-        }else if (indexPath.row == 3){
+        }else if (indexPath.row == 2){
             self.hidesBottomBarWhenPushed=YES;
             QRViewController *qrVC = [[QRViewController alloc]init];
             [self.navigationController pushViewController:qrVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
-        }else if (indexPath.row == 4){
+        }else if (indexPath.row == 3){
             self.hidesBottomBarWhenPushed=YES;
             AppointmentDateViewController *appointmentVC = [[AppointmentDateViewController alloc]init];
             [self.navigationController pushViewController:appointmentVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
-        }else if (indexPath.row == 5){
+        }else if (indexPath.row == 4){
             self.hidesBottomBarWhenPushed = YES;
             SuggestionsViewController *suggestVC = [[SuggestionsViewController alloc]init];
             [self.navigationController pushViewController:suggestVC animated:YES];
@@ -397,45 +390,45 @@ NSLog(@"****%@****%@****%@****%@****%@****%@****%@****%@****%@",KUSERID,KUSERIMA
     }
 }
 
-//- (void)isUpdataApp:(NSString *)appId{
-//    
-//    NSURL *appUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://itunes.apple.com/lookup?id=%@",appId]];
-//    NSString *appMsg = [NSString stringWithContentsOfURL:appUrl encoding:NSUTF8StringEncoding error:nil];
-//    NSDictionary *appMsgDict = [self jsonStringToDictionary:appMsg];
-//    NSDictionary *appResultsDict = [appMsgDict[@"results"] lastObject];
-//    NSString *appStoreVersion = appResultsDict[@"version"];
-//    float newVersionFloat = [appStoreVersion floatValue];//新发布的版本号
-//    
-//    NSString *currentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-//    float currentVersionFloat = [currentVersion floatValue];//使用中的版本号
-//    NSLog(@"APP Store版本号%f当前使用版本号%f",newVersionFloat,currentVersionFloat);
-//    //当前版本小于App Store上的版本&用户未点击不再提示
-//    if (currentVersionFloat < newVersionFloat )
-//    {
-//        self.appId = appId;
-//        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:@"提示" message:@"检测到新版本，是否去更新？" preferredStyle:UIAlertControllerStyleAlert];
-//        
-//        UIAlertAction *action = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://itunes.apple.com/cn/app/id%@?mt=8",self.appId]]];
-//        }];
-//        
+- (void)isUpdataApp:(NSString *)appId{
+    
+    NSURL *appUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://itunes.apple.com/lookup?id=%@",appId]];
+    NSString *appMsg = [NSString stringWithContentsOfURL:appUrl encoding:NSUTF8StringEncoding error:nil];
+    NSDictionary *appMsgDict = [self jsonStringToDictionary:appMsg];
+    NSDictionary *appResultsDict = [appMsgDict[@"results"] lastObject];
+    NSString *appStoreVersion = appResultsDict[@"version"];
+    float newVersionFloat = [appStoreVersion floatValue];//新发布的版本号
+    
+    NSString *currentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    float currentVersionFloat = [currentVersion floatValue];//使用中的版本号
+    NSLog(@"APP Store版本号%f当前使用版本号%f",newVersionFloat,currentVersionFloat);
+    //当前版本小于App Store上的版本&用户未点击不再提示
+    if (currentVersionFloat - newVersionFloat > 0)
+    {
+        self.appId = appId;
+        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:@"提示" message:@"版本过低，无法使用，请下载最新版本" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"查看新版本" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://itunes.apple.com/cn/app/id%@?mt=8",self.appId]]];
+        }];
+        
 //        UIAlertAction *actionOne = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//            
-//            
+//
+//
 //        }];
-//        
-//        //     UIAlertAction *actionTwo = [UIAlertAction actionWithTitle:@"忽略更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        //            [self isAlertUpdataAgain];
-//        //        }];
-//        [actionOne setValue:kColor(190, 190, 190) forKey:@"_titleTextColor"];
-//        
-//        [alertView addAction:action];
-//        [alertView addAction:actionOne];
-//        //     [alertView addAction:actionTwo];
-//        [self presentViewController:alertView animated:YES completion:nil];
-//    }
-//    
-//}
+        
+        //     UIAlertAction *actionTwo = [UIAlertAction actionWithTitle:@"忽略更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //            [self isAlertUpdataAgain];
+        //        }];
+  //      [actionOne setValue:kColor(190, 190, 190) forKey:@"_titleTextColor"];
+        
+        [alertView addAction:action];
+   //     [alertView addAction:actionOne];
+        //     [alertView addAction:actionTwo];
+        [self presentViewController:alertView animated:YES completion:nil];
+    }
+    
+}
 
 - (NSDictionary *)jsonStringToDictionary:(NSString *)jsonStr
 {

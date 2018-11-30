@@ -98,9 +98,9 @@
     
     
     _keepButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    _keepButton.frame = CGRectMake(kScreenWidth * 0.1, 120, kScreenWidth * 0.8, 35);
+    _keepButton.frame = CGRectMake(kScreenWidth * 0.1, 120, kScreenWidth * 0.8, 50);
     [_keepButton setTintColor:[UIColor blackColor]];
-    _keepButton.layer.cornerRadius = 17.5;
+    _keepButton.layer.cornerRadius = 25;
     _keepButton.layer.masksToBounds = YES;
     [_keepButton setBackgroundColor:kColor(255, 210, 0)];
     [_keepButton setTitle:@"保存" forState:UIControlStateNormal];
@@ -229,7 +229,7 @@
                 NSString *binstring = [self getBinaryByHex:string];
                 doString = [doString stringByAppendingString:binstring];
             }
-       //     NSLog(@"%ld******%@",doString.length,doString);
+         //   NSLog(@"%ld******%@",doString.length,doString);
             [self uploadDateWithDateString:doString];
         }
         
@@ -287,7 +287,7 @@
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
-    [manager POST:@"http://bei.51hxe.com:9002/appcommercial/updateUserBookTime" parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/updateUserBookTime",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
    //     NSLog(@"%@",responseObject);

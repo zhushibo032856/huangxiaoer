@@ -53,7 +53,7 @@
 -(void)addPrintAndLineFeed;
 
 /**
- * 方法说明：设置打印模式，0x1B 0x21 n(0-255)，根据n的值设置字符打印模式
+ * 方法说明：设置打印模式，0x1B 0x21 n(0-255)，根据n的值设置字符打印模n
  * @param font     选择FONTA or FONTB
  * @param emphasized    是否加粗
  * @param doubleheight  是否倍高，当倍宽和倍高模式同时选择时，字符同时在横向和纵向放大两倍。

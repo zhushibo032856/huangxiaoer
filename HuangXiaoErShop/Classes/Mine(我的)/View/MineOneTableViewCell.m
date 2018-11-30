@@ -29,7 +29,7 @@
     
     self.voiceLable.sd_layout.topSpaceToView(self.contentView, 10).leftSpaceToView(self.voiceimageView, 10).widthIs(100).heightIs(30);
     
-    self.voiceSwitch.sd_layout.topSpaceToView(self.contentView, 10).rightSpaceToView(self.contentView, 10).widthIs(30).heightIs(30);
+    self.voiceSwitch.sd_layout.topSpaceToView(self.contentView, 10).rightSpaceToView(self.contentView, 15).widthIs(30).heightIs(30);
 }
 - (UISwitch *)voiceSwitch{
     

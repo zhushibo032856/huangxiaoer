@@ -97,17 +97,12 @@ static CGFloat const heightButton = 40.0;
     
     UIView *timeView = [[UIView alloc]initWithFrame:CGRectMake(10, 50, kScreenWidth - 20, 60)];
     timeView.backgroundColor = [UIColor whiteColor];
-    timeView.layer.cornerRadius = 10;
+    timeView.layer.cornerRadius = 5;
     timeView.layer.masksToBounds = YES;
     [self.view addSubview:timeView];
     
     _timeTF = [[UITextField alloc]initWithFrame:CGRectMake(10, 10, 30, 40)];
     
-    if (kStringIsEmpty(KDATETIME)) {
-        _timeTF.text = @"20";
-    }else{
-        _timeTF.text = KDATETIME;
-    }
     _timeTF.textAlignment = NSTextAlignmentCenter;
     _timeTF.font = [UIFont systemFontOfSize:19];
     [timeView addSubview:_timeTF];
@@ -132,12 +127,11 @@ static CGFloat const heightButton = 40.0;
 #pragma mark **创建时间列表布局
 - (UIButton *)addButton{
     if (!_addButton) {
-        NSLog(@"123");
         _addButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [_addButton setTitle:@"添加预约时间" forState:UIControlStateNormal];
         [_addButton setTintColor:[UIColor blackColor]];
         [_addButton setBackgroundColor:[UIColor whiteColor]];
-        _addButton.layer.cornerRadius = 10;
+        _addButton.layer.cornerRadius = 5;
         _addButton.layer.masksToBounds = YES;
         [_addButton addTarget:self action:@selector(getToEditViewController) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -147,7 +141,7 @@ static CGFloat const heightButton = 40.0;
 - (void)creatAutoLayoutWithDateArrayount:(NSInteger)count{
     
     self.dateView = [[UIView alloc]initWithFrame:CGRectMake(10, 160, kScreenWidth - 20, 60 * count)];
-    self.dateView.layer.cornerRadius = 10;
+    self.dateView.layer.cornerRadius = 5;
     self.dateView.layer.masksToBounds = YES;
     [self.view addSubview:self.dateView];
     
@@ -209,8 +203,10 @@ static CGFloat const heightButton = 40.0;
         UIView *currentView = label;
         
         _textfield = [[UITextField alloc] initWithFrame:CGRectMake(currentView.frame.origin.x, (currentView.frame.origin.y + currentView.frame.size.height + originXY), currentView.frame.size.width, heightButton)];
-        _textfield.backgroundColor = [UIColor lightGrayColor];
+        _textfield.backgroundColor = kColor(230, 230, 230);
         _textfield.textAlignment = NSTextAlignmentCenter;
+        _textfield.layer.masksToBounds = YES;
+        _textfield.layer.cornerRadius = 5;
         _textfield.placeholder = @"20";
         [_titleEidtView addSubview:_textfield];
         
@@ -220,7 +216,7 @@ static CGFloat const heightButton = 40.0;
         [button setTitle:@"确定" forState:UIControlStateNormal];
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         button.backgroundColor = kColor(255, 210, 0);
-        button.layer.cornerRadius = heightButton / 2;
+        button.layer.cornerRadius = 5;
         button.layer.masksToBounds = YES;
         [button addTarget:self action:@selector(hideClick) forControlEvents:UIControlEventTouchUpInside];
         [_titleEidtView addSubview:button];
@@ -235,7 +231,7 @@ static CGFloat const heightButton = 40.0;
 }
 - (void)hideClick
 {
-    NSLog(@"%@",_textfield.text);
+  //  NSLog(@"%@",_textfield.text);
     
     NSScanner* scan = [NSScanner scannerWithString:_textfield.text];
     
@@ -256,14 +252,48 @@ static CGFloat const heightButton = 40.0;
             return;
         }else{
             _timeTF.text = _textfield.text;
-            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-            [user setValue:_textfield.text forKey:@"dateTime"];
-            [user synchronize];
-            NSLog(@"%@",KDATETIME);
         }
+        
     }
-
+//    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+//    [user setValue:_textfield.text forKey:@"dateTime"];
+//    [user synchronize];
+    
+    [self uploadBookdistanceWithDateTime:_timeTF.text];
+    
     [self.alertView hide];
+    
+}
+- (void)uploadBookdistanceWithDateTime:(NSString *)dateTime{
+    
+    NSDictionary *partner = @{
+                              @"bookdistance": dateTime,
+                              @"sysUserId": KUSERSHOPID,
+                              @"token": KUSERID
+                              };
+ //   NSLog(@"%@",partner);
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/updateUserBookTime",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //     NSLog(@"%@",responseObject);
+        if ([responseObject[@"status"] integerValue] == 200) {
+            [MBProgressHUD showSuccess:responseObject[@"msg"]];
+            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+            [user setValue:dateTime forKey:@"dateTime"];
+            [user synchronize];
+        }else{
+            [MBProgressHUD showError:responseObject[@"msg"]];
+        }
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
     
 }
 
@@ -284,29 +314,35 @@ static CGFloat const heightButton = 40.0;
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     
-    NSString *string = [NSString stringWithFormat:@"http://bei.51hxe.com:9002/appcommercial/findUserBookTime/%@/%@",KUSERSHOPID,KUSERID];
+    NSString *string = [NSString stringWithFormat:@"https://api.51hxe.com/appcommercial/findUserBookTime/%@/%@",KUSERSHOPID,KUSERID];
     
     [manager GET:string parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-      //    NSLog(@"%@",responseObject);
+       //   NSLog(@"%@",responseObject);
         
         if ([responseObject[@"status"] integerValue] == 200) {
            
             NSDictionary *dataDic = responseObject[@"data"];
             NSString *string = [dataDic objectForKey:@"bookTime"];
+            NSString *bookdistance = dataDic[@"bookdistance"];
+            _timeTF.text = [NSString stringWithFormat:@"%@",bookdistance];
+            
+            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+            [user setValue:_timeTF.text forKey:@"dateTime"];
+            [user synchronize];
             
             if (kStringIsEmpty(string)) {
                 NSString *str = @"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
                 NSString *dataString = [self turnToArrWithString:str];
                 _dataArray = [self ergodicGetStringWithString:dataString];
-                NSLog(@"****%lu",(unsigned long)_dataArray.count);
+              //  NSLog(@"****%lu",(unsigned long)_dataArray.count);
                 
                [self creatAutoLayoutWithDateArrayount:_dataArray.count];
                 
             }else{
                 NSString *dataString = [self turnToArrWithString:string];
                _dataArray = [self ergodicGetStringWithString:dataString];
-                NSLog(@"%lu",(unsigned long)_dataArray.count);
-                
+           //     NSLog(@"%lu",(unsigned long)_dataArray.count);
+             //   NSLog(@"%@",_dataArray);
                 [self creatAutoLayoutWithDateArrayount:_dataArray.count];
             }
             [self.dateTableview reloadData];
@@ -314,7 +350,6 @@ static CGFloat const heightButton = 40.0;
             
             [MBProgressHUD showError:responseObject[@"msg"]];
         }
-        
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
@@ -397,11 +432,17 @@ static CGFloat const heightButton = 40.0;
         }else{
             min = [NSString stringWithFormat:@"%.f",m];
         }
+        NSString *hour = [NSString string];
+        if (h < 10) {
+            hour = [NSString stringWithFormat:@"0%.f",h];
+        }else{
+            hour = [NSString stringWithFormat:@"%.f",h];
+        }
         
         
-        NSString *time = [NSString stringWithFormat:@"%.f:%@",h,min];
+        NSString *time = [NSString stringWithFormat:@"%@:%@",hour,min];
         
-        
+   //     NSLog(@"%@",time);
         if (([isTrue isEqualToString:@"1"] && [tipString isEqualToString:@"end"]) || ([isTrue isEqualToString:@"1"] && [tipString isEqualToString:@""])) {
             tipString = @"start";
             timeString = [NSString stringWithFormat:@"%@%@",time,@"~"];
@@ -417,7 +458,7 @@ static CGFloat const heightButton = 40.0;
             timeString = @"";
         }
     }
-    
+  //  NSLog(@"%@",timeArr);
     return timeArr;
     
 }
@@ -560,7 +601,7 @@ static CGFloat const heightButton = 40.0;
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
-    [manager POST:@"http://bei.51hxe.com:9002/appcommercial/updateUserBookTime" parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/updateUserBookTime",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
               NSLog(@"%@",responseObject);

@@ -28,10 +28,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
 
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+    
     application.applicationIconBadgeNumber = 0;
     
     [Bugly startWithAppId:@"db2d271985"];
-    
     
     if(kStringIsEmpty(KUSERID)) {
         
@@ -39,6 +40,8 @@
     }else{
         [self showHomeView];
     }
+    
+    [self print];
     
     [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge categories:nil]];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
@@ -51,6 +54,58 @@
     manager.toolbarManageBehaviour =IQAutoToolbarByTag; // 最新版
     
     return YES;
+}
+
+- (void)print{
+    if (Manager.bleConnecter == nil) {
+        [Manager didUpdateState:^(NSInteger state) {
+            switch (state) {
+                case CBManagerStateUnsupported:
+                    NSLog(@"The platform/hardware doesn't support Bluetooth Low Energy.");
+                    break;
+                case CBManagerStateUnauthorized:
+                    NSLog(@"The app is not authorized to use Bluetooth Low Energy.");
+                    break;
+                case CBManagerStatePoweredOff:
+                    NSLog(@"Bluetooth is currently powered off.");
+                    break;
+                case CBManagerStatePoweredOn:
+                    [self connectLastPrint];
+                    NSLog(@"Bluetooth power on");
+                    break;
+                case CBManagerStateUnknown:
+                default:
+                    break;
+            }
+        }];
+    }else{
+        [self connectLastPrint];
+    }
+}
+
+
+- (void)connectLastPrint{
+    
+    if (KBLUETOOTH) {
+        [Manager scanForPeripheralsWithServices:nil options:nil discover:^(CBPeripheral * _Nullable peripheral, NSDictionary<NSString *,id> * _Nullable advertisementData, NSNumber * _Nullable RSSI) {
+            if ([peripheral.identifier.UUIDString isEqualToString:KBLUETOOTH]) {
+                NSLog(@"相同则开始连接此蓝牙");
+                [Manager connectPeripheral:peripheral options:nil timeout:5 connectBlack:^(ConnectState state) {
+                    if (state == CONNECT_STATE_CONNECTED) {
+                        [Manager stopScan];
+                    }else if (state == CONNECT_STATE_TIMEOUT || state == CONNECT_STATE_FAILT || state == CONNECT_STATE_DISCONNECT){
+                        [self print];
+                    }
+                    
+                }];
+            }else{
+                NSLog(@"未找到该设备");
+            }
+        }];
+    }else{
+     //   NSLog(@"请手动连接蓝牙打票机");
+    }
+   
 }
 
 
@@ -78,52 +133,41 @@
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 
     NSString *deviceTokenStr = [[[[deviceToken description]
-
                                   stringByReplacingOccurrencesOfString:@"<" withString:@""]
-
                                  stringByReplacingOccurrencesOfString:@">" withString:@""]
-
                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSLog(@"%@",deviceTokenStr);
 
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     [user setValue:deviceTokenStr forKey:@"deviceToken"];
     [user synchronize];
-    
-    
-
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    NSString *error_str = [NSString stringWithFormat: @"%@", error];
-    NSLog(@"Failed to get token, error:%@", error_str);
+  //  NSString *error_str = [NSString stringWithFormat: @"%@", error];
+   // NSLog(@"Failed to get token, error:%@", error_str);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo{
-    NSLog(@"******%@",userInfo);
+    
 }
+
 //
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary * _Nonnull)userInfo fetchCompletionHandler:(void (^ _Nonnull)(UIBackgroundFetchResult))completionHandler{
 
  //   NSLog(@"didReceiveRemoteNotification:%@",userInfo);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"postnote" object:nil];
     
     NSDictionary *dataDic = userInfo[@"data"];
-    
-  //  NSLog(@"%@",dataDic);
-  //  NSString *status = dataDic[@"status"];
-    
     NSString *orderNum = dataDic[@"orderNum"];
-    
-    
+
     if (!kStringIsEmpty(orderNum)) {
         
      [self requestDataWithOrderID:orderNum];
-        
-    }
-    
-    
-    application.applicationIconBadgeNumber = 0;
 
+    }
+
+    application.applicationIconBadgeNumber = 0;
 
     //应用程序在前台给一个提示特别消息
     if (application.applicationState == UIApplicationStateActive) {
@@ -134,14 +178,14 @@
     }else if(application.applicationState == UIApplicationStateBackground){
 
         //其他两种情况，一种在后台程序没有被杀死，另一种是在程序已经杀死。用户点击推送的消息进入app的情况处理。
-
-
     }else{
         //   NSLog(@"用用程序处于关闭状态");
-
     }
     completionHandler(UIBackgroundFetchResultNewData);
 }
+
+
+
 - (void)playVoice{
 
     NSString *path = [[NSBundle mainBundle] pathForResource:@"dd" ofType:@"caf"];
@@ -187,7 +231,7 @@
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
-    [manager POST:@"http://bei.51hxe.com:9007/appordersr/findOrderByOrderNums" parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+    [manager POST:[NSString stringWithFormat:@"%@/appordersr/findOrderByOrderNums",HXEORDER] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
@@ -199,13 +243,18 @@
             
             if (x == 1) {
                 [Manager write:[self escCommandWithOrderDic:dic] progress:^(NSUInteger total, NSUInteger progress) {
-                    
+                    NSLog(@"打印成功");
                 } receCallBack:^(NSData * _Nullable data) {
-                    
+                    NSLog(@"打印失败");
+                    NSLog(@"%@",data);
+                    NSDate *date = [NSDate date];
+                    NSLog(@"%@",date);
                 }];
+                
             }else{
              //   NSString *data = responseObject[@"data"];
                 [MBProgressHUD showError:@"订单数据为空"];
+                NSLog(@"数据为空");
             }
             
             
@@ -221,33 +270,48 @@
 #pragma mark
 - (NSData *)escCommandWithOrderDic:(NSDictionary *)dic{
     
-    
     EscCommand *command = [[EscCommand alloc]init];
     [command addInitializePrinter];
     
     NSInteger x = [dic[@"isPay"] integerValue];
     
+    [command queryRealtimeStatus:2];
+    
     if (x == 2) {
-        [command addPrintAndFeedLines:1];
-        [command addPrintMode:0x0];
-        [command addText:@"****"];
         
-        [command addPrintMode:0x16 | 0x32];
-        [command addText:@"  黄小二  "];
-        [command addSetJustification:1];
+        if ([dic[@"isPack"] integerValue] == 2) {
+            [command addPrintAndFeedLines:1];
+            [command addPrintMode:0x0];
+            [command addText:@"===============================\n"];
+            
+            [command addPrintMode:0X0];
+            [command addText:@"注意:此单用户要求打包\n"];
+            [command addPrintMode:0x0];
+            [command addText:@"===============================\n"];
+            
+            [command addPrintMode:0x16 | 0x32];
+            [command addText:@"黄小二【打包】\n\n"];
+            
+        }else{
+            [command addPrintAndFeedLines:1];
+            [command addPrintMode:0x0];
+            [command addText:@"****"];
+            
+            [command addPrintMode:0x16 | 0x32];
+            [command addText:@"  黄小二  "];
+            [command addSetJustification:1];
+            
+            [command addPrintMode:0x0];
+            [command addText:@"****\n\n"];
+        }
         
-        [command addPrintMode:0x0];
-        [command addText:@"****\n\n"];
     }else if (x == 1){
         [command addPrintAndFeedLines:1];
         [command addPrintMode:0x16 | 0x32];
         [command addText:@"黄小二【未支付单】\n"];
     }else if(x == 3 || x ==4){
         
-        NSString *refuse = dic[@""];
-        
-        
-        
+        NSString *refuse = dic[@"desFefount"];
         
         [command addPrintAndFeedLines:1];
         [command addPrintMode:0x16 | 0x32];
@@ -257,12 +321,11 @@
         [command addText:@"-------------------------------\n"];
         
         [command addPrintMode:0x16 | 0x32];
-        [command addText:[NSString stringWithFormat:@"%@\n",refuse]];
+        [command addText:[NSString stringWithFormat:@"退款原因:%@\n",refuse]];
         
         [command addPrintMode:0x0];
         [command addText:@"-------------------------------\n"];
     }
-    
     
     NSString *shopSign = dic[@"shopSign"];
     NSString *diningName = dic[@"diningName"];
@@ -329,38 +392,57 @@
     NSString *phone = dic[@"phone"];
     [command addText:[NSString stringWithFormat:@"%@\n",phone]];
     
+    [command addText:@"11111111111111 \n"];
+    
     NSString *orderNum = dic[@"orderNum"];
-    [command addText:[NSString stringWithFormat:@"订单号:%@\n\n\n\n",orderNum]];
+    [command addText:[NSString stringWithFormat:@"订单号:%@\n\n\n\n\n",orderNum]];
     
     
     return [command getCommand];
     
-  
-
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+
 }
 
-
+//声明的任务ID
+UIBackgroundTaskIdentifier taskId;
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    NSLog(@"进入后台");
+    taskId = [application beginBackgroundTaskWithExpirationHandler:^{
+        
+    }];
+     [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
 }
 
+- (void)timerAction:(NSTimer *)timer {
+    
+    int count = 0;
+    count++;
+    if (count % 500 == 0) {
+        UIApplication *application = [UIApplication sharedApplication];
+        //结束旧的后台任务
+        [application endBackgroundTask:taskId];
+        //开启一个新的后台
+        taskId = [application beginBackgroundTaskWithExpirationHandler:NULL];
+    }
+
+}
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
     application.applicationIconBadgeNumber = 0;
 }
 
-
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [self print];
+    NSLog(@"进入前台");
 }
-
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.

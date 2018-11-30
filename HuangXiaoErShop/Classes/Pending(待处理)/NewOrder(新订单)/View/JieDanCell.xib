@@ -305,7 +305,7 @@
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-            <viewLayoutGuide key="safeArea" id="bKx-QZ-5u3"/>
+            <viewLayoutGuide key="safeArea" id="b1e-zY-Koy"/>
             <connections>
                 <outlet property="addView" destination="Uk0-2K-Faf" id="ZCw-2h-WZq"/>
                 <outlet property="bzLb" destination="8jp-wP-TM4" id="ool-UN-1gH"/>

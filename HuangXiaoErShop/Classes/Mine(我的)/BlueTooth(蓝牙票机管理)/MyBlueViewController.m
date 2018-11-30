@@ -1,40 +1,25 @@
 //
-//  BlueToothViewController.m
+//  MyBlueViewController.m
 //  HuangXiaoErShop
 //
-//  Created by apple on 2018/10/30.
+//  Created by apple on 2018/11/14.
 //  Copyright © 2018年 aladdin. All rights reserved.
 //
 
-#import "BlueToothViewController.h"
-#import "MineBlueToothTableViewCell.h"
+#import "MyBlueViewController.h"
 #import "SearchBlueToothTableViewCell.h"
-#import "DetailBlueToothViewController.h"
-
 #import "ConnecterManager.h"
 
-static NSString * const mineCell = @"MineBlueToothTableViewCell";
 static NSString * const searchCell = @"SearchBlueToothTableViewCell";
 
-@interface BlueToothViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface MyBlueViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *printTableView;
-
-@property (nonatomic, strong) NSMutableArray *devices;
 @property (nonatomic, strong) NSMutableDictionary *dicts;
-
-@property (nonatomic, strong) CBPeripheral *peripheral;
 
 @end
 
-@implementation BlueToothViewController
-
--(NSMutableArray *)devices {
-    if (!_devices) {
-        _devices = [[NSMutableArray alloc]init];
-    }
-    return _devices;
-}
+@implementation MyBlueViewController
 
 -(NSMutableDictionary *)dicts {
     if (!_dicts) {
@@ -71,14 +56,12 @@ static NSString * const searchCell = @"SearchBlueToothTableViewCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = kColor(230, 230, 230);
     
-    self.view.backgroundColor = [UIColor whiteColor];
-    
-
-    _printTableView = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+    _printTableView = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStylePlain];
     _printTableView.delegate = self;
     _printTableView.dataSource = self;
-    [_printTableView registerClass:[MineBlueToothTableViewCell class] forCellReuseIdentifier:mineCell];
+
     [_printTableView registerClass:[SearchBlueToothTableViewCell class] forCellReuseIdentifier:searchCell];
     [self.view addSubview:_printTableView];
     
@@ -108,7 +91,7 @@ static NSString * const searchCell = @"SearchBlueToothTableViewCell";
                     [MBProgressHUD showError:@"蓝牙可用，但是未打开"];
                     break;
                 case CBManagerStatePoweredOn:
-               //     [MBProgressHUD showError:@"蓝牙可用"];
+                    //     [MBProgressHUD showError:@"蓝牙可用"];
                     [self startScane];
                     break;
                     
@@ -129,138 +112,50 @@ static NSString * const searchCell = @"SearchBlueToothTableViewCell";
             NSUInteger oldCounts = [self.dicts count];
             [self.dicts setObject:peripheral forKey:peripheral.identifier.UUIDString];
             
-       //     NSLog(@"%@",_dicts);
+            //     NSLog(@"%@",_dicts);
             if (oldCounts < [self.dicts count]) {
                 [_printTableView reloadData];
             }
         }
     }];
     
-
+    
 }
 
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0.00001;
-}
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 30;
-}
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    UIView *view = [[UIView alloc]init];
-    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(20, 5, kScreenWidth - 20, 20)];
-    [view addSubview:lable];
-    if (section == 0) {
-        lable.text = @"我的票机";
-    }else{
-        lable.text = @"请选择要连接的票机";
-    }
-    return view;
-}
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 50;
-}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+    return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section == 0) {
-        return 1;
-    }else{
+
         return [[self.dicts allKeys]count];
-      //  return 2;
-    }
+
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    if (indexPath.section == 0) {
-        MineBlueToothTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:mineCell forIndexPath:indexPath];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.nameLable.text = @"已连接票机";
-        
-        return cell;
-    }else{
-         SearchBlueToothTableViewCell *seaCell = [tableView dequeueReusableCellWithIdentifier:searchCell forIndexPath:indexPath];
+    
+        SearchBlueToothTableViewCell *seaCell = [tableView dequeueReusableCellWithIdentifier:searchCell forIndexPath:indexPath];
         CBPeripheral *peripheral = [self.dicts objectForKey:[self.dicts allKeys][indexPath.row]];
         seaCell.nameLable.text = peripheral.name;
-   
+        
         return seaCell;
-    }
+    
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    if (indexPath.section == 1) {
-        CBPeripheral *peripheral = [self.dicts objectForKey:[self.dicts allKeys][indexPath.row]];
-
-        [self connectDevice:peripheral];
-    }else{
-        if (!_peripheral) {
-            [MBProgressHUD showError:@"请先连接打印机"];
-            return;
-        }
-        NSLog(@"%@",_peripheral);
-        
-        
-
-        
-        
-        self.hidesBottomBarWhenPushed = YES;
-        DetailBlueToothViewController *detailVC = [[DetailBlueToothViewController alloc]init];
-        detailVC.peripheral = _peripheral;
-    //    NSLog(@"*******%@",_peripheral);
-        [self.navigationController pushViewController:detailVC animated:YES];
-    }
     
+    
+        CBPeripheral *peripheral = [self.dicts objectForKey:[self.dicts allKeys][indexPath.row]];
+        [self connectDevice:peripheral];
 
 }
-
 
 -(void)connectDevice:(CBPeripheral *)peripheral {
-
-    [Manager connectPeripheral:peripheral options:nil timeout:5 connectBlack:^(ConnectState state) {
-        NSLog(@"%lu%@",(unsigned long)state,peripheral);
-        
-        switch (state) {
-            case 0:
-                [MBProgressHUD showError:@"未找到设备"];
-                break;
-            case 1:
-                [MBProgressHUD showError:@"断开连接"];
-                break;
-            case 2:
-                [MBProgressHUD showError:@"连接中"];
-                break;
-            case 3:
-                [MBProgressHUD showError:@"连接成功"];
-                _peripheral = peripheral;
-                [self userDefaultWith:peripheral];
-                break;
-            case 4:
-                [MBProgressHUD showError:@"连接超时"];
-                break;
-            case 5:
-                [MBProgressHUD showError:@"连接失败"];
-                break;
-                
-            default:
-                break;
-        }
-    }];
-   
-}
-- (void)userDefaultWith:(CBPeripheral *)peripheral{
     
+    _block(peripheral);
+    [Manager connectPeripheral:peripheral options:nil timeout:5 connectBlack:self.state];
     
-    NSDictionary *dic = [self.dicts objectForKey:peripheral.identifier.UUIDString];
-    
-    
-    
-    NSUserDefaults *user = kUserDefaults;
-  //  [user setObject:dic forKey:@"blueTooth"];
-    [user synchronize];
-    NSLog(@"%@",dic);
-
-    
+        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+        [user setValue:peripheral.identifier.UUIDString forKey:@"blueTooth"];
+        [user setValue:peripheral.name forKey:@"blueName"];
+        [user synchronize];
 }
 
 - (void)didReceiveMemoryWarning {

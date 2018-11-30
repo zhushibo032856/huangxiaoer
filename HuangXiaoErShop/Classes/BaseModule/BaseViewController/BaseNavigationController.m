@@ -18,6 +18,7 @@
     [super viewDidLoad];
     
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"backcolor"] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+ //   [[UINavigationBar appearance] setBackgroundColor:kColor(0, 0, 0)];
     [[UINavigationBar appearance] setShadowImage:[UIImage imageNamed:@"clearImage"]];
     // Do any additional setup after loading the view.
 }

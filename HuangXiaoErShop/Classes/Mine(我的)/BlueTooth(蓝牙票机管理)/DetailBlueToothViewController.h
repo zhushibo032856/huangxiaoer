@@ -11,5 +11,6 @@
 @interface DetailBlueToothViewController : BaseViewController
 
 @property (nonatomic, strong) CBPeripheral *peripheral;
+@property (nonatomic, copy) ConnectDeviceState state;
 
 @end

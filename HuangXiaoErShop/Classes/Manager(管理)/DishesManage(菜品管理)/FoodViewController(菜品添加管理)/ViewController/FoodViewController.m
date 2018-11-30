@@ -18,6 +18,7 @@
 @property (nonatomic, strong) UITextField *activeTF;//真实价格
 @property (nonatomic, strong) BRTextField *cateGoryTF;//分类
 @property (nonatomic, strong) UIImageView *foodImage;//图片
+@property (nonatomic, strong) UITextField *packTF;//餐盒费
 
 @property (nonatomic, strong) UIButton *keepButton;
 
@@ -113,7 +114,7 @@
     lable.text = @"菜品规格";
     [self.view addSubview:lable];
     
-    UIView *twoView = [[UIView alloc]initWithFrame:CGRectMake(10, 220, kScreenWidth - 20, 150)];
+    UIView *twoView = [[UIView alloc]initWithFrame:CGRectMake(10, 220, kScreenWidth - 20, 200)];
     twoView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:twoView];
     
@@ -150,8 +151,22 @@
     [self setupCategoryTF:twoView];
     [twoView addSubview:self.cateGoryTF];
     
+    UILabel *lineLableFour = [[UILabel alloc]initWithFrame:CGRectMake(10, 150, kScreenWidth - 40, 1)];
+    lineLableFour.backgroundColor = kColor(240, 240, 240);
+    [twoView addSubview:lineLableFour];
+    
+    UILabel *packLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 160, 100, 30)];
+    packLable.text = @"餐盒费";
+    [twoView addSubview:packLable];
+    
+    self.packTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 160, kScreenWidth * 0.4, 30)];
+    self.packTF.placeholder = @"0";
+    self.packTF.textAlignment = NSTextAlignmentRight;
+    [twoView addSubview:self.packTF];
+    
+
     self.keepButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.keepButton.frame = CGRectMake(10, 380, kScreenWidth - 20, 50);
+    self.keepButton.frame = CGRectMake(10, 430, kScreenWidth - 20, 50);
     [self.keepButton setTitle:@"保存" forState:UIControlStateNormal];
     [self.keepButton setTintColor:[UIColor blackColor]];
     [self.keepButton addTarget:self action:@selector(KeepButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -266,7 +281,7 @@
 
 - (BRTextField *)getTextField:(UIView *)view{
     
-    BRTextField *textField = [[BRTextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.65, 110, kScreenWidth * 0.25, 30)];
+    BRTextField *textField = [[BRTextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.65, 110, kScreenWidth * 0.3, 30)];
     textField.backgroundColor = [UIColor clearColor];
     textField.font = [UIFont systemFontOfSize:17];
     textField.textAlignment = NSTextAlignmentLeft;
@@ -300,7 +315,12 @@
         [MBProgressHUD showError:@"图片或者数据不能为空"];
     }else{
         NSString *cateID = [self.dic objectForKey:self.cateGoryTF.text];
-            [self requsetDataUploadImageUrl:self.uploadImageUrl Name:self.nameTF.text Price:self.priceTF.text activePrice:self.activeTF.text CateGoryID:cateID];
+        if (kStringIsEmpty(self.packTF.text)) {
+            [self requsetDataUploadImageUrl:self.uploadImageUrl Name:self.nameTF.text Price:self.priceTF.text activePrice:self.activeTF.text CateGoryID:cateID packFee:[NSString stringWithFormat:@"0"]];
+        }else{
+        
+            [self requsetDataUploadImageUrl:self.uploadImageUrl Name:self.nameTF.text Price:self.priceTF.text activePrice:self.activeTF.text CateGoryID:cateID packFee:self.packTF.text];
+        }
     }
 }
 
@@ -310,9 +330,11 @@
                             Price:(NSString *)price
                       activePrice:(NSString *)activePrice
                        CateGoryID:(NSString *)categoryID
+                          packFee:(NSString *)packfee
 {
     NSDictionary *partner = @{
                               @"des": @"无",
+                              @"packFee": packfee,
                               @"imageUrl": imageUrl,
                               @"name": name,
                               @"productCount": @"-1",
@@ -321,7 +343,7 @@
                               @"tb_category_categoryId":categoryID,
                               @"token": KUSERID
                               };
-  //  NSLog(@"======");
+  //  NSLog(@"%@",partner);
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -348,6 +370,7 @@
     self.priceTF.text = @"";
     self.cateGoryTF.text = @"";
     self.activeTF.text = @"";
+    self.packTF.text = @"";
     [self.foodImage setImage:[UIImage imageNamed:@"addBackImage"]];
 }
 

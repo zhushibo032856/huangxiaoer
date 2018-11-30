@@ -99,6 +99,8 @@ static dispatch_once_t once;
 
 -(void)write:(NSData *_Nullable)data progress:(void(^_Nullable)(NSUInteger total,NSUInteger progress))progress receCallBack:(void (^_Nullable)(NSData *_Nullable))callBack {
     [_bleConnecter write:data progress:progress receCallBack:callBack];
+    NSLog(@"************");
+    
 }
 
 -(void)write:(NSData *)data receCallBack:(void (^)(NSData *))callBack {
@@ -129,6 +131,10 @@ static dispatch_once_t once;
             _ethernetConnecter = nil;
             break;
     }
+}
+
+- (void)closePeripheral:(CBPeripheral *)peripheral{
+    [_bleConnecter closePeripheral:peripheral];
 }
 
 @end

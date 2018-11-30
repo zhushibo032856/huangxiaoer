@@ -57,7 +57,7 @@
     
     if (!_imageViewTwo) {
         _imageViewTwo = [[UIImageView alloc]init];
-        [_imageViewTwo setImage:[UIImage imageNamed:@"codeImage"]];
+   //     [_imageViewTwo setImage:[UIImage imageNamed:@"codeImage"]];
     }
     return _imageViewTwo;
 }

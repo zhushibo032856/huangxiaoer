@@ -45,7 +45,7 @@
 }
 
 + (BOOL)checkTelNumber:(NSString *) telNumber{
-    NSString *pattern = @"^1+[3578]+\\d{9}";
+    NSString *pattern = @"^(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9]|19[0-9])\\d{8}$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", pattern];
     BOOL isMatch = [pred evaluateWithObject:telNumber];
     return isMatch;

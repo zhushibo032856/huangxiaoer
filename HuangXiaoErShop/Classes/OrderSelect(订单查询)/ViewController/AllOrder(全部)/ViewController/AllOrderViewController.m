@@ -25,7 +25,6 @@
 
 @property (nonatomic, strong) NSMutableArray *dataSource;
 @property (nonatomic, strong) NSMutableArray *layoutArr;
-@property (nonatomic, strong) NSString *phone;
 
 @property (nonatomic, assign) NSInteger thePage;
 
@@ -114,6 +113,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         if ([responseObject[@"status"] integerValue] == 200){
             if (_thePage == 1) {
                 [self.dataSource removeAllObjects];
+                [self.layoutArr removeAllObjects];
             }
             NSDictionary *dataDic = responseObject[@"data"];
             NSArray *arr = dataDic[@"rows"];
@@ -245,13 +245,13 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
     [phoneImageView setImage:[UIImage imageNamed:@"callPhone"]];
     [view addSubview:phoneImageView];
 
-    self.phone = model.phone;
     UIButton *phoneButton = [UIButton buttonWithType:UIButtonTypeSystem];
     phoneButton.frame = CGRectMake(CGRectGetMaxX(phoneImageView.frame) - 2, CGRectGetMaxY(lable.frame) + 15, kScreenWidth * 0.15, 15);
     [phoneButton setTitle:@"联系顾客" forState:UIControlStateNormal];
     [phoneButton setTintColor:kColor(100, 100, 100)];
+    [phoneButton setTag:1000 +section];
     phoneButton.titleLabel.font = [UIFont systemFontOfSize:12];
-    [phoneButton addTarget:self action:@selector(callNumberWithPhone) forControlEvents:UIControlEventTouchUpInside];
+    [phoneButton addTarget:self action:@selector(callNumberWithPhoneWith:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:phoneButton];
 
     /* 订单 */
@@ -315,10 +315,10 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
     }
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sender.tag-300] withRowAnimation:UITableViewRowAnimationFade];
 }
-- (void)callNumberWithPhone{
-
-    NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",self.phone];
-    NSLog(@"%@",str);
+- (void)callNumberWithPhoneWith:(UIButton *)sender{
+    
+    CellModel *model = self.dataSource[sender.tag - 1000];
+    NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",model.phone];
     UIWebView *callWebview = [[UIWebView alloc] init];
     [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
     [self.view addSubview:callWebview];

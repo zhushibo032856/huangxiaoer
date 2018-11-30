@@ -101,6 +101,6 @@ typedef enum : NSUInteger{
 -(void)scanForPeripheralsWithServices:(nullable NSArray<CBUUID *> *)serviceUUIDs options:(nullable NSDictionary<NSString *, id> *)options discover:(void(^_Nullable)(CBPeripheral *_Nullable peripheral,NSDictionary<NSString *, id> *_Nullable advertisementData,NSNumber *_Nullable RSSI))discover;
 
 
-
+- (void)closePeripheral:(nonnull CBPeripheral *)peripheral;
 
 @end

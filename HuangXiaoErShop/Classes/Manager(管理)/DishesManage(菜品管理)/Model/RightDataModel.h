@@ -15,6 +15,7 @@
 @property (nonatomic, copy) NSString *activityPrice;
 @property (nonatomic, copy) NSString *imageUrl;
 @property (nonatomic, copy) NSString *status;
+@property (nonatomic, copy) NSString *packFee;
 @property (nonatomic, assign) NSInteger id;
 @property (nonatomic, strong) NSString *tb_category_categoryId;
 @end

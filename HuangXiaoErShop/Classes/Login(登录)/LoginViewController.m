@@ -8,8 +8,6 @@
 //750  1334
 #import "LoginViewController.h"
 
-
-
 static CGFloat const lineHeight = 0.8f;
 
 @interface LoginViewController ()
@@ -32,17 +30,6 @@ static CGFloat const lineHeight = 0.8f;
     [super viewDidLoad];
     
     [self creatLoginView];
-    
-//    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
-//    [manager startMonitoring];
-//    [manager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-//        NSLog(@"*********%ld",(long)status);
-//        NSString *string = [NSString stringWithFormat:@"%ld",(long)status];
-//        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-//        [user setValue:string forKey:@"AFNetwork"];
-//        [user synchronize];
-//    }];
-
     
     self.view.userInteractionEnabled = YES;
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fingerTapped:)];
@@ -198,11 +185,6 @@ static CGFloat const lineHeight = 0.8f;
         [MBProgressHUD showMessage:@"登录失败，请重新登录"];
         [[AppDelegate mainAppDelegate] showLoginView];
         
-        if (error.code == -1) {
-            [MBProgressHUD showError:@"未知网络地址"];
-        }else if (error.code == -1001){
-            [MBProgressHUD showError:@"请求超时"];
-        }
     }];
     
 }

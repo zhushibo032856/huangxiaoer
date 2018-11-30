@@ -85,7 +85,7 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
     [self creatCollectionView];
     
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setRefresh) name:@"noti1" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setRefresh) name:@"postnote" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setRefresh) name:@"notiEdit" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestShopManager) name:@"notiEdit" object:nil];
     [self setRefresh];
@@ -133,8 +133,11 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
             //请求完数据立马刷新按钮状态
             if (_shopStutas == 1) {
                 [_businessButton setBackgroundImage:[UIImage imageNamed:@"openShop"] forState:UIControlStateNormal];
+                [UIApplication sharedApplication].idleTimerDisabled = YES;
+                
             }else{
                 [_businessButton setBackgroundImage:[UIImage imageNamed:@"closedShop"] forState:UIControlStateNormal];
+                [UIApplication sharedApplication].idleTimerDisabled = NO;
             }
             //     NSLog(@"======%ld",_shopStutas);
             
@@ -165,15 +168,16 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
     
     
     
-    _shopPhotoView = [[UIImageView alloc]initWithFrame:CGRectMake(25, CGRectGetHeight(_headView.frame) / 3 + 10, CGRectGetHeight(_headView.frame) / 3 + 20, CGRectGetHeight(_headView.frame) / 3 + 20)];
+    _shopPhotoView = [[UIImageView alloc]initWithFrame:CGRectMake(20, CGRectGetHeight(_headView.frame) / 3 + 10, CGRectGetHeight(_headView.frame) / 3 + 30, CGRectGetWidth(_shopPhotoView.frame) / 4 * 3)];
     _shopPhotoView.layer.masksToBounds = YES;
-    _shopPhotoView.layer.cornerRadius = CGRectGetHeight(_shopPhotoView.frame) / 2;
+    _shopPhotoView.layer.cornerRadius = 6;
     [_shopPhotoView sd_setImageWithURL:[NSURL URLWithString:self.userImageUrl] placeholderImage:[UIImage imageNamed:@"userName"]];
     [_headView addSubview:_shopPhotoView];
     
     _nameLable = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_shopPhotoView.frame) + 20, CGRectGetHeight(_headView.frame) / 3 + 10, kScreenWidth - _shopPhotoView.frame.size.width - 20 - _businessButton.frame.size.width - 30, 30)];
     _nameLable.text = self.userName;
-    _nameLable.font = [UIFont systemFontOfSize:20];
+    [_nameLable setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20]];
+  //  _nameLable.font = [UIFont systemFontOfSize:20];
     _nameLable.textAlignment = NSTextAlignmentLeft;
     [_headView addSubview:_nameLable];
     
@@ -187,7 +191,7 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
     [_headView addSubview:_detailButton];
     
     _businessButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    _businessButton.frame = CGRectMake(kScreenWidth - CGRectGetHeight(_headView.frame) / 3 - 50, CGRectGetHeight(_headView.frame) / 3 + 20, kScreenWidth * 0.3, kScreenWidth * 0.09);
+    _businessButton.frame = CGRectMake(kScreenWidth - CGRectGetHeight(_headView.frame) / 3 - 60, CGRectGetHeight(_headView.frame) / 3 + 20, kScreenWidth * 0.3, kScreenWidth * 0.1);
     
     if (_shopStutas == 1) {
         [_businessButton setBackgroundImage:[UIImage imageNamed:@"openShop"] forState:UIControlStateNormal];
