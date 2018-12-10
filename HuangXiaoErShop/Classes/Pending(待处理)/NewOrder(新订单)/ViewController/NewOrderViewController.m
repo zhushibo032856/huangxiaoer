@@ -13,6 +13,8 @@
 #import "OrderLayoutModel.h"
 #import "ManagerModel.h"
 
+#import "ConnecterManager.h"
+#import "PostOrderModel.h"
 
 @interface NewOrderViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -539,6 +541,190 @@
         [self.tableView.mj_header endRefreshing];
     }];
 }
+
+#pragma 打印订单
+- (void)printOrderWithOrderNumber:(NSString *)orderNumber{
+    
+    NSDictionary *partner = @{
+                              @"orderNum": orderNumber,
+                              @"token": KUSERID
+                              };
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    
+    [manager POST:[NSString stringWithFormat:@"%@/appordersr/findOrderByOrderNums",HXEORDER] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if ([responseObject[@"status"] integerValue] == 200) {
+            
+            NSDictionary *dic = responseObject[@"data"];
+            NSLog(@"%@",dic);
+            BOOL x = [responseObject[@"data"] isKindOfClass:[NSDictionary class]];
+            
+            if (x == 1) {
+                [Manager write:[self escCommandWithOrderDic:dic] progress:^(NSUInteger total, NSUInteger progress) {
+                    NSLog(@"打印成功");
+                } receCallBack:^(NSData * _Nullable data) {
+                    NSLog(@"打印失败");
+                    NSLog(@"%@",data);
+                    NSDate *date = [NSDate date];
+                    NSLog(@"%@",date);
+                }];
+                
+            }else{
+                //   NSString *data = responseObject[@"data"];
+                [MBProgressHUD showError:@"订单数据为空"];
+                NSLog(@"数据为空");
+            }
+            
+            
+        }else{
+            
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+#pragma mark
+- (NSData *)escCommandWithOrderDic:(NSDictionary *)dic{
+    
+    EscCommand *command = [[EscCommand alloc]init];
+    [command addInitializePrinter];
+    
+    NSInteger x = [dic[@"isPay"] integerValue];
+    
+    [command queryRealtimeStatus:2];
+    
+    if (x == 2) {
+        
+        if ([dic[@"isPack"] integerValue] == 2) {
+            [command addPrintAndFeedLines:1];
+            [command addPrintMode:0x0];
+            [command addText:@"===============================\n"];
+            
+            [command addPrintMode:0X0];
+            [command addText:@"注意:此单用户要求打包\n"];
+            [command addPrintMode:0x0];
+            [command addText:@"===============================\n"];
+            
+            [command addPrintMode:0x16 | 0x32];
+            [command addText:@"黄小二【打包】\n\n"];
+            
+        }else{
+            [command addPrintAndFeedLines:1];
+            [command addPrintMode:0x0];
+            [command addText:@"****"];
+            
+            [command addPrintMode:0x16 | 0x32];
+            [command addText:@"  黄小二  "];
+            [command addSetJustification:1];
+            
+            [command addPrintMode:0x0];
+            [command addText:@"****\n\n"];
+        }
+        
+    }else if (x == 1){
+        [command addPrintAndFeedLines:1];
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:@"黄小二【未支付单】\n"];
+    }else if(x == 3 || x ==4){
+        
+        NSString *refuse = dic[@"desFefount"];
+        
+        [command addPrintAndFeedLines:1];
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:@"黄小二【退款单】\n"];
+        
+        [command addPrintMode:0x0];
+        [command addText:@"-------------------------------\n"];
+        
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:[NSString stringWithFormat:@"退款原因:%@\n",refuse]];
+        
+        [command addPrintMode:0x0];
+        [command addText:@"-------------------------------\n"];
+    }
+    
+    NSString *shopSign = dic[@"shopSign"];
+    NSString *diningName = dic[@"diningName"];
+    [command addPrintMode:0x0];
+    [command addText:[NSString stringWithFormat:@"%@(%@)\n",shopSign,diningName]];
+    [command addSetJustification:0];
+    
+    [command addPrintMode:0x0];
+    [command addText:@"-------------------------------\n"];
+    [command addSetJustification:0];
+    
+    NSString *takeNum = dic[@"takeNum"];
+    
+    [command addText:@"叫号:"];
+    [command addPrintMode:0x16 | 0x32];
+    [command addText:[NSString stringWithFormat:@"%@\n",takeNum]];
+    
+    [command addPrintMode:0x0];
+    [command addText:@"预约时间:\n"];
+    
+    NSString *useDate = dic[@"useDate"];
+    if (kStringIsEmpty(useDate)) {
+        NSLog(@"数据为空");
+    }else{
+        NSString *dateString = [useDate substringWithRange:NSMakeRange(5, 11)];
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:[NSString stringWithFormat:@"%@\n",dateString]];
+    }
+    
+    
+    [command addPrintMode:0x0];
+    [command addText:@"-------------------------------\n"];
+    
+    NSArray *orderArr = dic[@"goodsList"];
+    NSMutableArray *orderDetailArr = [NSMutableArray arrayWithCapacity:0];
+    [command addPrintMode:0x16];
+    for (NSDictionary *dic in orderArr) {
+        PostOrderModel *model = [[PostOrderModel alloc]init];
+        [model setValuesForKeysWithDictionary:dic];
+        [orderDetailArr addObject:model];
+    }
+    
+    for (int i = 0; i < orderDetailArr.count; i ++) {
+        PostOrderModel *model = orderDetailArr[i];
+        [command addText:[NSString stringWithFormat:@"%@    X%@\n",model.goodsName,model.goodsNum]];
+    }
+    
+    [command addPrintMode:0x0];
+    [command addText:@"-------------------------------\n"];
+    
+    
+    NSString *des = dic[@"des"];
+    [command addText:[NSString stringWithFormat:@"备注:%@",des]];
+    [command addText:@"\n-------------------------------\n"];
+    
+    
+    NSString *totalFee = dic[@"totalFee"];
+    [command addText:[NSString stringWithFormat:@"订单价格:%@元",totalFee]];
+    [command addText:@"\n-------------------------------\n"];
+    
+    NSString *nickName = dic[@"nickName"];
+    [command addText:[NSString stringWithFormat:@"%@\n",nickName]];
+    
+    NSString *phone = dic[@"phone"];
+    [command addText:[NSString stringWithFormat:@"%@\n",phone]];
+    
+    [command addText:@"11111111111111 \n"];
+    
+    NSString *orderNum = dic[@"orderNum"];
+    [command addText:[NSString stringWithFormat:@"订单号:%@\n\n\n\n\n",orderNum]];
+    
+    
+    return [command getCommand];
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

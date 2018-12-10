@@ -122,12 +122,7 @@
     NSLog(@"开始加载网页");
 
     [SVProgressHUD showWithStatus:@"网页加载中..."];
-//    //开始加载网页时展示出progressView
-//    self.progressView.hidden = NO;
-//    //开始加载网页的时候将progressView的Height恢复为1.5倍
-//    self.progressView.transform = CGAffineTransformMakeScale(1.0f, 1.5f);
-//    //防止progressView被网页挡住
-//    [self.view bringSubviewToFront:self.progressView];
+   [self.view bringSubviewToFront:self.progressView];
 
 }
 

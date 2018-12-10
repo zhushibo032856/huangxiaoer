@@ -167,7 +167,7 @@ static NSString *const detailCell = @"detailMessageCell";
     // Do any additional setup after loading the view.
 }
 - (void)setRefresh {
-    NSLog(@"123456");
+
     _thePage = 1;
     __block typeof(self)weakself = self;
     self.tableview.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -187,7 +187,7 @@ static NSString *const detailCell = @"detailMessageCell";
 
 - (void)creatAutoLayout{
     
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - 110) style:UITableViewStyleGrouped];
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStyleGrouped];
     
     self.tableview.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 30)];
     self.tableview.tableFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 20)];

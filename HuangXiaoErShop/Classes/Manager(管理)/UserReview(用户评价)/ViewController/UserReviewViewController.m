@@ -155,6 +155,7 @@ static NSString * const reviewCell = @"reviewTableviewCell";
     
     self.tableviewReview.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
         weakself.thePage = 1;
+        [self requsetDataWithReview];
         [self.tableviewReview.mj_footer endRefreshing];
     }];
     // 进入界面时刷新

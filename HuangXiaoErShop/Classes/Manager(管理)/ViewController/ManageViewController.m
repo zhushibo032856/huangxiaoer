@@ -22,6 +22,7 @@
 #import "EditViewController.h"
 #import "ScavengingreceiptsViewController.h"
 #import "BusinessanalysisViewController.h"
+#import "MessageTypeViewController.h"
 
 @interface ManageViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -431,9 +432,8 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
     //  TodayOrderViewController *todayOrderVC = [TodayOrderViewController new];
     //  TodayTurnoverViewController * todayTurnoverVC = [TodayTurnoverViewController new];
     ScavengingreceiptsViewController *scavengVC = [ScavengingreceiptsViewController new];
-    
     UserReviewViewController *userReviewVC = [UserReviewViewController new];
-    //  MessageCenterViewController *messageCenterVC = [MessageCenterViewController new];
+    MessageTypeViewController *messageTypeVC = [MessageTypeViewController new];
     DishesManagerViewController *dishesManagerVC = [DishesManagerViewController new];
     self.hidesBottomBarWhenPushed = YES;
     if (indexPath.section == 0) {
@@ -452,7 +452,7 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
         
         if (indexPath.row == 0) {
             [MBProgressHUD showError:@"该功能暂未开放"];
-            //  [self.navigationController pushViewController:messageCenterVC animated:YES];
+            
             
         }else if (indexPath.row == 1){
             
@@ -501,6 +501,11 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
             }];
             
             
+        }else if (indexPath.row == 5){
+           // self.hidesBottomBarWhenPushed = YES;
+            messageTypeVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:messageTypeVC animated:YES];
+            self.hidesBottomBarWhenPushed = NO;
         }else if (indexPath.row == 6){
             self.hidesBottomBarWhenPushed = YES;
             BusinessanalysisViewController *businessVC = [BusinessanalysisViewController new];

@@ -20,6 +20,8 @@
 #import "QRViewController.h"
 #import "AppointmentDateViewController.h"
 
+#import "MarketManagerModel.h"
+
 @interface MineViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UIView *headView;//头视图
@@ -37,6 +39,8 @@
 
 @property (nonatomic, strong) NSString *appId;
 
+@property (nonatomic, strong) UIAlertController *alertVC;
+@property (nonatomic, strong) UITapGestureRecognizer *tap;
 
 @end
 
@@ -92,6 +96,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     
     [self requestShopManager];
     
+//    [self submitTokenToSocket];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestShopManager) name:@"notiEdit" object:nil];
     // Do any additional setup after loading the view.
 }
@@ -143,7 +148,11 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     _shopPhotoView = [[UIImageView alloc]initWithFrame:CGRectMake(20, CGRectGetHeight(_headView.frame) / 3 + 10, CGRectGetHeight(_headView.frame) / 3 + 30, CGRectGetWidth(_shopPhotoView.frame) / 4 * 3)];
     _shopPhotoView.layer.masksToBounds = YES;
     _shopPhotoView.layer.cornerRadius = 6;
+    NSString *str = [NSString stringWithFormat:@"%@",KUSERIMAGEURL];
+    NSLog(@"%@",str);
+
     [_shopPhotoView sd_setImageWithURL:[NSURL URLWithString:self.userImageUrl] placeholderImage:[UIImage imageNamed:@"userName"]];
+    
     [_headView addSubview:_shopPhotoView];
     
     _nameLable = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_shopPhotoView.frame) + 20, CGRectGetHeight(_headView.frame) / 3 + 10, kScreenWidth - _shopPhotoView.frame.size.width - 20, 30)];
@@ -240,7 +249,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     if (section == 0) {
         return 1;
     } else if (section == 1){
-        return 5;
+        return 7;
     }
     return 1;
 }
@@ -288,11 +297,19 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
             cellOne.voiceLable.text = @"预约时间";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"yuyueTime"]];
-        }
-        else{
+        }else if(indexPath.row == 4){
             cellOne.voiceLable.text = @"意见反馈";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"Suggestions"]];
+        }else if(indexPath.row == 5){
+            cellOne.voiceLable.text = @"联系客服";
+            cellOne.voiceSwitch.hidden = YES;
+            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"kufu"]];
+        }
+        else{
+            cellOne.voiceLable.text = @"联系经理";
+            cellOne.voiceSwitch.hidden = YES;
+            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"jingli"]];
         }
         
         return cellOne;
@@ -367,8 +384,9 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
             [self.navigationController pushViewController:setUpVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
         }else if (indexPath.row == 1){
-         //   self.hidesBottomBarWhenPushed=YES;
+            self.hidesBottomBarWhenPushed=YES;
             MachinesManagerViewController *macVC = [[MachinesManagerViewController alloc]init];
+          //  macVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:macVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
         }else if (indexPath.row == 2){
@@ -377,18 +395,118 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
             [self.navigationController pushViewController:qrVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
         }else if (indexPath.row == 3){
-            self.hidesBottomBarWhenPushed=YES;
-            AppointmentDateViewController *appointmentVC = [[AppointmentDateViewController alloc]init];
-            [self.navigationController pushViewController:appointmentVC animated:YES];
-            self.hidesBottomBarWhenPushed = NO;
+            [self selectIsOpen];
         }else if (indexPath.row == 4){
             self.hidesBottomBarWhenPushed = YES;
             SuggestionsViewController *suggestVC = [[SuggestionsViewController alloc]init];
             [self.navigationController pushViewController:suggestVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
+        }else if (indexPath.row == 5){
+        //    [MBProgressHUD showSuccess:@"联系客服"];
+            NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:0371-56033072"];
+            UIWebView *callWebview = [[UIWebView alloc] init];
+            [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
+            [self.view addSubview:callWebview];
+            
+        }else if (indexPath.row == 6){
+         //   [MBProgressHUD showSuccess:@"联系经理"];
+            [self requestPhone];
         }
     }
 }
+
+#pragma mark 商户预约权限查询
+- (void)selectIsOpen{
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    
+    [manager GET:[NSString stringWithFormat:@"%@/appcommercial/findUserBookTime/%@/%@",HXECOMMEN,KUSERSHOPID,KUSERID] parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+     //   NSLog(@"%@",responseObject);
+        NSDictionary *data = responseObject[@"data"];
+        NSString *isOpen = data[@"isOpen"];
+        
+        if ([responseObject[@"status"] integerValue] == 200) {
+            if ([isOpen integerValue] == 1) {
+                [MBProgressHUD showError:@"权限不足,请联系客服"];
+            }else{
+                self.hidesBottomBarWhenPushed=YES;
+                AppointmentDateViewController *appointmentVC = [[AppointmentDateViewController alloc]init];
+                [self.navigationController pushViewController:appointmentVC animated:YES];
+                self.hidesBottomBarWhenPushed = NO;
+            }
+        }else{
+            [MBProgressHUD showError:responseObject[@"msg"]];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    
+}
+
+
+
+
+- (void)requestPhone{
+    
+    NSDictionary *partner = @{
+                              @"id": KUSERSHOPID,
+                              @"token": KUSERID
+                              };
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json", @"text/javascript",@"text/html", nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/findMarketManagerInfo",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+   //     NSLog(@"%@",responseObject);
+        NSDictionary *data = responseObject[@"data"];
+        NSString *phone = data[@"phone"];
+        NSString *userName = data[@"userName"];
+        if ([responseObject[@"status"] integerValue] == 200) {
+            NSLog(@"%@%@",phone,userName);
+            [self creatCallJingLiWith:userName Tel:phone];
+        }else{
+            [MBProgressHUD showError:responseObject[@"msg"]];
+        }
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [MBProgressHUD showError:@"网络异常,请联系客服"];
+    }];
+    
+    
+}
+
+- (void)creatCallJingLiWith:(NSString *)nameStr
+                        Tel:(NSString *)telStr{
+    
+    UIAlertController *aler = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+    UIAlertAction *add = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"%@ %@",nameStr,telStr] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+
+        NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",telStr];
+        UIWebView *callWebview = [[UIWebView alloc] init];
+        [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
+        [self.view addSubview:callWebview];
+
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [aler addAction:cancel];
+
+
+    [aler addAction:add];
+    [self presentViewController:aler animated:YES completion:nil];
+
+}
+
 
 - (void)isUpdataApp:(NSString *)appId{
     

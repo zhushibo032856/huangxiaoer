@@ -171,7 +171,7 @@ static CGFloat const lineHeight = 0.8f;
             [user synchronize];
             
             [[AppDelegate mainAppDelegate] showHomeView];
-            
+         //   [self requestShopManager];
         }
         if([responseObject[@"status"] integerValue] == 400){
             [MBProgressHUD showError:responseObject[@"msg"]];
@@ -188,6 +188,49 @@ static CGFloat const lineHeight = 0.8f;
     }];
     
 }
+
+- (void)requestShopManager{
+    
+    NSDictionary *partner = @{
+                              @"token":KUSERID
+                              };
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json", @"text/javascript",@"text/html", nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/findbytoken",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+             NSLog(@"%@",responseObject);
+        
+        if ([responseObject[@"status"] integerValue] == 200) {
+//            [self.dataArray removeAllObjects];
+            NSDictionary *dic = responseObject[@"data"];
+            
+            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+            [user setObject:dic[@"logoImage"] forKey:@"imageurl"];
+            [user setObject:dic[@"shopSign"] forKey:@"shopName"];
+            [user setObject:dic[@"address"] forKey:@"shopAddress"];
+            [user setObject:dic[@"id"] forKey:@"shopId"];;
+            [user setObject:dic[@"userName"] forKey:@"userName"];
+            [user synchronize];
+        }else if ([responseObject[@"status"] integerValue] == 301){
+            [[AppDelegate mainAppDelegate] showLoginView];
+        }
+        else{
+            [MBProgressHUD showMessage:responseObject[@"msg"]];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -178,7 +178,8 @@ static NSString * const scavengCell = @"ScavengingTableViewCell";
     }];
     
     self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        weakself.thePage = 1;
+        weakself.thePage += 1;
+        [self requestDataWithDate:dataString];
         [self.tableView.mj_footer endRefreshing];
     }];
     // 进入界面时刷新

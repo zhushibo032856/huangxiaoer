@@ -108,11 +108,13 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
     
     
     self.leftTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        weakself.thePage = 1;
+        weakself.thePage += 1;
+        [self reloadRightData];
         [self.leftTableView.mj_footer endRefreshing];
     }];
     self.rightTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        weakself.thePage = 1;
+        weakself.thePage += 1;
+        [self reloadRightData];
         [self.rightTableView.mj_footer endRefreshing];
     }];
     

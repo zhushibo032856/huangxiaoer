@@ -221,72 +221,8 @@ static NSString * const cateGoryCell = @"CateGoryTableViewCell";
     
 }
 
-//- (void)setEditing:(BOOL)editing animated:(BOOL)animated{
-//    [super setEditing:editing animated:YES];
-//}
-//
-//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
-//    return YES;
-//}
-//
-//- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    return UITableViewCellEditingStyleDelete;
-//}
-//
-//- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return @"删除";
-//}
-//
-//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-//
-//        if (editingStyle == UITableViewCellEditingStyleDelete) {
-//
-//            LeftDataModel *model = self.dataArray[indexPath.row];
-//
-//            [self deleteCategory:model.id];
-//            [self.dataArray removeObjectAtIndex:indexPath.row];
-//            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-//
-//    }
-//}
-//
-///** 商品分类删除 */
-//- (void)deleteCategory: (NSString *)category{
-//
-//    NSDictionary *partner = @{
-//                              @"id": category,
-//                              @"token": KUSERID
-//                              };
-//
-//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-//    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-//    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", nil];
-//
-//    [manager POST:[NSString stringWithFormat:@"%@/appproduct/category/delete",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
-//
-//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        //NSLog(@"%@",responseObject);
-//        if ([responseObject[@"status"] integerValue] == 200) {
-//            [MBProgressHUD showSuccess:@"删除成功"];
-//        }else
-//            [MBProgressHUD showError:@"删除失败"];
-//
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//
-//    }];
-//
-//}
-//
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
-    
-    
-    
-    // Dispose of any resources that can be recreated.
 }
 
 /*

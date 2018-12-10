@@ -81,7 +81,8 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
     }];
     
     self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        weakself.thePage = 1;
+        weakself.thePage += 1;
+        [self requestDataWithDataString:dataString];
         [self.tableView.mj_footer endRefreshing];
     }];
     // 进入界面时刷新

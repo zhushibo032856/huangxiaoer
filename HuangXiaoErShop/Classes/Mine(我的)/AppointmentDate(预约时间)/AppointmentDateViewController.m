@@ -297,7 +297,7 @@ static CGFloat const heightButton = 40.0;
     
 }
 
-#pragma mark  **编辑页面
+#pragma mark  **添加页面
 - (void)getToEditViewController{
     
     self.hidesBottomBarWhenPushed = YES;
@@ -313,10 +313,8 @@ static CGFloat const heightButton = 40.0;
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    
-    NSString *string = [NSString stringWithFormat:@"https://api.51hxe.com/appcommercial/findUserBookTime/%@/%@",KUSERSHOPID,KUSERID];
-    
-    [manager GET:string parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+    [manager GET:[NSString stringWithFormat:@"%@/appcommercial/findUserBookTime/%@/%@",HXECOMMEN,KUSERSHOPID,KUSERID] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
        //   NSLog(@"%@",responseObject);
         
         if ([responseObject[@"status"] integerValue] == 200) {
@@ -604,7 +602,7 @@ static CGFloat const heightButton = 40.0;
     [manager POST:[NSString stringWithFormat:@"%@/appcommercial/updateUserBookTime",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-              NSLog(@"%@",responseObject);
+         //     NSLog(@"%@",responseObject);
         if ([responseObject[@"status"] integerValue] == 200) {
             [MBProgressHUD showSuccess:responseObject[@"msg"]];
             [self.dateView removeFromSuperview];
