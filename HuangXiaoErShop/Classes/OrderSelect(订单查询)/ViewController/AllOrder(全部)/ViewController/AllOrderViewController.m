@@ -10,6 +10,14 @@
 #import "CellModel.h"
 #import "AllOrderLayoutModel.h"
 
+#import "JiesuanTableViewCell.h"
+#import "JiesuanModel.h"
+
+#import "MLMOptionSelectView.h"
+#import "CustomTableViewCell.h"
+
+#import "DetailIncomeViewController.h"
+
 @interface AllOrderViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     NSMutableDictionary *dic;//创建一个字典进行判断收缩还是展开
@@ -28,9 +36,19 @@
 
 @property (nonatomic, assign) NSInteger thePage;
 
+@property (nonatomic, strong) UITableView *jiesuanView;
+@property (nonatomic, strong) NSMutableArray *jiesuanArr;
+@property (nonatomic, strong) UILabel *timeLable;
+
+@property (nonatomic, strong) MLMOptionSelectView *cellView;
+@property (nonatomic, strong) NSMutableArray *detailArr;
+
 @end
 
 static NSString * const allOrderCell = @"AllOrderTableViewCell";
+static NSString * const jiesuanCell = @"JiesuanTableViewCell";
+
+static NSString *const customCell = @"CustomTableViewCell";
 
 @implementation AllOrderViewController
 - (NSMutableArray *)dataSource {
@@ -45,32 +63,55 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         self.layoutArr = [NSMutableArray arrayWithCapacity:0];
     }
     return _layoutArr;
-
 }
+- (NSMutableArray *)jiesuanArr{
+    if (!_jiesuanArr) {
+        _jiesuanArr = [NSMutableArray arrayWithCapacity:0];
+    }
+    return _jiesuanArr;
+}
+- (NSMutableArray *)detailArr{
+    if (!_detailArr) {
+        _detailArr = [NSMutableArray arrayWithCapacity:0];
+    }
+    return _detailArr;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = kColor(240, 240, 240);
 
     dic = [NSMutableDictionary dictionary];
-
+    self.timeLable = [[UILabel alloc]init];
+ //   NSLog(@"%@",self.dataString);
+    
+    _cellView = [[MLMOptionSelectView alloc] initOptionView];//设置弹框
+    
     [self creatTableView];
-
+    [self initIncomeView];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(send:) name:@"dataNot" object:nil];
 
- //   [self requestDataWithDataString:self.dataString];
-
     [self setRefreshWithDataString:self.dataString];
+    [self requestJiesuanDataWith:self.dataString];
 }
 - (void)send:(NSNotification *)dataDic{
-    //   NSLog(@"=======%@",dataDic.userInfo[@"dataString"]);
     [self.dataSource removeAllObjects];
     [self.layoutArr removeAllObjects];
-  //  [self requestDataWithDataString:dataDic.userInfo[@"dataString"]];
+    [self.jiesuanArr removeAllObjects];
     [self setRefreshWithDataString:dataDic.userInfo[@"dataString"]];
+    [self requestJiesuanDataWith:dataDic.userInfo[@"dataString"]];
+}
 
+- (void)analysisWith:(NSString *)dataString{
+ //    self.timeLable.text = @"";
+    NSString *month = [dataString substringWithRange:NSMakeRange(5, 2)];
+    NSString *day = [dataString substringWithRange:NSMakeRange(8, 2)];
+    self.timeLable.text = [NSString stringWithFormat:@"%@月%@日",month,day];
 }
 
 - (void)setRefreshWithDataString:(NSString *)dataString{
-    
+    [self analysisWith:dataString];
     _thePage = 1;
     __block typeof(self)weakself = self;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -153,6 +194,60 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
     }];
 
 }
+
+- (void)requestJiesuanDataWith:(NSString *)dateString{
+    
+    NSString *currentTime = [[NSString stringWithFormat:@"%@", dateString]substringWithRange:NSMakeRange(0, 10)];
+    NSString *string = @" 00:00:00";
+    NSString *createTime = [NSString stringWithFormat:@"%@%@",currentTime,string];
+    
+    NSDictionary *partner = @{
+                              @"createTime": createTime,
+                              @"isPay": @"2",
+                              @"orderStatus": @"6",
+                              @"page": @"1",
+                              @"size": @"20",
+                              @"token": KUSERID
+                              };
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@/appordersr/findtodayinfo",HXEORDER] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+     //   NSLog(@"%@",responseObject);
+        if ([responseObject[@"status"] integerValue] == 200) {
+            [self.jiesuanArr removeAllObjects];
+            NSDictionary *data = responseObject[@"data"];
+            JiesuanModel *model = [[JiesuanModel alloc]init];
+            [model setValuesForKeysWithDictionary:data];
+            [_jiesuanArr addObject:model];
+      //      NSLog(@"%@",_jiesuanArr);
+            [self.jiesuanView reloadData];
+        }else{
+            [MBProgressHUD showError:responseObject[@"msg"]];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    
+}
+
+
+#pragma mark 创建结算视图展示数据
+- (void)initIncomeView{
+    
+    self.jiesuanView = [[UITableView alloc]initWithFrame:CGRectMake(0, 10, kScreenWidth, 50) style:UITableViewStylePlain];
+    self.jiesuanView.delegate = self;
+    self.jiesuanView.dataSource = self;
+    self.jiesuanView.scrollEnabled = NO;
+    [self.jiesuanView registerNib:[UINib nibWithNibName:@"JiesuanTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:jiesuanCell];
+    [self.view addSubview:self.jiesuanView];
+}
 - (void)creatTableView{
 
     UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
@@ -160,9 +255,9 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
     [self.view addSubview:lineView];
     CGFloat commen = kNav_H + kTabbar_H;
     if(iPhoneX){
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 10, kScreenWidth, kScreenHeight - 30 - commen - 100) style:UITableViewStyleGrouped];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 70, kScreenWidth, kScreenHeight - 30 - commen - 100 - 50) style:UITableViewStyleGrouped];
     }else{
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 10, kScreenWidth, kScreenHeight - 30 - 64 - 49) style:UITableViewStyleGrouped];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 70, kScreenWidth, kScreenHeight - 30 - 64 - 49 - 50) style:UITableViewStyleGrouped];
     }
     [self.tableView registerNib:[UINib nibWithNibName:@"AllOrderTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:allOrderCell];
     self.tableView.delegate = self;
@@ -171,40 +266,52 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
     [self.view addSubview:self.tableView];
 
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (tableView == self.jiesuanView) {
+        return 0.000001;
+    }
     return 120;
+    
 }
 //
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
 
+    if (tableView == self.jiesuanView) {
+        return nil;
+    }
     CellModel *model = self.dataSource[section];
     UIView *view = [UIView new];
     view.backgroundColor = [UIColor whiteColor];
-    /* #*/
-    UILabel *jingLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 10, 15)];
-    jingLable.text = @"#";
-    jingLable.font = [UIFont systemFontOfSize:13];
-    [view addSubview:jingLable];
-    /* 订单号 */
-    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(25, 10, 40, 15)];
- //   lable.text = [NSString stringWithFormat:@"%@",model.takeNum];
-    if (model.takeNum.length == 0) {
-        lable.text = @"--";
-    }else if (model.takeNum.length < 2 && model.takeNum.length > 0) {
-        lable.text = [NSString stringWithFormat:@"0%@",model.takeNum];
-    }else{
-        lable.text = [NSString stringWithFormat:@"%@",model.takeNum];
-    }
+
+    /* 取餐号 */
+    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(40, 10, 150, 15)];
     lable.font = [UIFont systemFontOfSize:20];
+    if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
+        if (model.takeNum.length == 0) {
+            lable.text = @"取餐号 --";
+        }else if (model.takeNum.length < 2 && model.takeNum.length > 0) {
+            lable.text = [NSString stringWithFormat:@"取餐号 0%@",model.takeNum];
+        }else{
+            lable.text = [NSString stringWithFormat:@"取餐号 %@",model.takeNum];
+        }
+    }else{//堂食
+        if (model.deskNum.length < 2) {
+            lable.text = [NSString stringWithFormat:@"桌号 0%@",model.deskNum];
+        }else{
+            lable.text = [NSString stringWithFormat:@"桌号 %@",model.deskNum];
+        }
+    }
+    
     [view addSubview:lable];
+    
+    
     /* 拼团图片 */
-    UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(70, 7, 20, 20)];
-    if ([model.orderType isEqualToString:@"APPOINTMENT"]) {
+    UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 7, 20, 20)];
+    if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
         [typeImageView setImage:[UIImage imageNamed:@"APPOINTMENT"]];
-    }else if ([model.orderType isEqualToString:@"ARRIVE"]){
-        [typeImageView setImage:[UIImage imageNamed:@"ARRIVE"]];
-    }else if([model.orderType isEqualToString:@"PT"]){
-        [typeImageView setImage:[UIImage imageNamed:@"PT"]];
+    }else{//堂食
+        [typeImageView setImage:[UIImage imageNamed:@"DINEIN"]];
     }
     [view addSubview:typeImageView];
     /* 接单状态 */
@@ -254,6 +361,12 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
     phoneButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [phoneButton addTarget:self action:@selector(callNumberWithPhoneWith:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:phoneButton];
+    
+    
+    
+    
+    
+    
 
     /* 订单 */
     UILabel *orderLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(nameLable.frame) + 15, 50, 15)];
@@ -326,51 +439,40 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 70;
+    if (tableView == self.jiesuanView) {
+        return 0.00001;
+    }
+    return 40;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    if (tableView == self.jiesuanView) {
+        return nil;
+    }
     UIView *view = [UIView new];
     CellModel *model = self.dataSource[section];
     view.backgroundColor = kColor(255, 255, 255);
     
-    UILabel *couponsLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, kScreenWidth * 0.2, 20)];
-    couponsLable.text = @"顾客实付";
-    couponsLable.font = [UIFont systemFontOfSize:13];
-    [view addSubview:couponsLable];
-    
-    UILabel *priceLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 35, kScreenWidth * 0.2, 20)];
-    priceLable.text = @"本单收入";
+    UILabel *priceLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, 85, 20)];
+    priceLable.text = @"本单预计收入";
     priceLable.font = [UIFont systemFontOfSize:13];
     [view addSubview:priceLable];
-
-    UILabel *couponsPrice = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.8, 5, kScreenWidth * 0.2, 20)];
-    couponsPrice.font = [UIFont systemFontOfSize:15];
-    couponsPrice.text = [NSString stringWithFormat:@"￥%@",model.realFee];
-    [view addSubview:couponsPrice];
     
-    UILabel *jieshiLable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.3, 5, kScreenWidth * 0.5 - 5, 20)];
-    jieshiLable.textAlignment = NSTextAlignmentRight;
-    jieshiLable.font = [UIFont systemFontOfSize:14];
-    if ([model.isCoupons integerValue] == 1) {
-        jieshiLable.text = [NSString stringWithFormat:@"(黄小二平台补贴%@元)",model.couponsFee];
-    }else{
-        jieshiLable.hidden = YES;
-    }
+    UIButton *detailBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    detailBtn.frame = CGRectMake(95, 5, 20, 20);
+    [detailBtn setTag:1000 + section];
+    [detailBtn addTarget:self action:@selector(messageSelectWtih:) forControlEvents:UIControlEventTouchUpInside];
+    [detailBtn setBackgroundImage:[UIImage imageNamed:@"detailBtn"] forState:UIControlStateNormal];
+    [view addSubview:detailBtn];
     
-    [view addSubview:jieshiLable];
     
-    UILabel *sumPriceLable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.8, 35, kScreenWidth * 2, 20)];
+    UILabel *sumPriceLable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.8, 5, kScreenWidth * 2, 20)];
     sumPriceLable.font = [UIFont systemFontOfSize:15];
-    if ([model.orderType isEqualToString:@"APPOINTMENT"]) {
-        CGFloat realPrice = [model.realFee floatValue];
-        sumPriceLable.text = [NSString stringWithFormat:@"￥%@",model.totalFee];
-    }else if([model.orderType isEqualToString:@"PT"]){
-        CGFloat totalPrice = [model.totalFee floatValue];
-        sumPriceLable.text = [NSString stringWithFormat:@"￥%.2f",totalPrice];
-    }
+    CGFloat totalPrice = [model.income floatValue];
+    sumPriceLable.text = [NSString stringWithFormat:@"￥%.2f",totalPrice];
+    
     [view addSubview:sumPriceLable];
     /* 分隔视图 */
-    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 60, kScreenWidth, 10)];
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 30, kScreenWidth, 10)];
     lineView.backgroundColor = kColor(240, 240, 240);
     [view addSubview:lineView];
 
@@ -378,11 +480,18 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
 }
 
 
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if (tableView == self.jiesuanView) {
+        return 1;
+    }
     return self.dataSource.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     NSString *string = [NSString stringWithFormat:@"%ld",(long)section+300];
+    if (tableView == self.jiesuanView) {
+        return 1;
+    }
     if ([dic[string] integerValue] == 1 ) {  //打开cell返回数组的count
         return 1;
     }else{
@@ -391,18 +500,43 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (tableView == self.jiesuanView) {
+        return 50;
+    }
     AllOrderLayoutModel *model = self.layoutArr[indexPath.section];
     return model.cellHei;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-
+    if (tableView == self.jiesuanView) {
+        
+        JiesuanModel *model = _jiesuanArr[0];
+        JiesuanTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:jiesuanCell forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.timeLable.text = _timeLable.text;
+        [cell setValueWith:model];
+        return cell;
+    }
     CellModel *model = self.dataSource[indexPath.section];
     AllOrderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:allOrderCell forIndexPath:indexPath];
     [cell cellViewsValueWithModel:model];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
+
+
+
+- (void)messageSelectWtih:(UIButton *)sender{
+    NSInteger section = sender.tag - 1000;
+    CellModel *model = self.dataSource[section];
+   
+    DetailIncomeViewController *detail = [[DetailIncomeViewController alloc]init];
+    detail.hidesBottomBarWhenPushed = YES;
+    detail.model = model;
+    [self.navigationController pushViewController:detail animated:YES];
+    detail.hidesBottomBarWhenPushed = NO;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -411,6 +545,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
+
 /*
  #pragma mark - Navigation
 

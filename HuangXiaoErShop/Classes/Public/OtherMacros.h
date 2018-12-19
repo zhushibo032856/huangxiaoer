@@ -12,6 +12,7 @@
 /** 用户退出登录通知 */
 #define USEREXITEVENTNOTIFICATION @"USEREXITEVENTNOTIFICATION"
 
+#define KEY_USERNAME_PASSWORD  @"com.cloud.app.usernamepassword"
 
 #define LOADDATAHARDLY     @"努力加载中"
 #define LOADDATAERROR      @"服务器发生错误"

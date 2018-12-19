@@ -12,6 +12,7 @@
 #import "OrderSelectViewController.h"
 #import "ManageViewController.h"
 #import "MineViewController.h"
+#import "NewPendingViewController.h"
 
 @interface BaseTabBarController ()<UITabBarControllerDelegate>
 
@@ -44,8 +45,11 @@
 /** Add tabBarControllers */
 - (void)addChildViewControllers {
     
-    PendingViewController *pendingVC = [PendingViewController new];
-    [self addChildViewController:pendingVC image:@"pending" selectedImage:@"pending2" title:@"待处理"];
+//    PendingViewController *pendingVC = [PendingViewController new];
+//    [self addChildViewController:pendingVC image:@"pending" selectedImage:@"pending2" title:@"待处理"];
+    
+    NewPendingViewController *newPendingVC = [NewPendingViewController new];
+    [self addChildViewController:newPendingVC image:@"pending" selectedImage:@"pending2" title:@"待处理"];
     
     OrderSelectViewController *orderSelectVC = [OrderSelectViewController new];
     [self addChildViewController:orderSelectVC image:@"orderselect" selectedImage:@"orderselect1" title:@"订单查询"];

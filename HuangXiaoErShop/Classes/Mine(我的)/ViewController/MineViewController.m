@@ -19,6 +19,7 @@
 #import "CreatQRViewController.h"
 #import "QRViewController.h"
 #import "AppointmentDateViewController.h"
+#import "UuidObject.h"
 
 #import "MarketManagerModel.h"
 
@@ -75,7 +76,8 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     
     [super viewDidLoad];
     
-    
+    NSString *uuid = [UuidObject getUUID];
+  //  NSLog(@"UUID = %@",uuid);
     
     _mineTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, kScreenHeight / 5, kScreenWidth, kScreenHeight / 5 * 4) style:UITableViewStyleGrouped];
   //  _mineTableView.scrollEnabled = NO;
@@ -95,13 +97,12 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     [self creatHeadViewLayout];
     
     [self requestShopManager];
-    
-//    [self submitTokenToSocket];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestShopManager) name:@"notiEdit" object:nil];
     // Do any additional setup after loading the view.
 }
 - (void)submitTokenToSocket{
-
+    
     if (kStringIsEmpty(KDEVICETOKEN)) {
      //   [MBProgressHUD showError:@"注册deviceToken失败"];
         return;
@@ -121,7 +122,8 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
                               @"sys_user_id": KUSERSHOPID,
                               @"token": KUSERID
                               };
-  //  NSLog(@"%@",partner);
+    
+ //   NSLog(@"%@",partner);
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -130,7 +132,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     [manager POST:[NSString stringWithFormat:@"%@/appcommercial/addcommericalpush",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
 
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
- //       NSLog(@"%@",responseObject);
+    //    NSLog(@"%@",responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 
     }];
@@ -148,8 +150,8 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     _shopPhotoView = [[UIImageView alloc]initWithFrame:CGRectMake(20, CGRectGetHeight(_headView.frame) / 3 + 10, CGRectGetHeight(_headView.frame) / 3 + 30, CGRectGetWidth(_shopPhotoView.frame) / 4 * 3)];
     _shopPhotoView.layer.masksToBounds = YES;
     _shopPhotoView.layer.cornerRadius = 6;
-    NSString *str = [NSString stringWithFormat:@"%@",KUSERIMAGEURL];
-    NSLog(@"%@",str);
+   // NSString *str = [NSString stringWithFormat:@"%@",KUSERIMAGEURL];
+  //  NSLog(@"%@",str);
 
     [_shopPhotoView sd_setImageWithURL:[NSURL URLWithString:self.userImageUrl] placeholderImage:[UIImage imageNamed:@"userName"]];
     

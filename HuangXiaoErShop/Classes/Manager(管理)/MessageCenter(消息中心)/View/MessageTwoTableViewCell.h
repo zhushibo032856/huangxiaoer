@@ -17,6 +17,4 @@
 
 - (void)setMessageWith:(MessageModel *)model;
 
-- (CGFloat)heightForModel:(MessageModel *)model;
-
 @end

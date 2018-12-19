@@ -8,13 +8,13 @@
 
 #import "MessageDetailViewController.h"
 #import "MessageTwoTableViewCell.h"
+//#import "UIView+frameAdjust.h"
 
 @interface MessageDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UILabel *lable;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArr;
-@property (nonatomic, strong) MessageTwoTableViewCell *tempCell;
 
 @end
 
@@ -22,7 +22,14 @@ static NSString * const MessageTwo = @"MessageTwoTableViewCell";
 
 @implementation MessageDetailViewController
 
-
+- (NSMutableArray *)dataArr{
+    
+    if (!_dataArr) {
+        _dataArr = [NSMutableArray arrayWithCapacity:0];
+    }
+    
+    return _dataArr;
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     
@@ -53,68 +60,26 @@ static NSString * const MessageTwo = @"MessageTwoTableViewCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-//    _dataArr = [[NSMutableArray alloc] init];
-//    MessageModel *model = self.model;
-//    [_dataArr addObject:model];
-//    NSLog(@"%@",_dataArr);
+
     self.view.backgroundColor = kColor(230, 230, 230);
     [self uploadDataReadAlreadyToUnread];
     
-    [self creatAutoLayout];
-  //  [self setTableView];
+    [self setTableView];
     // Do any additional setup after loading the view.
 }
 
-- (void)creatAutoLayout{
-    
-    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, 200)];
-    backView.layer.masksToBounds = YES;
-    backView.layer.cornerRadius = 6;
-    backView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:backView];
-    
-    UILabel *titleLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 40, 30)];
-    if ([self.model.type isEqualToString:@"ORDERMSG"]) {
-        titleLable.text = @"订单消息";
-    }else if ([self.model.type isEqualToString:@"VERIFYMSG"]){
-        titleLable.text = @"审核信息";
-    }else if ([self.model.type isEqualToString:@"SYSMSG"]){
-        titleLable.text = @"系统通知";
-    }else if ([self.model.type isEqualToString:@"PAYMSG"]){
-        titleLable.text = @"财务信息";
-    }else if ([self.model.type isEqualToString:@"ACTIVEITYMSG"]){
-        titleLable.text = @"活动消息";
-    }
-    titleLable.font = [UIFont systemFontOfSize:21];
-    [backView addSubview:titleLable];
-    
-    UILabel *contextLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, kScreenWidth - 40, 100)];
-    contextLable.textColor = kColor(204, 204, 204);
-    contextLable.numberOfLines = 0;
-    contextLable.text = self.model.content;
-    [backView addSubview:contextLable];
-    
-    UILabel *timeLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 160, kScreenWidth - 40, 30)];
-    timeLable.textColor = kColor(204, 204, 204);
-    timeLable.text = self.model.sendTime;
-    timeLable.textAlignment = NSTextAlignmentRight;
-    [backView addSubview:timeLable];
-}
-
-
 - (void)setTableView{
-    
+
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStyleGrouped];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.estimatedRowHeight = 175;
+    _tableView.separatorStyle = NO;
     [_tableView registerClass:[MessageTwoTableViewCell class] forCellReuseIdentifier:MessageTwo];
     [self.view addSubview:_tableView];
-    
-    self.tempCell = [[MessageTwoTableViewCell alloc]initWithStyle:0 reuseIdentifier:MessageTwo];
-}
 
+
+}
 
 - (void)uploadDataReadAlreadyToUnread{
     
@@ -141,50 +106,34 @@ static NSString * const MessageTwo = @"MessageTwoTableViewCell";
     
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-//    return 0.000001;
-//}
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-//
-//    UIView *view = [[UIView alloc]init];
-//    return view;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-//    return 1;
-//}
-//
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-//    return _dataArr.count;
-//}
-//
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//
-//    MessageModel *model = _dataArr[indexPath.section];
-//    if (model.cellHeight == 0) {
-//        CGFloat cellHeight = [self.tempCell heightForModel:_dataArr[indexPath.section]];
-//
-//        // 缓存给model
-//        model.cellHeight = cellHeight;
-//
-//        return cellHeight;
-//    } else {
-//        return model.cellHeight;
-//    }
-//}
-//
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-//
-//    MessageTwoTableViewCell *twoCell = [tableView dequeueReusableCellWithIdentifier:MessageTwo forIndexPath:indexPath];
-//
-//    twoCell.layer.masksToBounds = YES;
-//    twoCell.layer.cornerRadius = 6;
-//
-//    [twoCell setMessageWith:_dataArr[indexPath.section]];
-//
-//    return twoCell;
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0.000001;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
 
+    UIView *view = [[UIView alloc]init];
+    return view;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 1;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    MessageTwoTableViewCell *twoCell = [tableView dequeueReusableCellWithIdentifier:MessageTwo forIndexPath:indexPath];
+
+    twoCell.layer.masksToBounds = YES;
+    twoCell.layer.cornerRadius = 6;
+   
+    [twoCell setMessageWith:self.model];
+    return twoCell;
+}
 
 
 - (void)didReceiveMemoryWarning {

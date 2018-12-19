@@ -95,12 +95,12 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
     
     _thePage = 1;
     __block typeof(self)weakself = self;
-    self.leftTableView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
+    self.leftTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [self.leftTableView.mj_footer resetNoMoreData];
         weakself.thePage = 1;
         [self reloadRightData];
     }];
-    self.rightTableView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
+    self.rightTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [self.rightTableView.mj_footer resetNoMoreData];
         weakself.thePage = 1;
         [self reloadRightData];
@@ -108,12 +108,12 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
     
     
     self.leftTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        weakself.thePage += 1;
+        weakself.thePage = 1;
         [self reloadRightData];
         [self.leftTableView.mj_footer endRefreshing];
     }];
     self.rightTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        weakself.thePage += 1;
+        weakself.thePage = 1;
         [self reloadRightData];
         [self.rightTableView.mj_footer endRefreshing];
     }];
@@ -396,9 +396,7 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
 - (void)reloadRightData{
     
     NSDictionary *partner = @{
-                              
                               @"token":KUSERID
-                              
                               };
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -429,7 +427,6 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
                     [productMutableArray addObject:model];
                 }
                 [self.rightDataArr addObject:productMutableArray];
-                
             }
             
             NSMutableArray *arr = [self.rightDataArr firstObject];
@@ -451,36 +448,6 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
            [self.rightTableView reloadData];
              [self.leftTableView reloadData];
         }
-        
-        
-
-//        [self.rightArr removeAllObjects];
-//
-//        NSArray *dataArr = responseObject[@"data"];
-//        for (NSDictionary *dict in dataArr) {
-//            NSArray *productArray = dict[@"product"];
-//
-//            LeftDataModel *model = [[LeftDataModel alloc]init];
-//            [model setValuesForKeysWithDictionary:dict];
-//            [self.leftDataArr addObject:model];
-//            NSMutableArray *productMutableArray = [NSMutableArray array];
-//            for (NSDictionary *productDict in productArray) {
-//                RightDataModel *model = [[RightDataModel alloc]init];
-//                [model setValuesForKeysWithDictionary:productDict];
-//                [productMutableArray addObject:model];
-//            }
-//            [self.rightDataArr addObject:productMutableArray];
-//
-//        }
-//
-//        NSMutableArray *arr = self.rightDataArr[0];
-//        for (RightDataModel *model in arr) {
-//            [self.rightArr addObject:model];
-//
-//        }
-//        [self.leftTableView reloadData];
-//         [self.rightTableView reloadData];
-        
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         

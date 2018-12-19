@@ -94,7 +94,7 @@ static NSString * const messageOne = @"MessageOneTableViewCell";
     }];
     // 进入界面时刷新
     [self.tableView.mj_header beginRefreshing];
-    
+    [self.tableView reloadData];
 }
 
 
@@ -103,7 +103,7 @@ static NSString * const messageOne = @"MessageOneTableViewCell";
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - kNavHeight - 50) style:UITableViewStyleGrouped];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    
+    _tableView.separatorStyle = NO;
     [_tableView registerClass:[MessageOneTableViewCell class] forCellReuseIdentifier:messageOne];
     
     [self.view addSubview:_tableView];

@@ -33,6 +33,8 @@
 #import "LSPPageView.h"
 #import "BirthdayView.h"
 #import "UIColor+Util.h"
+#import "LSXAlertInputView.h"
+#import "MLMOptionSelectView.h"
 
 /** SDK Header */
 #import "BLEConnecter.h"

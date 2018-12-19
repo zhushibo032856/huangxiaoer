@@ -23,42 +23,61 @@
 
 - (void)creatAutoLayout{
     
-    self.titleLable.frame = CGRectMake(10, 10, kScreenWidth - 40, 30);
-    [self.contentView addSubview:self.contentLable];
+    self.titleLable = [[UILabel alloc]init];
+    self.timeLable.font = [UIFont systemFontOfSize:21];
+    [self.contentView addSubview:self.titleLable];
+    
+    self.contentLable = [[UILabel alloc]init];
     self.contentLable.numberOfLines = 0;
-    self.contentLable.preferredMaxLayoutWidth = kScreenWidth - 40;
+    self.contentLable.font = [UIFont systemFontOfSize:17];
+    self.contentLable.textColor = kColor(204, 204, 204);
     [self.contentView addSubview:self.contentLable];
+    
+    self.timeLable = [[UILabel alloc]init];
+    self.timeLable.textColor = kColor(204, 204, 204);
+    self.timeLable.textAlignment = NSTextAlignmentRight;
+    [self.contentView addSubview:self.timeLable];
+    
+    [self.titleLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.mas_equalTo(self.contentView).offset(10);
+        make.height.mas_equalTo(30);
+        
+    }];
+    
     [self.contentLable mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(50);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(20);
-        make.bottom.mas_equalTo(40);
+        make.left.mas_equalTo(self.contentView).offset(10);
+        make.right.mas_equalTo(self.contentView).offset(-10);
+        make.top.mas_equalTo(self.titleLable.mas_bottom).offset(10);
+        make.height.mas_equalTo(60);
+    }];
+    
+    [self.timeLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.contentLable.mas_bottom).offset(20);
+        make.right.mas_equalTo(self.contentView).offset(-10);
+        make.height.mas_equalTo(30);
+        make.bottom.mas_equalTo(self.contentView).offset(-10);
     }];
     
 }
-- (UILabel *)titleLable{
-    if (!_titleLable) {
-        _titleLable = [[UILabel alloc]init];
-        _titleLable.text = @"123";
-    }
-    return _titleLable;
-}
+
 
 - (void)setMessageWith:(MessageModel *)model{
-    
-    NSAttributedString *contentStr = [[NSAttributedString alloc]initWithString:model.content attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:16], NSForegroundColorAttributeName:kColor(204, 204, 204)}];
-    self.contentLable.attributedText = contentStr;
-    NSLog(@"%@",contentStr);
-}
-- (CGFloat)heightForModel:(MessageModel *)model{
-    [self setMessageWith:model];
-    [self layoutIfNeeded];
-    
-    CGFloat cellHeight = [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height+1;
-    
-    return cellHeight;
-}
+ 
 
+    if ([model.type isEqualToString:@"ORDERMSG"]) {
+        _titleLable.text = @"订单消息";
+    }else if ([model.type isEqualToString:@"VERIFYMSG"]){
+        _titleLable.text = @"审核信息";
+    }else if ([model.type isEqualToString:@"SYSMSG"]){
+        _titleLable.text = @"系统通知";
+    }else if ([model.type isEqualToString:@"PAYMSG"]){
+        _titleLable.text = @"财务信息";
+    }else if ([model.type isEqualToString:@"ACTIVEITYMSG"]){
+        _titleLable.text = @"活动消息";
+    }
+    _contentLable.text = model.content;
+    _timeLable.text = model.sendTime;
+}
 
 
 - (void)setFrame:(CGRect)frame{

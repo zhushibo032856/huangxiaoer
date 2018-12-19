@@ -69,6 +69,7 @@ static NSString * const messageOne = @"MessageOneTableViewCell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(readAlreadyToUnread) name:@"ReadAlreadyToUnread" object:nil];
 }
 - (void)readAlreadyToUnread{
+    [self.dataArray removeAllObjects];
     [self setRefreshWith:@"0"];
 }
 
@@ -77,6 +78,7 @@ static NSString * const messageOne = @"MessageOneTableViewCell";
     [self.dataArray removeAllObjects];
  //   [self getDataFromNetWithStatus:dataDic.userInfo[@"PostIndex"]];
     [self setRefreshWith:dataDic.userInfo[@"PostIndex"]];
+
 }
 
 - (void)setRefreshWith:(NSString *)status{
@@ -94,7 +96,7 @@ static NSString * const messageOne = @"MessageOneTableViewCell";
     }];
     // 进入界面时刷新
     [self.tableView.mj_header beginRefreshing];
-    
+    [self.tableView reloadData];
 }
 
 
@@ -103,7 +105,7 @@ static NSString * const messageOne = @"MessageOneTableViewCell";
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - kNavHeight - 50) style:UITableViewStyleGrouped];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-
+    _tableView.separatorStyle = NO;
     [_tableView registerClass:[MessageOneTableViewCell class] forCellReuseIdentifier:messageOne];
    
     [self.view addSubview:_tableView];
@@ -210,7 +212,6 @@ static NSString * const messageOne = @"MessageOneTableViewCell";
     detailVC.model = model;
     [self.navigationController pushViewController:detailVC animated:YES];
 
-    NSLog(@"%ld",indexPath.section);
 }
 
 

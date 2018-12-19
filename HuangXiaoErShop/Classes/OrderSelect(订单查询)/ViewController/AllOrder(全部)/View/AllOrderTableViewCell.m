@@ -24,6 +24,13 @@
     self.BeiZhuLable.text = model.des;
     self.OrderNumber.text = model.orderNum;
     self.CreatTime.text = model.createTime;
+    CGFloat youhuiPrice = [model.couponsFee floatValue];
+    if ([model.isCoupons integerValue] == 1) {
+        self.CouponsLable.text = [NSString stringWithFormat:@"-￥%.2f",youhuiPrice];
+    }else{
+        self.CouponsLable.text = [NSString stringWithFormat:@""];
+    }
+    
     if (6 == [model.orderStatus integerValue]) {
         self.AchieveTime.text = model.updateTime;
     }else{
@@ -54,7 +61,7 @@
     titleLb.text = title;
     
     
-    UILabel *priceLb = [[UILabel alloc] initWithFrame:(CGRectMake(view.frame.size.width - 60, 5, 50, view.frame.size.height - 10))];
+    UILabel *priceLb = [[UILabel alloc] initWithFrame:(CGRectMake(view.frame.size.width - 70, 5, 70, view.frame.size.height - 10))];
     priceLb.font = [UIFont systemFontOfSize:15];
     CGFloat floatPrice = [[NSString stringWithFormat:@"%@",price]floatValue];
     
@@ -74,6 +81,8 @@
     
     return view;
 }
+
+
 
 - (void)awakeFromNib {
     [super awakeFromNib];

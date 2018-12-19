@@ -189,6 +189,7 @@ static CGFloat const lineHeight = 0.8f;
     
 }
 
+
 - (void)requestShopManager{
     
     NSDictionary *partner = @{

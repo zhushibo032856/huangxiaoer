@@ -14,7 +14,7 @@
     if (self = [super init]) {
         
         self.isTitleViewScrollEnable = NO;
-        self.isContentViewScrollEnable = NO;
+        self.isContentViewScrollEnable = YES;
         self.normalColor = kColor(102, 102, 102);
         self.selectedColor = kColor(255, 210, 0);
         self.font = [UIFont systemFontOfSize:13.0];

@@ -97,7 +97,7 @@
     [printButton setBackgroundColor:kColor(255, 210, 0)];
     [printButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [printButton addTarget:self action:@selector(printDataWithButton) forControlEvents:UIControlEventTouchUpInside];
-    [printButton setTitle:@"打印测试" forState:UIControlStateNormal];
+    [printButton setTitle:@"预约打印测试" forState:UIControlStateNormal];
     
     [self.view addSubview:printButton];
     
@@ -108,15 +108,21 @@
     closeButton.layer.masksToBounds = YES;
     [closeButton setBackgroundColor:[UIColor whiteColor]];
     [closeButton setTintColor:[UIColor redColor]];
-    [closeButton setTitle:@"断开连接" forState:UIControlStateNormal];
+    [closeButton setTitle:@"堂食打印测试" forState:UIControlStateNormal];
     [closeButton addTarget:self action:@selector(closerPrint) forControlEvents:UIControlEventTouchUpInside];
-  //  [self.view addSubview:closeButton];
+    [self.view addSubview:closeButton];
 }
 
 - (void)closerPrint{
-    if (_peripheral != nil) {
-        [Manager closePeripheral:_peripheral];
-    }
+//    if (_peripheral != nil) {
+//        [Manager closePeripheral:_peripheral];
+//    }
+    
+    [Manager write:[self escCommandWithDinein] progress:^(NSUInteger total, NSUInteger progress) {
+        [MBProgressHUD showSuccess:@"打印中"];
+    } receCallBack:^(NSData * _Nullable data) {
+        
+    }];
     
 }
 
@@ -192,10 +198,12 @@
     [command addText:@"黄焖鸡 X1"];
     
     [command addPrintMode:0x0];
-    [command addText:@"\n-------------------------------\n"];
+    [command addText:@"\n*******************************\n"];
     
+    [command addPrintMode:0x16 | 0x32];
     [command addText:@"备注："];
-    [command addText:@"\n-------------------------------\n"];
+    [command addPrintMode:0x0];
+    [command addText:@"\n*******************************\n"];
     
     [command addText:@"订单价格："];
     [command addText:@"\n-------------------------------\n"];
@@ -205,6 +213,82 @@
     [command addText:@"订单号:D123456787654321\n\n\n\n"];
     
  
+    [command queryRealtimeStatus:0x02];
+    return [command getCommand];
+}
+
+-(NSData *)escCommandWithDinein{
+    
+    int x = arc4random() % 2;
+    
+    EscCommand *command = [[EscCommand alloc]init];
+    [command addInitializePrinter];
+    
+    if (x == 0) {
+        [command addPrintAndFeedLines:1];
+        [command addPrintMode:0x0];
+        [command addText:@"注意:堂食订单\n"];
+        [command addPrintMode:0x0];
+        [command addText:@"===============================\n"];
+        
+        [command addPrintMode:0x16 | 0x32];
+        [command addSetJustification:1];
+        [command addText:@"黄小二【堂食】\n"];
+        
+        
+    }else{
+        [command addPrintAndFeedLines:1];
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:@"黄小二【退款单】\n"];
+        
+        [command addPrintMode:0x0];
+        [command addText:@"-------------------------------\n"];
+        
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:@"退款原因:这家饭太难吃了\n"];
+        
+        [command addPrintMode:0x0];
+        [command addText:@"-------------------------------\n"];
+    }
+    
+    
+    
+    [command addPrintMode:0x0];
+    [command addSetJustification:1];
+    [command addText:@"*黄小二*\n"];
+    
+    [command addSetJustification:0];
+    [command addPrintMode:0x0];
+    [command addText:[NSString stringWithFormat:@"下单时间:2018-12-12"]];
+    
+    [command addPrintMode:0x0];
+    [command addText:@"\n-------------------------------\n"];
+    
+    [command addPrintMode:0x16 | 0x32];
+    [command addText:[NSString stringWithFormat:@"桌号:28"]];
+    
+    [command addPrintMode:0x0];
+    [command addText:@"\n-------------------------------\n"];
+    
+    [command addPrintMode:0x16];
+    [command addText:@"黄焖鸡 X1"];
+    
+    [command addPrintMode:0x0];
+    [command addText:@"\n*******************************\n"];
+    
+    [command addPrintMode:0x16 | 0x32];
+    [command addText:@"备注:这只是一个测试"];
+    [command addPrintMode:0x0];
+    [command addText:@"\n*******************************\n"];
+    
+    [command addText:@"订单价格："];
+    [command addText:@"\n-------------------------------\n"];
+    
+    [command addText:@"用户名:黄小二\n"];
+    [command addText:@"123456789\n"];
+    [command addText:@"订单号:D123456787654321\n\n\n\n"];
+    
+    
     [command queryRealtimeStatus:0x02];
     return [command getCommand];
 }

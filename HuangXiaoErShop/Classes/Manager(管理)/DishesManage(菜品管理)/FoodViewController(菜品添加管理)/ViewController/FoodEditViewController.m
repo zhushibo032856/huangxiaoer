@@ -13,7 +13,7 @@
 #import "DishesManagerViewController.h"
 
 @interface FoodEditViewController ()<UITextFieldDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
-@property (nonatomic, strong) UITextField *nameTF;//菜品名称
+@property (nonatomic, strong) UITextView *nameTF;//菜品名称
 @property (nonatomic, strong) UITextField *priceTF;//优惠价格
 @property (nonatomic, strong) UITextField *activeTF;//真实价格
 @property (nonatomic, strong) BRTextField *cateGoryTF;//分类
@@ -141,10 +141,12 @@
     nameLable.text = @"菜品名称";
     [_firstView addSubview:nameLable];
     
-    self.nameTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.6, 80, kScreenWidth * 0.3, 30)];
+    self.nameTF = [[UITextView alloc]initWithFrame:CGRectMake(kScreenWidth * 0.4, 80, kScreenWidth * 0.55, 40)];
     self.nameTF.text = model.name;
     self.nameTF.textAlignment = NSTextAlignmentRight;
     self.nameTF.font = [UIFont systemFontOfSize:15];
+    self.nameTF.limitLength = @22;
+    
     [_firstView addSubview:self.nameTF];
     
     UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(20, 180, kScreenWidth - 40, 30)];

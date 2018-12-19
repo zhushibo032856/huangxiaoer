@@ -390,7 +390,7 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
     TodayDataModel *model = self.collectionArray[0];
     
     //    NSLog(@"%@",model);
-    NSArray *titleArr = @[@"今日订单",@"今日营业额",@"扫码收款"];
+    NSArray *titleArr = @[@"有效订单",@"预计收入",@"扫码收款"];
     
     NSArray *titleTwoArr = @[@"配菜助手",@"菜品管理",@"用户评价",@"结算管理",@"营销活动",@"消息中心",@"营业分析",@"经营数据",@"敬请期待"];
     NSArray *nameArr = @[@"sidedish",@"foodmanagement",@"userevaluation",@"settlement",@"activesite",@"messagecenter",@"businessanalysis",@"businessdata",@"comingsoon"];

@@ -17,7 +17,10 @@
 @property (weak, nonatomic) IBOutlet UIView *addView;
 @property (weak, nonatomic) IBOutlet UILabel *BeiZhuLable;
 
+@property (weak, nonatomic) IBOutlet UILabel *CouponsLable;
+
 @property (weak, nonatomic) IBOutlet UILabel *OrderNumber;
 @property (weak, nonatomic) IBOutlet UILabel *CreatTime;
 @property (weak, nonatomic) IBOutlet UILabel *AchieveTime;
+
 @end

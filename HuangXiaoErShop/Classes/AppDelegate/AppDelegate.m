@@ -90,10 +90,11 @@
         [Manager scanForPeripheralsWithServices:nil options:nil discover:^(CBPeripheral * _Nullable peripheral, NSDictionary<NSString *,id> * _Nullable advertisementData, NSNumber * _Nullable RSSI) {
             if ([peripheral.identifier.UUIDString isEqualToString:KBLUETOOTH]) {
                 NSLog(@"相同则开始连接此蓝牙");
-                [Manager connectPeripheral:peripheral options:nil timeout:5 connectBlack:^(ConnectState state) {
+                [Manager connectPeripheral:peripheral options:nil timeout:50 connectBlack:^(ConnectState state) {
                     if (state == CONNECT_STATE_CONNECTED) {
                         [Manager stopScan];
                     }else if (state == CONNECT_STATE_TIMEOUT || state == CONNECT_STATE_FAILT || state == CONNECT_STATE_DISCONNECT){
+                        [MBProgressHUD showError:@"请尝试重启蓝牙票机"];
                         [self print];
                     }
                     
@@ -277,6 +278,71 @@
     
     [command queryRealtimeStatus:2];
     
+    if ([dic[@"orderType"] isEqualToString:@"DINEIN"]) {
+        
+        if (x == 2) {
+            [command addPrintMode:0x0];
+            [command addText:@"注意:堂食订单\n"];
+            [command addPrintMode:0x0];
+            [command addText:@"===============================\n"];
+            
+            [command addPrintMode:0x16 | 0x32];
+            [command addSetJustification:1];
+            [command addText:@"黄小二【堂食】\n\n"];
+            
+        }else if (x == 3 || x == 4){
+            NSString *refuse = dic[@"desFefount"];
+            
+            [command addPrintAndFeedLines:1];
+            [command addPrintMode:0x16 | 0x32];
+            [command addText:@"黄小二【退款单】\n"];
+            
+            [command addPrintMode:0x0];
+            [command addText:@"-------------------------------\n"];
+            
+            [command addPrintMode:0x16 | 0x32];
+            [command addPrintAndFeedLines:0];
+            [command addText:[NSString stringWithFormat:@"退款原因:%@\n",refuse]];
+            
+            [command addPrintMode:0x0];
+            [command addText:@"-------------------------------\n"];
+        }
+        
+        NSString *shopSign = dic[@"shopSign"];
+   //     NSString *diningName = dic[@"diningName"];
+        [command addPrintMode:0x0];
+        [command addSetJustification:1];
+        [command addText:[NSString stringWithFormat:@"%@\n",shopSign]];
+        
+        [command addSetJustification:0];
+        [command addPrintMode:0x0];
+        [command addText:@"-------------------------------\n"];
+        
+        NSString *creatTime = dic[@"createTime"];
+        if (kStringIsEmpty(creatTime)) {
+            [command addPrintMode:0x0];
+            [command addText:[NSString stringWithFormat:@""]];
+        }else{
+            NSString *dateString = [creatTime substringWithRange:NSMakeRange(5, 11)];
+            [command addPrintMode:0x0];
+            [command addText:[NSString stringWithFormat:@"下单时间%@",dateString]];
+        }
+        
+        
+        
+        [command addPrintMode:0x0];
+        [command addText:@"\n-------------------------------\n"];
+        
+        NSString *deskNum = dic[@"deskNum"];
+        [command addPrintMode:0x16 | 0x32];
+        [command addText:[NSString stringWithFormat:@"桌号:%@\n",deskNum]];
+        
+        [command addPrintMode:0x0];
+        [command addText:@"-------------------------------\n"];
+        
+    }else{
+    
+    
     if (x == 2) {
         
         if ([dic[@"isPack"] integerValue] == 2) {
@@ -348,7 +414,8 @@
     
     NSString *useDate = dic[@"useDate"];
     if (kStringIsEmpty(useDate)) {
-        NSLog(@"数据为空");
+        [command addPrintMode:0x0];
+        [command addText:[NSString stringWithFormat:@""]];
     }else{
         NSString *dateString = [useDate substringWithRange:NSMakeRange(5, 11)];
         [command addPrintMode:0x16 | 0x32];
@@ -358,6 +425,9 @@
     
     [command addPrintMode:0x0];
     [command addText:@"-------------------------------\n"];
+}
+    
+    
     
     NSArray *orderArr = dic[@"goodsList"];
     NSMutableArray *orderDetailArr = [NSMutableArray arrayWithCapacity:0];
@@ -374,13 +444,14 @@
     }
     
     [command addPrintMode:0x0];
-    [command addText:@"-------------------------------\n"];
+    [command addText:@"\n*******************************\n"];
     
     
     NSString *des = dic[@"des"];
+    [command addPrintMode:0x16 | 0x32];
     [command addText:[NSString stringWithFormat:@"备注:%@",des]];
-    [command addText:@"\n-------------------------------\n"];
-    
+    [command addPrintMode:0x0];
+    [command addText:@"\n*******************************\n"];
     
     NSString *totalFee = dic[@"totalFee"];
     [command addText:[NSString stringWithFormat:@"订单价格:%@元",totalFee]];
@@ -391,8 +462,6 @@
     
     NSString *phone = dic[@"phone"];
     [command addText:[NSString stringWithFormat:@"%@\n",phone]];
-    
-    [command addText:@"11111111111111 \n"];
     
     NSString *orderNum = dic[@"orderNum"];
     [command addText:[NSString stringWithFormat:@"订单号:%@\n\n\n\n\n",orderNum]];

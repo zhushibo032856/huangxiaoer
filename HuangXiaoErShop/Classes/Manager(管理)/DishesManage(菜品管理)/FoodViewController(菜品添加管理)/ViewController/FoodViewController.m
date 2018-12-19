@@ -13,7 +13,7 @@
 
 @interface FoodViewController ()<UITextFieldDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
-@property (nonatomic, strong) UITextField *nameTF;//菜品名称
+@property (nonatomic, strong) UITextView *nameTF;//菜品名称
 @property (nonatomic, strong) UITextField *priceTF;//优惠价格
 @property (nonatomic, strong) UITextField *activeTF;//真实价格
 @property (nonatomic, strong) BRTextField *cateGoryTF;//分类
@@ -106,8 +106,12 @@
     nameLable.text = @"菜品名称";
     [firstView addSubview:nameLable];
     
-    self.nameTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.7, 80, kScreenWidth * 0.25, 30)];
-    self.nameTF.placeholder = @"请填写名称";
+    self.nameTF = [[UITextView alloc]initWithFrame:CGRectMake(kScreenWidth * 0.4, 80, kScreenWidth * 0.55, 40)];
+    
+    self.nameTF.font = [UIFont systemFontOfSize:15];
+    self.nameTF.placeholder = @"请填写菜品名称,最多22个字";
+    self.nameTF.textAlignment = NSTextAlignmentRight;
+    self.nameTF.limitLength = @22;
     [firstView addSubview:self.nameTF];
     
     UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(20, 180, kScreenWidth - 40, 30)];

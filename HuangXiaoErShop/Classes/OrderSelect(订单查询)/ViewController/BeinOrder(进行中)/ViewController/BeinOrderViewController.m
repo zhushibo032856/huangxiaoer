@@ -188,31 +188,31 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
     CellModel *model = self.dataSource[section];
     UIView *view = [UIView new];
     view.backgroundColor = [UIColor whiteColor];
-    /* #*/
-    UILabel *jingLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 10, 15)];
-    jingLable.text = @"#";
-    jingLable.font = [UIFont systemFontOfSize:13];
-    [view addSubview:jingLable];
-    /* 订单号 */
-    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(25, 10, 40, 15)];
-    //   lable.text = [NSString stringWithFormat:@"%@",model.takeNum];
-    if (model.takeNum.length == 0) {
-        lable.text = @"--";
-    }else if (model.takeNum.length < 2 && model.takeNum.length > 0) {
-        lable.text = [NSString stringWithFormat:@"0%@",model.takeNum];
-    }else{
-        lable.text = [NSString stringWithFormat:@"%@",model.takeNum];
-    }
+    /* 取餐号 */
+    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(40, 10, 150, 15)];
     lable.font = [UIFont systemFontOfSize:20];
+    if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
+        if (model.takeNum.length == 0) {
+            lable.text = @"取餐号 --";
+        }else if (model.takeNum.length < 2 && model.takeNum.length > 0) {
+            lable.text = [NSString stringWithFormat:@"取餐号 0%@",model.takeNum];
+        }else{
+            lable.text = [NSString stringWithFormat:@"取餐号 %@",model.takeNum];
+        }
+    }else{//堂食
+        if (model.deskNum.length < 2) {
+            lable.text = [NSString stringWithFormat:@"桌号 0%@",model.deskNum];
+        }else{
+            lable.text = [NSString stringWithFormat:@"桌号 %@",model.deskNum];
+        }
+    }
     [view addSubview:lable];
     /* 拼团图片 */
-    UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(70, 7, 20, 20)];
-    if ([model.orderType isEqualToString:@"APPOINTMENT"]) {
+    UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 7, 20, 20)];
+    if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
         [typeImageView setImage:[UIImage imageNamed:@"APPOINTMENT"]];
-    }else if ([model.orderType isEqualToString:@"ARRIVE"]){
-        [typeImageView setImage:[UIImage imageNamed:@"ARRIVE"]];
-    }else if([model.orderType isEqualToString:@"PT"]){
-        [typeImageView setImage:[UIImage imageNamed:@"PT"]];
+    }else{//堂食
+        [typeImageView setImage:[UIImage imageNamed:@"DINEIN"]];
     }
     [view addSubview:typeImageView];
     /* 接单状态 */
@@ -317,50 +317,28 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 70;
+    return 40;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIView *view = [UIView new];
     CellModel *model = self.dataSource[section];
     view.backgroundColor = kColor(255, 255, 255);
-    UILabel *couponsLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, kScreenWidth * 0.2, 20)];
-    couponsLable.text = @"顾客实付";
-    couponsLable.font = [UIFont systemFontOfSize:13];
-    [view addSubview:couponsLable];
     
-    UILabel *priceLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 35, kScreenWidth * 0.2, 20)];
-    priceLable.text = @"本单收入";
+    UILabel *priceLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, kScreenWidth * 0.3, 20)];
+    priceLable.text = @"本单预计收入";
     priceLable.font = [UIFont systemFontOfSize:13];
     [view addSubview:priceLable];
     
-    UILabel *couponsPrice = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.8, 5, kScreenWidth * 0.2, 20)];
-    couponsPrice.font = [UIFont systemFontOfSize:15];
-    couponsPrice.text = [NSString stringWithFormat:@"￥%@",model.realFee];
-    [view addSubview:couponsPrice];
     
-    UILabel *jieshiLable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.3, 5, kScreenWidth * 0.5 - 5, 20)];
-    jieshiLable.textAlignment = NSTextAlignmentRight;
-    jieshiLable.font = [UIFont systemFontOfSize:14];
-    if ([model.isCoupons integerValue] == 1) {
-        jieshiLable.text = [NSString stringWithFormat:@"(黄小二平台补贴%@元)",model.couponsFee];
-    }else{
-        jieshiLable.hidden = YES;
-    }
-    
-    [view addSubview:jieshiLable];
-    
-    UILabel *sumPriceLable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.8, 35, kScreenWidth * 2, 20)];
+    UILabel *sumPriceLable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.8, 5, kScreenWidth * 2, 20)];
     sumPriceLable.font = [UIFont systemFontOfSize:15];
-    if ([model.orderType isEqualToString:@"APPOINTMENT"]) {
-     //   CGFloat realPrice = [model.realFee floatValue];
-        sumPriceLable.text = [NSString stringWithFormat:@"￥%@",model.totalFee];
-    }else if([model.orderType isEqualToString:@"PT"]){
-        CGFloat totalPrice = [model.totalFee floatValue];
-        sumPriceLable.text = [NSString stringWithFormat:@"￥%.2f",totalPrice];
-    }
+    
+    CGFloat totalPrice = [model.income floatValue];
+    sumPriceLable.text = [NSString stringWithFormat:@"￥%.2f",totalPrice];
+    
     [view addSubview:sumPriceLable];
     /* 分隔视图 */
-    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 60, kScreenWidth, 10)];
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 30, kScreenWidth, 10)];
     lineView.backgroundColor = kColor(240, 240, 240);
     [view addSubview:lineView];
     
