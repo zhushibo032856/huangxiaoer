@@ -77,7 +77,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     [super viewDidLoad];
     
     NSString *uuid = [UuidObject getUUID];
-  //  NSLog(@"UUID = %@",uuid);
+    NSLog(@"UUID = %@",uuid);
     
     _mineTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, kScreenHeight / 5, kScreenWidth, kScreenHeight / 5 * 4) style:UITableViewStyleGrouped];
   //  _mineTableView.scrollEnabled = NO;

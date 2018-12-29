@@ -15,5 +15,10 @@
 @property (nonatomic, copy) NSString *phone;
 @property (nonatomic, copy) NSString *createTime;
 @property (nonatomic, copy) NSString *content;
+@property (nonatomic, copy) NSString *shopscore;
+@property (nonatomic, copy) NSString *sumscore;
+@property (nonatomic, copy) NSString *productscore;
+@property (nonatomic, copy) NSString *shopReply;
+@property (nonatomic, copy) NSString *id;
 
 @end

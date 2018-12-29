@@ -11,6 +11,7 @@
 #import "LeftDataModel.h"
 #import "RightDataModel.h"
 #import "DishesManagerViewController.h"
+#import "RecommendedGalleryViewController.h"
 
 @interface FoodEditViewController ()<UITextFieldDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 @property (nonatomic, strong) UITextView *nameTF;//菜品名称
@@ -62,7 +63,7 @@
     self.navigationController.navigationBarHidden = NO;
     
     UIButton * leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.frame = CGRectMake(0, 0, 30, 30);
+    leftBtn.frame = CGRectMake(0, 0, 30, 30);;
     [leftBtn setBackgroundImage:[UIImage imageNamed:@"itemBack"] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(leftBarBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
@@ -92,20 +93,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:YES];
-    RightDataModel *model = self.dataSource[self.index];
-    self.foodImage = [[UIImageView alloc]initWithFrame:CGRectMake(kScreenWidth - 90, 5, 60, 60)];
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(uploadImage)];
-    [self.foodImage addGestureRecognizer:tapGesture];
-    self.foodImage.userInteractionEnabled = YES;
-    
-//    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:model.imageUrl]];
-//    [self.foodImage setImage:[UIImage imageWithData:data]];
-    [self.foodImage sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"userName"]];
-    [_firstView addSubview:self.foodImage];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -123,16 +110,17 @@
     imageLable.text = @"菜品图片";
     [_firstView addSubview:imageLable];
     
-    RightDataModel *model = self.model;
-//    self.foodImage = [[UIImageView alloc]initWithFrame:CGRectMake(kScreenWidth - 80, 10, 50, 50)];
-//    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(uploadImage)];
-//    [self.foodImage addGestureRecognizer:tapGesture];
-//    self.foodImage.userInteractionEnabled = YES;
+  //  RightDataModel *model = self.model;
     
-//    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:model.imageUrl]];
-//    [self.foodImage setImage:[UIImage imageWithData:data]];
-//    [firstView addSubview:self.foodImage];
+    RightDataModel *model = self.dataSource[self.index];
+    self.foodImage = [[UIImageView alloc]initWithFrame:CGRectMake(kScreenWidth - 90, 5, 60, 60)];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(uploadImage)];
+    [self.foodImage addGestureRecognizer:tapGesture];
+    self.foodImage.userInteractionEnabled = YES;
     
+    [self.foodImage sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"userName"]];
+    [_firstView addSubview:self.foodImage];
+
     UILabel *lineLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 70, kScreenWidth - 40, 1)];
     lineLable.backgroundColor = kColor(240, 240, 240);
     [_firstView addSubview:lineLable];
@@ -256,10 +244,26 @@
         [self presentViewController:picker animated:YES completion:nil];
     }];
     
+    // 从推荐图库添加
+    UIAlertAction *RecommendedGallery = [UIAlertAction actionWithTitle:@"从推荐图库选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        RecommendedGalleryViewController *vc = [[RecommendedGalleryViewController alloc]init];
+        vc.nameString = _nameTF.text;
+        vc.hidesBottomBarWhenPushed = YES;
+        vc.block = ^(NSString *imgUrl) {
+            NSLog(@"%@",imgUrl);
+            
+            [self.foodImage sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:[UIImage imageNamed:@"userName"]];
+            self.uploadImageUrl = imgUrl;
+        };
+        [self.navigationController pushViewController:vc animated:YES];
+    }];
+    
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
     [aler addAction:cancel];
     [aler addAction:album];
     [aler addAction:camera];
+    [aler addAction:RecommendedGallery];
     [self presentViewController:aler animated:YES completion:nil];
     
 }

@@ -20,6 +20,7 @@
 @end
 
 static NSString * const messageOne = @"MessageOneTableViewCell";
+static NSString * const noneCell = @"NoneDataCell";
 
 @implementation MessageThreeViewController
 
@@ -37,7 +38,7 @@ static NSString * const messageOne = @"MessageOneTableViewCell";
     self.navigationController.navigationBarHidden = NO;
     
     UIButton * leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.frame = CGRectMake(0, 0, 30, 30);
+    leftBtn.frame = CGRectMake(0, 0, 30, 30);;
     [leftBtn setBackgroundImage:[UIImage imageNamed:@"itemBack"] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(leftBarBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
@@ -104,7 +105,7 @@ static NSString * const messageOne = @"MessageOneTableViewCell";
     _tableView.dataSource = self;
     _tableView.separatorStyle = NO;
     [_tableView registerClass:[MessageOneTableViewCell class] forCellReuseIdentifier:messageOne];
-    
+    [_tableView registerClass:[NoneDataTableViewCell class] forCellReuseIdentifier:noneCell];
     [self.view addSubview:_tableView];
     
 }
@@ -172,6 +173,9 @@ static NSString * const messageOne = @"MessageOneTableViewCell";
     return view;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (kArrayIsEmpty(self.dataArray)) {
+        return self.tableView.height;
+    }
     return 130;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -183,13 +187,20 @@ static NSString * const messageOne = @"MessageOneTableViewCell";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if (kArrayIsEmpty(self.dataArray)) {
+        return 1;
+    }
     return _dataArray.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 1;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    if (kArrayIsEmpty(self.dataArray)) {
+        NoneDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:noneCell forIndexPath:indexPath];
+        [cell showNoDataWithImgurl:@"remind-3" andTipString:@"暂无消息"];
+        return cell;
+    }
     MessageModel *model = _dataArray[indexPath.section];
     
     MessageOneTableViewCell *cellOne = [tableView dequeueReusableCellWithIdentifier:messageOne forIndexPath:indexPath];

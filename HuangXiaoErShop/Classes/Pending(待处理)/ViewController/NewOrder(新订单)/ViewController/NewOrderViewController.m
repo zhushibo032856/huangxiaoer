@@ -180,7 +180,7 @@
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-    //    NSLog(@"%@",responseObject);
+        NSLog(@"%@",responseObject);
         if ([responseObject[@"status"] integerValue] == 200) {
             
             [MBProgressHUD showSuccess:responseObject[@"msg"]];

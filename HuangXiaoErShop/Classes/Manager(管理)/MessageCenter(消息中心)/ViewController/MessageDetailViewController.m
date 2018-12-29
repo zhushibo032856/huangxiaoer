@@ -7,8 +7,7 @@
 //
 
 #import "MessageDetailViewController.h"
-#import "MessageTwoTableViewCell.h"
-//#import "UIView+frameAdjust.h"
+#import "MessageDetailTableViewCell.h"
 
 @interface MessageDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -18,7 +17,7 @@
 
 @end
 
-static NSString * const MessageTwo = @"MessageTwoTableViewCell";
+static NSString * const detailCell = @"NMessageDetailTableViewCell";
 
 @implementation MessageDetailViewController
 
@@ -37,7 +36,7 @@ static NSString * const MessageTwo = @"MessageTwoTableViewCell";
     self.navigationController.navigationBarHidden = NO;
     
     UIButton * leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.frame = CGRectMake(0, 0, 30, 30);
+    leftBtn.frame = CGRectMake(0, 0, 30, 30);;
     [leftBtn setBackgroundImage:[UIImage imageNamed:@"itemBack"] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(leftBarBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
@@ -61,7 +60,7 @@ static NSString * const MessageTwo = @"MessageTwoTableViewCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.view.backgroundColor = kColor(230, 230, 230);
+    self.view.backgroundColor = kColor(240, 240, 240);
     [self uploadDataReadAlreadyToUnread];
     
     [self setTableView];
@@ -70,12 +69,15 @@ static NSString * const MessageTwo = @"MessageTwoTableViewCell";
 
 - (void)setTableView{
 
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, kScreenHeight) style:UITableViewStyleGrouped];
+    _tableView.backgroundColor = kColor(240, 240, 240);
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.estimatedRowHeight = 175;
+    _tableView.estimatedRowHeight = 100;
+    _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.separatorStyle = NO;
-    [_tableView registerClass:[MessageTwoTableViewCell class] forCellReuseIdentifier:MessageTwo];
+    _tableView.scrollEnabled = NO;
+    [_tableView registerNib:[UINib nibWithNibName:@"MessageDetailTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:detailCell];
     [self.view addSubview:_tableView];
 
 
@@ -126,13 +128,13 @@ static NSString * const MessageTwo = @"MessageTwoTableViewCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    MessageTwoTableViewCell *twoCell = [tableView dequeueReusableCellWithIdentifier:MessageTwo forIndexPath:indexPath];
+    MessageDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:detailCell forIndexPath:indexPath];
 
-    twoCell.layer.masksToBounds = YES;
-    twoCell.layer.cornerRadius = 6;
-   
-    [twoCell setMessageWith:self.model];
-    return twoCell;
+    cell.layer.masksToBounds = YES;
+    cell.layer.cornerRadius = 8;
+    cell.selectionStyle = NO;
+    [cell setMessageWith:self.model];
+    return cell;
 }
 
 

@@ -35,11 +35,7 @@
         }
     }else{
         [self.typeImage setImage:[UIImage imageNamed:@"DINEIN"]];
-        if (model.deskNum.length < 2) {
-            self.takeNumLable.text = [NSString stringWithFormat:@"桌号 0%@",model.deskNum];
-        }else{
-            self.takeNumLable.text = [NSString stringWithFormat:@"桌号 %@",model.deskNum];
-        }
+        self.takeNumLable.text = [NSString stringWithFormat:@"桌号 %@",model.deskNum];
     }
     
     [self.addView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -47,7 +43,7 @@
     for (NSInteger i = 0; i < model.arr.count; i++) {
         OrderCaiModel *caiModel = model.arr[i];
         
-        UIView *caiView = [self addViewWithFrame:(CGRectMake(10, 10 + 30 * i,kScreenWidth - 50 , 30)) Title:caiModel.goodsName num:caiModel.goodsNum Price:caiModel.goodsPrice];
+        UIView *caiView = [self addViewWithFrame:(CGRectMake(0, 10 + 30 * i,kScreenWidth - 50 , 30)) Title:caiModel.goodsName num:caiModel.goodsNum Price:caiModel.goodsPrice];
         [self.addView addSubview:caiView];
     }
     
@@ -77,12 +73,12 @@
     //    priceLb.textAlignment = NSTextAlignmentRight;
     
     
-    UILabel *numLb = [[UILabel alloc] initWithFrame:(CGRectMake(view.width - 50, 0, 20, view.height))];
+    UILabel *numLb = [[UILabel alloc] initWithFrame:(CGRectMake(view.width - 30, 0, 20, view.height))];
     numLb.text = [NSString stringWithFormat:@"%@",num];
     [numLb setFont:[UIFont fontWithName:@"Helvetica-Bold" size:19]];
     [view addSubview:numLb];
     
-    UILabel *fenLable = [[UILabel alloc]initWithFrame:CGRectMake(view.width - 30, 0, 20,view.height)];
+    UILabel *fenLable = [[UILabel alloc]initWithFrame:CGRectMake(view.width - 10, 0, 20,view.height)];
     fenLable.text = @"份";
     [view addSubview:fenLable];
     

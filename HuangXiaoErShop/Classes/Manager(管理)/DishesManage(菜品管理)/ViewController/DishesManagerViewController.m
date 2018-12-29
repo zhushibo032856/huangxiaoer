@@ -50,19 +50,17 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = NO;
     
+    
     UIButton * leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.frame = CGRectMake(0, 0, 30, 30);
     [leftBtn setBackgroundImage:[UIImage imageNamed:@"itemBack"] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(leftBarBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
-    
     [self setNavigationController];
     
 }
 
-
 - (NSMutableArray *)leftDataArr{
-    
     if (!_leftDataArr) {
         _leftDataArr = [NSMutableArray arrayWithCapacity:0];
     }
@@ -70,13 +68,11 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
 }
 
 - (NSMutableArray *)rightDataArr{
-    
     if (!_rightDataArr) {
         _rightDataArr = [NSMutableArray arrayWithCapacity:0];
     }
     return _rightDataArr;
 }
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -85,8 +81,6 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
     
     [self creatAutoLayout];
     
-    /** 请求数据 */
-  //   [self reloadRightData];
     [self setRefresh];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setRefresh) name:@"notiEdit" object:nil];
 }

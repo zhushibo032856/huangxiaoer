@@ -33,6 +33,7 @@
 
 static NSString * const newOrderCell = @"NewOrderTableViewCell";
 static NSString * const newAppointCell = @"NewAppointTableViewCell";
+static NSString * const noneCell = @"noneCell";
 
 @implementation NewneworderViewController
 
@@ -61,7 +62,7 @@ static NSString * const newAppointCell = @"NewAppointTableViewCell";
     [super viewDidLoad];
     self.view.backgroundColor = kColor(240, 240, 240);
     
-    [self jieDanZhuangTai];
+  //  [self jieDanZhuangTai];
     [self creatAutoJieDanView];
     [self creatTableView];
     
@@ -75,8 +76,8 @@ static NSString * const newAppointCell = @"NewAppointTableViewCell";
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [self.tableView.mj_footer resetNoMoreData];
         weakself.thePage = 1;
-        [self jieDanZhuangTai];
         [self getdata];
+        [self jieDanZhuangTai];
     }];
     
     self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
@@ -108,9 +109,11 @@ static NSString * const newAppointCell = @"NewAppointTableViewCell";
 }
 
 - (void)jieDanZhuangTai{
+    
     NSDictionary *partner = @{
                               @"token":KUSERID
                               };
+    NSLog(@"%@",partner);
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -185,16 +188,19 @@ static NSString * const newAppointCell = @"NewAppointTableViewCell";
 - (void)creatTableView{
     
     if (iPhoneX) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 40, kScreenWidth - 20, kScreenHeight - 64 - kNavHeight - 44- 40) style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 40, kScreenWidth - 20, kScreenHeight - 86 - 59 - 44 - 40) style:UITableViewStyleGrouped];
     }else{
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 40, kScreenWidth - 20, kScreenHeight - 64 - kNavHeight - 44 - 40) style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 40, kScreenWidth - 20, kScreenHeight - 49 - 64 - 44 - 40) style:UITableViewStyleGrouped];
     }
-    
+    _tableView.backgroundColor = kColor(240, 240, 240);
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = NO;
+    _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.estimatedRowHeight = 170;
     [_tableView registerNib:[UINib nibWithNibName:@"NewOrderTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:newOrderCell];
     [_tableView registerNib:[UINib nibWithNibName:@"NewAppointTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:newAppointCell];
+    [_tableView registerClass:[NoneDataTableViewCell class] forCellReuseIdentifier:noneCell];
     [self.view addSubview:_tableView];
     
 }
@@ -295,18 +301,31 @@ static NSString * const newAppointCell = @"NewAppointTableViewCell";
     return view;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if (kArrayIsEmpty(self.dataSource)) {
+        return 1;
+    }
     return _dataSource.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 1;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if (kArrayIsEmpty(self.dataSource)) {
+        return self.tableView.height;
+    }
     OrderLayoutModel *model = self.layoutArr[indexPath.section];
     return model.cellHei;
     
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (kArrayIsEmpty(self.dataSource)) {
+        NoneDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:noneCell forIndexPath:indexPath];
+        [cell showNoDataWithImgurl:@"remind-5" andTipString:@"暂无新订单"];
+        return cell;
+    }
+    
+    
     CellModel *model = self.dataSource[indexPath.section];
     if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
         
@@ -370,6 +389,7 @@ static NSString * const newAppointCell = @"NewAppointTableViewCell";
         [self jiaohaoWithUserID:model.tb_customer_id OrderNum:model.orderNum index:index Stastu:status butTag:300];
     }else if (btnTag == 400){
         [self printOrderWithOrderNumber:model.orderNum];
+        NSLog(@"dayin ");
     }
 }
 #pragma mark 叫号操作
@@ -500,7 +520,7 @@ static NSString * const newAppointCell = @"NewAppointTableViewCell";
         if ([responseObject[@"status"] integerValue] == 200) {
             
             NSDictionary *dic = responseObject[@"data"];
-          //  NSLog(@"%@",dic);
+      //      NSLog(@"%@",dic);
             BOOL x = [responseObject[@"data"] isKindOfClass:[NSDictionary class]];
             
             if (x == 1) {

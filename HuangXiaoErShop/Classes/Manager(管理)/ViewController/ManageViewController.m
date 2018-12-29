@@ -23,6 +23,7 @@
 #import "ScavengingreceiptsViewController.h"
 #import "BusinessanalysisViewController.h"
 #import "MessageTypeViewController.h"
+#import "MemberCenterViewController.h"
 
 @interface ManageViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -392,7 +393,7 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
     //    NSLog(@"%@",model);
     NSArray *titleArr = @[@"有效订单",@"预计收入",@"扫码收款"];
     
-    NSArray *titleTwoArr = @[@"配菜助手",@"菜品管理",@"用户评价",@"结算管理",@"营销活动",@"消息中心",@"营业分析",@"经营数据",@"敬请期待"];
+    NSArray *titleTwoArr = @[@"配菜助手",@"菜品管理",@"用户评价",@"结算管理",@"营销活动",@"消息中心",@"营业分析",@"经营数据",@"会员中心"];
     NSArray *nameArr = @[@"sidedish",@"foodmanagement",@"userevaluation",@"settlement",@"activesite",@"messagecenter",@"businessanalysis",@"businessdata",@"comingsoon"];
     if (indexPath.section == 0) {
         
@@ -512,6 +513,11 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
             [self.navigationController pushViewController:businessVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
     //        [MBProgressHUD showError:@"该功能暂未开放"];
+        }else if (indexPath.row == 8){
+            MemberCenterViewController *memberVC = [MemberCenterViewController new];
+            memberVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:memberVC animated:YES];
+            memberVC.hidesBottomBarWhenPushed = NO;
         }else{
             
             [MBProgressHUD showError:@"该功能暂未开放"];

@@ -43,7 +43,7 @@
     self.JieDanButton.layer.masksToBounds = YES;
     self.JieDanButton.layer.cornerRadius = 20;
     [self.JieDanButton.layer setBorderWidth:1.0];
-    [self.JieDanButton.layer setBorderColor:kColor(210, 210, 210).CGColor];
+    [self.JieDanButton.layer setBorderColor:kColor(255, 210, 0).CGColor];
     
     self.JiaoHaoButton.layer.masksToBounds = YES;
     self.JiaoHaoButton.layer.cornerRadius = 20;
@@ -64,11 +64,7 @@
         }
     }else{
         [self.TypeImage setImage:[UIImage imageNamed:@"DINEIN"]];
-        if (model.deskNum.length < 2) {
-            self.takeNumLable.text = [NSString stringWithFormat:@"桌号 0%@",model.deskNum];
-        }else{
-            self.takeNumLable.text = [NSString stringWithFormat:@"桌号 %@",model.deskNum];
-        }
+        self.takeNumLable.text = [NSString stringWithFormat:@"桌号 %@",model.deskNum];
     }
     
     if ([model.orderStatus integerValue] == 1) {
@@ -90,7 +86,7 @@
     for (NSInteger i = 0; i < model.arr.count; i++) {
         OrderCaiModel *caiModel = model.arr[i];
         
-        UIView *caiView = [self addViewWithFrame:(CGRectMake(10, 10 + 30 * i,kScreenWidth - 50 , 30)) Title:caiModel.goodsName num:caiModel.goodsNum Price:caiModel.goodsPrice];
+        UIView *caiView = [self addViewWithFrame:(CGRectMake(0, 10 + 30 * i,kScreenWidth - 50 , 30)) Title:caiModel.goodsName num:caiModel.goodsNum Price:caiModel.goodsPrice];
         [self.addView addSubview:caiView];
     }
     
@@ -129,12 +125,12 @@
     //    priceLb.textAlignment = NSTextAlignmentRight;
     
     
-    UILabel *numLb = [[UILabel alloc] initWithFrame:(CGRectMake(view.width - 50, 0, 20, view.height))];
+    UILabel *numLb = [[UILabel alloc] initWithFrame:(CGRectMake(view.width - 30, 0, 20, view.height))];
     numLb.text = [NSString stringWithFormat:@"%@",num];
     [numLb setFont:[UIFont fontWithName:@"Helvetica-Bold" size:19]];
     [view addSubview:numLb];
     
-    UILabel *fenLable = [[UILabel alloc]initWithFrame:CGRectMake(view.width - 40, 0, 20,view.height)];
+    UILabel *fenLable = [[UILabel alloc]initWithFrame:CGRectMake(view.width - 10, 0, 20,view.height)];
     fenLable.text = @"份";
     [view addSubview:fenLable];
     
@@ -143,6 +139,7 @@
 
 
 - (IBAction)JieDanButtonAction:(UIButton *)sender {
+    _block(_index, sender.tag);
 }
 
 - (void)awakeFromNib {

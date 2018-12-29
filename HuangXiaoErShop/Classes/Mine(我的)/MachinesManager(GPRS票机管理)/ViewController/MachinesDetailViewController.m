@@ -23,7 +23,7 @@
     self.navigationController.navigationBarHidden = NO;
     
     UIButton * leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.frame = CGRectMake(0, 0, 30, 30);
+    leftBtn.frame = CGRectMake(0, 0, 30, 30);;
     [leftBtn setBackgroundImage:[UIImage imageNamed:@"itemBack"] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(leftBarBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];

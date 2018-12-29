@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="48" id="KGk-i7-Jjw" customClass="MemberTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="366" height="48"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="366" height="47.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Stf-Tq-v3D">
+                        <rect key="frame" x="10" y="10" width="50" height="27.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="50" id="jw3-jr-MkR"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="黄小二客户" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AqS-pk-Gj5">
+                        <rect key="frame" x="70" y="10" width="142" height="28"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="142" id="6de-rs-n3V"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <color key="textColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="近半年下单150次" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qV5-VT-AgU">
+                        <rect key="frame" x="220" y="10" width="136" height="28"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <color key="textColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="AqS-pk-Gj5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="7ae-bk-ZHM"/>
+                    <constraint firstItem="qV5-VT-AgU" firstAttribute="leading" secondItem="AqS-pk-Gj5" secondAttribute="trailing" constant="8" id="8Ij-AU-xaw"/>
+                    <constraint firstAttribute="bottom" secondItem="Stf-Tq-v3D" secondAttribute="bottom" constant="10" id="Bzu-n7-poW"/>
+                    <constraint firstItem="Stf-Tq-v3D" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="Fpd-DU-ocv"/>
+                    <constraint firstAttribute="bottom" secondItem="qV5-VT-AgU" secondAttribute="bottom" constant="10" id="Uar-to-Gga"/>
+                    <constraint firstItem="AqS-pk-Gj5" firstAttribute="leading" secondItem="Stf-Tq-v3D" secondAttribute="trailing" constant="10" id="WRZ-ou-lAB"/>
+                    <constraint firstAttribute="trailing" secondItem="qV5-VT-AgU" secondAttribute="trailing" constant="10" id="ars-RT-JQ7"/>
+                    <constraint firstItem="Stf-Tq-v3D" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="crJ-0h-egF"/>
+                    <constraint firstAttribute="bottom" secondItem="AqS-pk-Gj5" secondAttribute="bottom" constant="10" id="e5a-fJ-iPh"/>
+                    <constraint firstItem="qV5-VT-AgU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="gYA-Z8-e23"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="NameLable" destination="AqS-pk-Gj5" id="P7k-ni-iYL"/>
+                <outlet property="NumberLable" destination="Stf-Tq-v3D" id="HrV-zB-cJK"/>
+                <outlet property="TotalNumberLable" destination="qV5-VT-AgU" id="wx5-go-Efc"/>
+            </connections>
+            <point key="canvasLocation" x="1" y="88"/>
+        </tableViewCell>
+    </objects>
+</document>

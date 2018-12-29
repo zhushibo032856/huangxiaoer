@@ -12,6 +12,7 @@
 #import "NewRefundTableViewCell.h"
 
 static NSString * const RefundCell = @"NewRefundTableViewCell";
+static NSString * const NoneCell = @"NoneDataCell";
 
 @interface NewRefundViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -73,7 +74,10 @@ static NSString * const RefundCell = @"NewRefundTableViewCell";
     }
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.separatorStyle = NO;
+    _tableView.backgroundColor = kColor(240, 240, 240);
     [_tableView registerNib:[UINib nibWithNibName:@"NewRefundTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:RefundCell];
+    [_tableView registerClass:[NoneDataTableViewCell class] forCellReuseIdentifier:NoneCell];
     [self.view addSubview:_tableView];
     
 }
@@ -94,16 +98,28 @@ static NSString * const RefundCell = @"NewRefundTableViewCell";
     return view;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (kArrayIsEmpty(self.dataSource)) {
+        return self.tableView.height;
+    }
     NewRefundModel *model = _layoutArr[indexPath.section];
     return model.cellHei;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if (kArrayIsEmpty(self.dataSource)) {
+        return 1;
+    }
     return _dataSource.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 1;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (kArrayIsEmpty(self.dataSource)) {
+        NoneDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NoneCell forIndexPath:indexPath];
+        [cell showNoDataWithImgurl:@"remind-5" andTipString:@"暂无退款订单"];
+        return cell;
+    }
     NewRefundTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:RefundCell forIndexPath:indexPath];
     CellModel *model = self.dataSource[indexPath.section];
     cell.layer.masksToBounds = YES;

@@ -12,6 +12,7 @@
 #import "NewCancelTableViewCell.h"
 
 static NSString * const CancelCell = @"NewCancelTableViewCell";
+static NSString * const NoneCell = @"NoneDataCell";
 
 @interface NewCancelOrderViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -71,14 +72,19 @@ static NSString * const CancelCell = @"NewCancelTableViewCell";
     }else{
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth - 20, kScreenHeight - 64 - kNavHeight - 44) style:UITableViewStyleGrouped];
     }
+    _tableView.backgroundColor = kColor(240, 240, 240);
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.separatorStyle = NO;
     [_tableView registerNib:[UINib nibWithNibName:@"NewCancelTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:CancelCell];
+    [_tableView registerClass:[NoneDataTableViewCell class] forCellReuseIdentifier:NoneCell];
     [self.view addSubview:_tableView];
     
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    if (kArrayIsEmpty(self.dataSource)) {
+        return self.tableView.height;
+    }
     NewLayoutModel *model = _layoutArr[indexPath.section];
     return model.cellHei;
 }
@@ -91,19 +97,28 @@ static NSString * const CancelCell = @"NewCancelTableViewCell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0.000001;
+    return 0.00001;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIView *view = [UIView new];
     return view;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if (kArrayIsEmpty(self.dataSource)) {
+        return 1;
+    }
     return _dataSource.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 1;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (kArrayIsEmpty(self.dataSource)) {
+        NoneDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NoneCell forIndexPath:indexPath];
+        [cell showNoDataWithImgurl:@"remind-5" andTipString:@"暂无取消订单"];
+        return cell;
+    }
     NewCancelTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CancelCell forIndexPath:indexPath];
     CellModel *model = self.dataSource[indexPath.section];
     cell.layer.masksToBounds = YES;

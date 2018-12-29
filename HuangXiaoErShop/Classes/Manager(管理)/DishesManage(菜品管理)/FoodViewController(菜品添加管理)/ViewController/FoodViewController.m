@@ -10,6 +10,7 @@
 #import "BRTextField.h"
 #import "LeftDataModel.h"
 #import "DishesManagerViewController.h"
+#import "RecommendedGalleryViewController.h"
 
 @interface FoodViewController ()<UITextFieldDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
@@ -50,7 +51,7 @@
     self.navigationController.navigationBarHidden = NO;
     
     UIButton * leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.frame = CGRectMake(0, 0, 30, 30);
+    leftBtn.frame = CGRectMake(0, 0, 30, 30);;
     [leftBtn setBackgroundImage:[UIImage imageNamed:@"itemBack"] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(leftBarBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
@@ -210,11 +211,23 @@
         picker.delegate = self;
         [self presentViewController:picker animated:YES completion:nil];
     }];
+    // 从推荐图库添加
+    UIAlertAction *RecommendedGallery = [UIAlertAction actionWithTitle:@"从推荐图库选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        RecommendedGalleryViewController *vc = [[RecommendedGalleryViewController alloc]init];
+        vc.hidesBottomBarWhenPushed = YES;
+        vc.block = ^(NSString *imgUrl) {
+            [self.foodImage sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:[UIImage imageNamed:@"userName"]];
+            self.uploadImageUrl = imgUrl;
+        };
+        [self.navigationController pushViewController:vc animated:YES];
+    }];
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
     [aler addAction:cancel];
     [aler addAction:album];
     [aler addAction:camera];
+    [aler addAction:RecommendedGallery];
     [self presentViewController:aler animated:YES completion:nil];
     
 }

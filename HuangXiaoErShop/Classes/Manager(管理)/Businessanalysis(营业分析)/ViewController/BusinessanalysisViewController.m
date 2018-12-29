@@ -46,6 +46,33 @@
     }
     return _wkWebView;
 }
+- (void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = NO;
+    
+    UIButton * leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    leftBtn.frame = CGRectMake(0, 0, 30, 30);;
+    [leftBtn setBackgroundImage:[UIImage imageNamed:@"itemBack"] forState:UIControlStateNormal];
+    [leftBtn addTarget:self action:@selector(leftBarBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
+    
+    [self setNavigationController];
+    
+}
+- (void)setNavigationController{
+    
+    //   [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"backcolor"] forBarMetrics:UIBarMetricsDefault];
+    
+    self.navigationItem.title = @"营业分析";
+    
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],NSForegroundColorAttributeName:[UIColor whiteColor]}] ;
+    
+}
+- (void)leftBarBtnClicked:(UIButton *)btn
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -63,23 +90,10 @@
 //     */
 //    [self.wkWebView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
     
-    [self setupToolView];
     [self startLoad];
     // Do any additional setup after loading the view.
 }
 
-- (void)setupToolView {
-    
-   CGPoint point = self.wkWebView.scrollView.center;
-    NSLog(@"%@",NSStringFromCGPoint(point));
-    
-   UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(10,10, 30, 30)];
-    [toolBar setBackgroundImage:[UIImage imageNamed:@"itemBack"] forToolbarPosition:0 barMetrics:0];
-    [self.view addSubview:toolBar];
-
-    self.item = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(goBackAction)];
-    [toolBar setItems:@[self.item] animated:YES];
-}
 
 - (void)startLoad{
     
