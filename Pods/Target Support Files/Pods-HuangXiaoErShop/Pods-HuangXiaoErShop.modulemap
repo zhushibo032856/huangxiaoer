@@ -1,0 +1,6 @@
+framework module Pods_HuangXiaoErShop {
+  umbrella header "Pods-HuangXiaoErShop-umbrella.h"
+
+  export *
+  module * { export * }
+}
