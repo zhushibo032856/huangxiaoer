@@ -24,7 +24,7 @@
     [self.contentView addSubview:self.todayNumberLable];
     [self.contentView addSubview:self.sunNumberLable];
     
-    self.todayNumberLable.frame = CGRectMake(20, 10, kScreenWidth * 0.5 - 30, 30);
+    self.todayNumberLable.frame = CGRectMake(20, 10, kScreenWidth * 0.5, 30);
     self.sunNumberLable.frame = CGRectMake(kScreenWidth * 0.5 + 10, 10, kScreenWidth * 0.5 - 30, 30);
 }
 

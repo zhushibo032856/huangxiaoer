@@ -169,9 +169,9 @@ static CGFloat const lineHeight = 0.8f;
             [user setValue:self.passWordTF.text forKey:@"password"];
             [user setValue:responseObject[@"data"] forKey:@"data"];
             [user synchronize];
-            
+       //     [self requestShopManagerWith:responseObject[@"data"]];
             [[AppDelegate mainAppDelegate] showHomeView];
-         //   [self requestShopManager];
+           
         }
         if([responseObject[@"status"] integerValue] == 400){
             [MBProgressHUD showError:responseObject[@"msg"]];
@@ -190,10 +190,10 @@ static CGFloat const lineHeight = 0.8f;
 }
 
 
-- (void)requestShopManager{
+- (void)requestShopManagerWith:(NSString *)token{
     
     NSDictionary *partner = @{
-                              @"token":KUSERID
+                              @"token":token
                               };
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -208,7 +208,6 @@ static CGFloat const lineHeight = 0.8f;
              NSLog(@"%@",responseObject);
         
         if ([responseObject[@"status"] integerValue] == 200) {
-//            [self.dataArray removeAllObjects];
             NSDictionary *dic = responseObject[@"data"];
             
             NSUserDefaults *user = [NSUserDefaults standardUserDefaults];

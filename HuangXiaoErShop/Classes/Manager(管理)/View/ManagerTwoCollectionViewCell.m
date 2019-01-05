@@ -13,8 +13,8 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     
     if (self = [super initWithFrame:frame]) {
-        self.imageView.frame = CGRectMake((kScreenWidth / 3 - 30) / 2, 10, 30, 30);
-        self.titleLableTwo.frame = CGRectMake(10, 45, kScreenWidth / 3 - 20, 20);
+        self.imageView.frame = CGRectMake((((kScreenWidth - 30) / 3) - 30) / 2, (((kScreenWidth - 30) / 3) - 30) / 2 - 10, 30, 30);
+        self.titleLableTwo.frame = CGRectMake(10, CGRectGetMaxY(self.imageView.frame), ((kScreenWidth - 30) / 3) - 20, 20);
         [self.contentView addSubview:self.imageView];
         [self.contentView addSubview:self.titleLableTwo];
     }

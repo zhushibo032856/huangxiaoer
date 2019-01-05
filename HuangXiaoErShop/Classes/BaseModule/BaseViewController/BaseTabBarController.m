@@ -13,6 +13,7 @@
 #import "ManageViewController.h"
 #import "MineViewController.h"
 #import "NewPendingViewController.h"
+#import "NewViewController.h"
 
 @interface BaseTabBarController ()<UITabBarControllerDelegate>
 
@@ -54,8 +55,11 @@
     OrderSelectViewController *orderSelectVC = [OrderSelectViewController new];
     [self addChildViewController:orderSelectVC image:@"orderselect" selectedImage:@"orderselect1" title:@"订单查询"];
     
-    ManageViewController *managerVC = [ManageViewController new];
-    [self addChildViewController:managerVC image:@"manager" selectedImage:@"manager2" title:@"管理"];
+    NewViewController *newManager = [NewViewController new];
+    [self addChildViewController:newManager image:@"manager" selectedImage:@"manager2" title:@"管理"];
+    
+//    ManageViewController *managerVC = [ManageViewController new];
+//    [self addChildViewController:managerVC image:@"manager" selectedImage:@"manager2" title:@"管理"];
     
     MineViewController *mineVC = [MineViewController new];
     [self addChildViewController:mineVC image:@"mine" selectedImage:@"mine2" title:@"设置"];

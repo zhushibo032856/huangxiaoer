@@ -20,40 +20,40 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Stf-Tq-v3D">
-                        <rect key="frame" x="10" y="10" width="50" height="27.5"/>
+                        <rect key="frame" x="5" y="10" width="50" height="27.5"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="50" id="jw3-jr-MkR"/>
+                            <constraint firstAttribute="width" constant="50" id="qFN-CC-cQ1"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="黄小二客户" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AqS-pk-Gj5">
-                        <rect key="frame" x="70" y="10" width="142" height="28"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="142" id="6de-rs-n3V"/>
-                        </constraints>
+                        <rect key="frame" x="60" y="10" width="151" height="27.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <color key="textColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="近半年下单150次" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qV5-VT-AgU">
-                        <rect key="frame" x="220" y="10" width="136" height="28"/>
+                        <rect key="frame" x="216" y="10" width="140" height="27.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="140" id="XEZ-ND-EXm"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <color key="textColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="AqS-pk-Gj5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="7ae-bk-ZHM"/>
-                    <constraint firstItem="qV5-VT-AgU" firstAttribute="leading" secondItem="AqS-pk-Gj5" secondAttribute="trailing" constant="8" id="8Ij-AU-xaw"/>
-                    <constraint firstAttribute="bottom" secondItem="Stf-Tq-v3D" secondAttribute="bottom" constant="10" id="Bzu-n7-poW"/>
-                    <constraint firstItem="Stf-Tq-v3D" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="Fpd-DU-ocv"/>
-                    <constraint firstAttribute="bottom" secondItem="qV5-VT-AgU" secondAttribute="bottom" constant="10" id="Uar-to-Gga"/>
-                    <constraint firstItem="AqS-pk-Gj5" firstAttribute="leading" secondItem="Stf-Tq-v3D" secondAttribute="trailing" constant="10" id="WRZ-ou-lAB"/>
-                    <constraint firstAttribute="trailing" secondItem="qV5-VT-AgU" secondAttribute="trailing" constant="10" id="ars-RT-JQ7"/>
-                    <constraint firstItem="Stf-Tq-v3D" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="crJ-0h-egF"/>
-                    <constraint firstAttribute="bottom" secondItem="AqS-pk-Gj5" secondAttribute="bottom" constant="10" id="e5a-fJ-iPh"/>
-                    <constraint firstItem="qV5-VT-AgU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="gYA-Z8-e23"/>
+                    <constraint firstItem="AqS-pk-Gj5" firstAttribute="leading" secondItem="Stf-Tq-v3D" secondAttribute="trailing" constant="5" id="4yj-Cq-5dW"/>
+                    <constraint firstItem="qV5-VT-AgU" firstAttribute="leading" secondItem="AqS-pk-Gj5" secondAttribute="trailing" constant="5" id="EhS-vP-NQR"/>
+                    <constraint firstItem="Stf-Tq-v3D" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="SBq-YR-fex"/>
+                    <constraint firstItem="Stf-Tq-v3D" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="gRs-S3-jcf"/>
+                    <constraint firstAttribute="bottom" secondItem="AqS-pk-Gj5" secondAttribute="bottom" constant="10" id="jd4-Vv-QLA"/>
+                    <constraint firstAttribute="bottom" secondItem="qV5-VT-AgU" secondAttribute="bottom" constant="10" id="m4b-xU-ZbU"/>
+                    <constraint firstItem="qV5-VT-AgU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="oGe-gM-YO0"/>
+                    <constraint firstAttribute="trailing" secondItem="qV5-VT-AgU" secondAttribute="trailing" constant="10" id="rT8-cd-5FD"/>
+                    <constraint firstAttribute="bottom" secondItem="Stf-Tq-v3D" secondAttribute="bottom" constant="10" id="v9W-Yk-k8W"/>
+                    <constraint firstItem="AqS-pk-Gj5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="vUU-Or-Y2J"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>

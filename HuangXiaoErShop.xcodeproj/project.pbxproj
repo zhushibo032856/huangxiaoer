@@ -99,6 +99,9 @@
 		18BFEE7821C9F05400DA4C31 /* NewAppointTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BFEE7621C9F05400DA4C31 /* NewAppointTableViewCell.m */; };
 		18BFEE7921C9F05400DA4C31 /* NewAppointTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BFEE7721C9F05400DA4C31 /* NewAppointTableViewCell.xib */; };
 		18C176C4217DCD01004DEF4D /* AppointmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C176C3217DCD01004DEF4D /* AppointmentTableViewCell.m */; };
+		18C2C8AB21DF0E8600F9953F /* TodayIncomeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C2C8AA21DF0E8600F9953F /* TodayIncomeTableViewCell.m */; };
+		18C2C8AE21DF450900F9953F /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C2C8AD21DF450900F9953F /* NewViewController.m */; };
+		18C5C12021DDB4D900B13CCF /* XHInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C5C11F21DDB4D900B13CCF /* XHInputView.m */; };
 		18D0706021A8EFAC00FA4B61 /* PostOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D0705F21A8EFAC00FA4B61 /* PostOrderModel.m */; };
 		18D0706221A9274000FA4B61 /* HeadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D0706121A9273F00FA4B61 /* HeadView.xib */; };
 		18D3D94021C73EC400B360A6 /* NewCancelTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D3D93E21C73EC400B360A6 /* NewCancelTableViewCell.m */; };
@@ -465,6 +468,12 @@
 		18BFEE7721C9F05400DA4C31 /* NewAppointTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewAppointTableViewCell.xib; sourceTree = "<group>"; };
 		18C176C2217DCD01004DEF4D /* AppointmentTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppointmentTableViewCell.h; sourceTree = "<group>"; };
 		18C176C3217DCD01004DEF4D /* AppointmentTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppointmentTableViewCell.m; sourceTree = "<group>"; };
+		18C2C8A921DF0E8600F9953F /* TodayIncomeTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayIncomeTableViewCell.h; sourceTree = "<group>"; };
+		18C2C8AA21DF0E8600F9953F /* TodayIncomeTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayIncomeTableViewCell.m; sourceTree = "<group>"; };
+		18C2C8AC21DF450900F9953F /* NewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
+		18C2C8AD21DF450900F9953F /* NewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
+		18C5C11E21DDB4D900B13CCF /* XHInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHInputView.h; sourceTree = "<group>"; };
+		18C5C11F21DDB4D900B13CCF /* XHInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHInputView.m; sourceTree = "<group>"; };
 		18D0705E21A8EFAC00FA4B61 /* PostOrderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostOrderModel.h; sourceTree = "<group>"; };
 		18D0705F21A8EFAC00FA4B61 /* PostOrderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostOrderModel.m; sourceTree = "<group>"; };
 		18D0706121A9273F00FA4B61 /* HeadView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeadView.xib; sourceTree = "<group>"; };
@@ -1345,6 +1354,8 @@
 				18ED49A02119947D007DC4C1 /* ManagerCollectionViewCell.m */,
 				18ED49A22119948F007DC4C1 /* ManagerTwoCollectionViewCell.h */,
 				18ED49A32119948F007DC4C1 /* ManagerTwoCollectionViewCell.m */,
+				18C2C8A921DF0E8600F9953F /* TodayIncomeTableViewCell.h */,
+				18C2C8AA21DF0E8600F9953F /* TodayIncomeTableViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1367,6 +1378,8 @@
 			children = (
 				18EBEF7B2114331200442A48 /* ManageViewController.h */,
 				18EBEF7C2114331200442A48 /* ManageViewController.m */,
+				18C2C8AC21DF450900F9953F /* NewViewController.h */,
+				18C2C8AD21DF450900F9953F /* NewViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -2444,6 +2457,8 @@
 				18E97F6521D49DBE00D2B380 /* UserView.xib */,
 				18E97F6721D4AC2A00D2B380 /* XJWTextView.h */,
 				18E97F6821D4AC2A00D2B380 /* XJWTextView.m */,
+				18C5C11E21DDB4D900B13CCF /* XHInputView.h */,
+				18C5C11F21DDB4D900B13CCF /* XHInputView.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -3004,6 +3019,7 @@
 				1874A077213E25BD0095BE7C /* AvoidCrashStubProxy.m in Sources */,
 				18ED494C211980DF007DC4C1 /* UIColor+Util.m in Sources */,
 				18EBEF832114334500442A48 /* MineViewController.m in Sources */,
+				18C2C8AE21DF450900F9953F /* NewViewController.m in Sources */,
 				18E97F6421D49DB200D2B380 /* UesrView.m in Sources */,
 				182FF1512112DAA400909692 /* GTMBase64.m in Sources */,
 				18ED4A4D21199F2D007DC4C1 /* EditViewController.m in Sources */,
@@ -3091,6 +3107,7 @@
 				1874A07C213E25BD0095BE7C /* NSMutableAttributedString+AvoidCrash.m in Sources */,
 				18ED4A4A21199F2D007DC4C1 /* ChildBankModel.m in Sources */,
 				18B1085821D1F828006221B9 /* MemberCenterViewController.m in Sources */,
+				18C5C12021DDB4D900B13CCF /* XHInputView.m in Sources */,
 				18B1085F21D1FB43006221B9 /* MemberTableViewCell.m in Sources */,
 				18D3D94921C7897C00B360A6 /* NewLayoutModel.m in Sources */,
 				18ED490321197D72007DC4C1 /* LSPTitleStyle.m in Sources */,
@@ -3117,6 +3134,7 @@
 				189E248C21C38E36008BE14A /* NewCuiDanViewController.m in Sources */,
 				18ED4A3B21199F2D007DC4C1 /* OrderAllModel.m in Sources */,
 				189A3FF6219D517B00BE8FA5 /* SearchBlueToothTableViewCell.m in Sources */,
+				18C2C8AB21DF0E8600F9953F /* TodayIncomeTableViewCell.m in Sources */,
 				18E048E121D0E5B2009DDB88 /* RecommendModel.m in Sources */,
 				18A7CE2B21D3163D005F7370 /* SumTableViewCell.m in Sources */,
 				1874A07F213E25BD0095BE7C /* NSObject+AvoidCrash.m in Sources */,

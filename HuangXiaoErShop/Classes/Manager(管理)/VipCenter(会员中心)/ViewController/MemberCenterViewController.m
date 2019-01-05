@@ -98,6 +98,7 @@ static NSString * const noneCell = @"NoneDataCell";
     _sumTableView.delegate = self;
     _sumTableView.dataSource = self;
     _sumTableView.separatorStyle = NO;
+    _sumTableView.scrollEnabled = NO;
     _sumTableView.backgroundColor = kColor(240, 240, 240);
     [_sumTableView registerClass:[SumTableViewCell class] forCellReuseIdentifier:sumCell];
     [self.view addSubview:_sumTableView];

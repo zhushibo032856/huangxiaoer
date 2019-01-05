@@ -13,8 +13,8 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     
     if (self = [super initWithFrame:frame]) {
-        self.titleLableOne.frame = CGRectMake(10, 10, kScreenWidth / 3 - 20, 20);
-        self.numberLable.frame = CGRectMake(20, 40, kScreenWidth / 3 - 40, 20);
+        self.titleLableOne.frame = CGRectMake(0, 20, kScreenWidth / 3 - 10, 20);
+        self.numberLable.frame = CGRectMake(0, 50, kScreenWidth / 3 - 10, 30);
         [self.contentView addSubview:self.titleLableOne];
         [self.contentView addSubview:self.numberLable];
     }
@@ -27,7 +27,7 @@
     if (!_numberLable) {
         _numberLable = [UILabel new];
         _numberLable.textAlignment = NSTextAlignmentCenter;
-        _numberLable.font = [UIFont systemFontOfSize:24];
+        _numberLable.font = [UIFont fontWithName:@"Helvetica-Bold" size:25];
         
     }
     return _numberLable;
@@ -38,7 +38,7 @@
     if (!_titleLableOne) {
         _titleLableOne = [UILabel new];
         _titleLableOne.textAlignment = NSTextAlignmentCenter;
-        _titleLableOne.font = [UIFont systemFontOfSize:12];;
+        _titleLableOne.font = [UIFont systemFontOfSize:15];;
     }
     return _titleLableOne;
 }

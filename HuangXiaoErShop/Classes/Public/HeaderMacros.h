@@ -23,6 +23,7 @@
 #import "SVProgressHUD.h"
 #import "UIColor+LX.h"
 #import "UIImage+LX.h"
+#import <IQKeyboardManager.h>
 
 /** Tools Header */
 #import "MBProgressHUD+JDLHUD.h"

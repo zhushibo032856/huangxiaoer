@@ -13,8 +13,9 @@
 #import "UserHeadView.h"
 #import "UesrView.h"
 #import "XJWTextView.h"
+#import "XHInputView.h"
 
-@interface UserReviewViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface UserReviewViewController ()<UITableViewDelegate,UITableViewDataSource,XHInputViewDelagete>
 
 @property (nonatomic, strong) UIView *headView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -27,12 +28,19 @@
 @property (nonatomic, strong) HYBStarEvaluationView *productscoreView;//菜品评分
 @property (nonatomic, strong) HYBStarEvaluationView *sumscoreView;//综合评分
 
+@property (nonatomic, strong) UILabel *shopLable;
+@property (nonatomic, strong) UILabel *productLable;
+
 @property (nonatomic, assign) NSInteger thePage;
 
 /*
  评论按钮
  */
 @property (nonatomic, strong) XJWTextView *xjwTextView;
+
+@property (nonatomic, strong) XHInputView *inputViewStyleDefault;
+@property (nonatomic, strong) XHInputView *inputView;
+
 @end
 
 static NSString * const reviewCell = @"shopTableviewCell";
@@ -80,6 +88,8 @@ static NSString * const reviewCell = @"shopTableviewCell";
     [self creatHeadView];
     [self initTableView];
     [self setRefresh];
+    
+   
     // Do any additional setup after loading the view.
 }
 
@@ -104,55 +114,56 @@ static NSString * const reviewCell = @"shopTableviewCell";
 
 - (void)creatHeadView{
     
-    _headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth , 85)];
+    _headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth , 100)];
     _headView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_headView];
     
-    _lableOne = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, 75, 55)];
+    _lableOne = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, kScreenWidth / 2 - 20, 55)];
     _lableOne.textColor = kColor(255, 210, 0);
+    _lableOne.textAlignment = NSTextAlignmentCenter;
     [_lableOne setFont:[UIFont fontWithName:@"Helvetica-Bold" size:35]];
+    [self.headView addSubview:_lableOne];
     
-    _sumscoreView = [[HYBStarEvaluationView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_lableOne.frame), 10, kScreenWidth / 2 - 85, 20) numberOfStars:5 isVariable:NO];
+    _sumscoreView = [[HYBStarEvaluationView alloc]initWithFrame:CGRectMake((kScreenWidth / 2 - 80) / 2, 55, 80, 25) numberOfStars:5 isVariable:NO];
     _sumscoreView.fullScore = 5.0;
+    _sumscoreView.isContrainsHalfStar = YES;
     [_headView addSubview:_sumscoreView];
     
-    _numberLable = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_lableOne.frame), 35, kScreenWidth / 2 - 80, 20)];
-    _numberLable.font = [UIFont systemFontOfSize:12];
-    _numberLable.textColor = kColor(210, 210, 210);
-    [_headView addSubview:_numberLable];
-    
-    UILabel *lableTwo = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, kScreenWidth / 2 - 15, 20)];
-    lableTwo.font = [UIFont systemFontOfSize:13];
-    lableTwo.text = @"快来看看有什么神评论!";
-    
-    [self.headView addSubview:_lableOne];
-    [self.headView addSubview:lableTwo];
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(kScreenWidth / 2 , 10, 1, 70)];
-    [lineView setBackgroundColor:[UIColor lightGrayColor]];
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(kScreenWidth / 2 , 10, 1, 80)];
+    [lineView setBackgroundColor:kColor(240, 240, 240)];
     [self.headView addSubview:lineView];
     
-    UILabel *lableThree = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth / 2 + 7.5, 17.5, 55, 20)];
-    lableThree.font = [UIFont systemFontOfSize:13];
-    lableThree.text = @"店铺评分";
-    UILabel *lableFour = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth / 2 + 7.5, 47.5, 55, 20)];
-    lableFour.font = [UIFont systemFontOfSize:13];
-    lableFour.text = @"菜品评分";
+    UILabel *lableThree = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth / 2 + 5, 15, 35, 25)];
+    lableThree.font = [UIFont systemFontOfSize:15];
+    lableThree.text = @"服务";
+    UILabel *lableFour = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth / 2 + 5, 55, 35, 25)];
+    lableFour.font = [UIFont systemFontOfSize:15];
+    lableFour.text = @"口味";
     
-    _shopscoreView = [[HYBStarEvaluationView alloc]initWithFrame:CGRectMake(kScreenWidth / 2 + 65, 16.5, 80, 20) numberOfStars:5 isVariable:NO];
-    _shopscoreView.fullScore = 5;
+    _shopscoreView = [[HYBStarEvaluationView alloc]initWithFrame:CGRectMake(lableThree.right, 15, 80, 25) numberOfStars:5 isVariable:NO];
+    _shopscoreView.fullScore = 5.0;
     _shopscoreView.isContrainsHalfStar = YES;
 
-    _productscoreView = [[HYBStarEvaluationView alloc]initWithFrame:CGRectMake(kScreenWidth / 2 + 65, 47.5, 80, 20) numberOfStars:5 isVariable:NO];
-    _productscoreView.fullScore = 5;
+    _productscoreView = [[HYBStarEvaluationView alloc]initWithFrame:CGRectMake(lableFour.right, 55, 80, 25) numberOfStars:5 isVariable:NO];
+    _productscoreView.fullScore = 5.0;
     _productscoreView.isContrainsHalfStar = YES;
+    
+    _shopLable = [[UILabel alloc]initWithFrame:CGRectMake(_shopscoreView.right + 1, 15, 50, 25)];
+    _shopLable.textColor = kColor(255, 210, 0);
+    [_shopLable setFont:[UIFont fontWithName:@"Helvetica-Bold" size:17]];
+    _productLable = [[UILabel alloc]initWithFrame:CGRectMake(_productscoreView.right + 1, 55, 50, 25)];
+    [_productLable setFont:[UIFont fontWithName:@"Helvetica-Bold" size:17]];
+    _productLable.textColor = kColor(255, 210, 0);
     
     [self.headView addSubview:_shopscoreView];
     [self.headView addSubview:_productscoreView];
     [self.headView addSubview:lableThree];
     [self.headView addSubview:lableFour];
+    [self.headView addSubview:_shopLable];
+    [self.headView addSubview:_productLable];
 }
 - (void)initTableView{
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 90, kScreenWidth - 20, kScreenHeight - kNavHeight - 85) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 105, kScreenWidth - 20, kScreenHeight - kNavHeight - 85) style:UITableViewStyleGrouped];
     _tableView.backgroundColor = kColor(240, 240, 240);
     
     _tableView.delegate = self;
@@ -160,7 +171,6 @@ static NSString * const reviewCell = @"shopTableviewCell";
     _tableView.separatorStyle = NO;
     _tableView.estimatedRowHeight = 100;
     _tableView.rowHeight = UITableViewAutomaticDimension;
-    
     _tableView.sectionHeaderHeight = UITableViewAutomaticDimension;
     _tableView.estimatedSectionHeaderHeight = 100;
     [_tableView registerNib:[UINib nibWithNibName:@"ShopTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:reviewCell];
@@ -192,12 +202,13 @@ static NSString * const reviewCell = @"shopTableviewCell";
             }
             NSDictionary *dicData = responseObject[@"data"];
             _lableOne.text = [NSString stringWithFormat:@"%@",dicData[@"sumscore"]];
-            _sumscoreView.actualScore = [dicData[@"sumscore"] integerValue];
-            _shopscoreView.actualScore = [dicData[@"shopscore"] integerValue];
-            _productscoreView.actualScore = [dicData[@"productscore"] integerValue];
+            _sumscoreView.actualScore = [dicData[@"sumscore"] floatValue];
+            _shopscoreView.actualScore = [dicData[@"shopscore"] floatValue];
+            _productscoreView.actualScore = [dicData[@"productscore"] floatValue];
+            _shopLable.text = [NSString stringWithFormat:@"%.2f",[dicData[@"shopscore"] floatValue]];
+            _productLable.text = [NSString stringWithFormat:@"%.2f",[dicData[@"productscore"] floatValue]];
             
             NSDictionary *dicEva = dicData[@"evaluationlist"];
-            _numberLable.text = [NSString stringWithFormat:@"%@人参与评分",dicEva[@"total"]];
             NSArray *arr = dicEva[@"rows"];
             for (NSDictionary *dic in arr) {
                 UserReviewModel *model = [[UserReviewModel alloc]init];
@@ -281,14 +292,86 @@ static NSString * const reviewCell = @"shopTableviewCell";
 - (void)shopReviewWith:(UIButton *)sender{
     
     UserReviewModel *model = self.dataArray[sender.tag - 100];
-    [self.xjwTextView.textView becomeFirstResponder];
-    __block typeof(self)weakself = self;
+//        [self.xjwTextView.textView becomeFirstResponder];
+//        __block typeof(self)weakself = self;
+//
+//        _xjwTextView.TextBlcok = ^(NSString *text) {
+//            [weakself uploadDataWithShopReview:text evaluationId:model.id index:sender.tag - 100];
+//        };
     
-    _xjwTextView.TextBlcok = ^(NSString *text) {
-        [weakself uploadDataWithShopReview:text evaluationId:model.id index:sender.tag - 100];
+    __weak typeof(self) weakSelf = self;
+
+    //样式一
+    self.inputViewStyleDefault = [self inputViewWithStyle:InputViewStyleDefault];
+    self.inputViewStyleDefault.delegate = self;
+    [self.view addSubview:self.inputViewStyleDefault];
+    /** 发送按钮点击事件 */
+    self.inputViewStyleDefault.sendBlcok = ^(NSString *text) {
+        [weakSelf.inputViewStyleDefault hide];//隐藏输入框
+        [weakSelf uploadDataWithShopReview:text evaluationId:model.id index:sender.tag - 100];
     };
+    [self.inputViewStyleDefault show];
+}
+
+#pragma mark - XHInputViewDelagete
+/**
+ XHInputView 将要显示
+ */
+-(void)xhInputViewWillShow:(XHInputView *)inputView
+{
+    /*
+     //如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要显示时将其关闭
+     [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
+     [IQKeyboardManager sharedManager].enable = NO;
+     */
+}
+
+/**
+ XHInputView 将要影藏
+ */
+-(void)xhInputViewWillHide:(XHInputView *)inputView{
+    
+    /*
+     //如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要影藏时将其打开
+     [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
+     [IQKeyboardManager sharedManager].enable = YES;
+     */
+}
+
+-(XHInputView *)inputViewWithStyle:(InputViewStyle)style{
+    
+    XHInputView *inputView = [[XHInputView alloc] initWithStyle:style];
+    //设置最大输入字数
+    inputView.maxCount = 100;
+    //输入框颜色
+    inputView.textViewBackgroundColor = [UIColor groupTableViewBackgroundColor];
+    //占位符
+    inputView.placeholder = @"请输入评论";
+    return inputView;
+    
+    //XHInputView 支持一下属性设置,详见XHInputView.h文件
+    
+    //    /** 最大输入字数 */
+    //    @property (nonatomic, assign) NSInteger maxCount;
+    //    /** 字体 */
+    //    @property (nonatomic, strong) UIFont * font;
+    //    /** 占位符 */
+    //    @property (nonatomic, copy) NSString *placeholder;
+    //    /** 占位符颜色 */
+    //    @property (nonatomic, strong) UIColor *placeholderColor;
+    //    /** 输入框背景颜色 */
+    //    @property (nonatomic, strong) UIColor* textViewBackgroundColor;
+    //    /** 发送按钮背景色 */
+    //    @property (nonatomic, strong) UIColor *sendButtonBackgroundColor;
+    //    /** 发送按钮Title */
+    //    @property (nonatomic, copy) NSString *sendButtonTitle;
+    //    /** 发送按钮圆角大小 */
+    //    @property (nonatomic, assign) CGFloat sendButtonCornerRadius;
+    //    /** 发送按钮字体 */
+    //    @property (nonatomic, strong) UIFont * sendButtonFont;
     
 }
+
 
 - (void)uploadDataWithShopReview:(NSString *)review
                     evaluationId:(NSString *)evaluationId

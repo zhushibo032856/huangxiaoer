@@ -43,6 +43,8 @@
 @property (nonatomic, strong) UIAlertController *alertVC;
 @property (nonatomic, strong) UITapGestureRecognizer *tap;
 
+@property (nonatomic, assign) BOOL isSelect;
+
 @end
 
 static NSString * const mineCell = @"mineTableViewCell";
@@ -95,7 +97,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     _mineTableView.dataSource = self;
     
     [self creatHeadViewLayout];
-    
+    [self setDetailView];
     [self requestShopManager];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestShopManager) name:@"notiEdit" object:nil];
@@ -147,29 +149,26 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     [_headView addSubview:imageView];
     [self.view addSubview:_headView];
     
+}
+- (void)setDetailView{
     _shopPhotoView = [[UIImageView alloc]initWithFrame:CGRectMake(20, CGRectGetHeight(_headView.frame) / 3 + 10, CGRectGetHeight(_headView.frame) / 3 + 30, CGRectGetWidth(_shopPhotoView.frame) / 4 * 3)];
     _shopPhotoView.layer.masksToBounds = YES;
     _shopPhotoView.layer.cornerRadius = 6;
-   // NSString *str = [NSString stringWithFormat:@"%@",KUSERIMAGEURL];
-  //  NSLog(@"%@",str);
-
-    [_shopPhotoView sd_setImageWithURL:[NSURL URLWithString:self.userImageUrl] placeholderImage:[UIImage imageNamed:@"userName"]];
-    
+    [_shopPhotoView sd_setImageWithURL:KUSERIMAGEURL placeholderImage:[UIImage imageNamed:@"userName"]];
     [_headView addSubview:_shopPhotoView];
     
     _nameLable = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_shopPhotoView.frame) + 20, CGRectGetHeight(_headView.frame) / 3 + 10, kScreenWidth - _shopPhotoView.frame.size.width - 20, 30)];
-    _nameLable.text = self.userName;
+    _nameLable.text = KUSERNAME;
     [_nameLable setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20]];
     _nameLable.textAlignment = NSTextAlignmentLeft;
     [_headView addSubview:_nameLable];
     
     _detailButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    _detailButton.frame = CGRectMake(CGRectGetMaxX(_shopPhotoView.frame) + 20, CGRectGetMaxY(_nameLable.frame) + 10 , 80, 15);
-
+    _detailButton.frame = CGRectMake(CGRectGetMaxX(_shopPhotoView.frame) + 20, CGRectGetMaxY(_nameLable.frame) + 5 , 80, 15);
+    
     [_detailButton setBackgroundImage:[UIImage imageNamed:@"shopDetailMessage"] forState:UIControlStateNormal];
     [_detailButton addTarget:self action:@selector(pushDetailShopView:) forControlEvents:UIControlEventTouchUpInside];
     [_headView addSubview:_detailButton];
-    
     
 }
 //请求主页信息
@@ -197,23 +196,18 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
             ManagerModel *model = [[ManagerModel alloc]init];
             [model setValuesForKeysWithDictionary:dic];
             [self.dataArray addObject:model];
-            
-            self.userName = model.shopSign;
-            self.userImageUrl = model.logoImage;
-            
-            
+
             NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
             [user setObject:dic[@"logoImage"] forKey:@"imageurl"];
             [user setObject:dic[@"shopSign"] forKey:@"shopName"];
             [user setObject:dic[@"address"] forKey:@"shopAddress"];
-            //   [user setObject:dic[@"id"] forKey:@"shopId"];
-            [user setValue:dic[@"id"] forKey:@"shopId"];
+            [user setObject:dic[@"id"] forKey:@"shopId"];;
             [user setObject:dic[@"userName"] forKey:@"userName"];
             [user synchronize];
             
             [self submitTokenToSocket];
             
-            [self creatHeadViewLayout];
+            [self setDetailView];
             
         }else if ([responseObject[@"status"] integerValue] == 301){
             [[AppDelegate mainAppDelegate] showLoginView];
@@ -398,6 +392,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
             self.hidesBottomBarWhenPushed = NO;
         }else if (indexPath.row == 3){
             [self selectIsOpen];
+
         }else if (indexPath.row == 4){
             self.hidesBottomBarWhenPushed = YES;
             SuggestionsViewController *suggestVC = [[SuggestionsViewController alloc]init];
