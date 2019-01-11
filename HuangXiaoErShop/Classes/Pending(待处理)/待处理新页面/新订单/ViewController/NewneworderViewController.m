@@ -188,7 +188,7 @@ static NSString * const noneCell = @"noneCell";
 - (void)creatTableView{
     
     if (iPhoneX) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 40, kScreenWidth - 20, kScreenHeight - 86 - 59 - 44 - 40) style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 40, kScreenWidth - 20, kScreenHeight - 86 - 59 - 44 - 70) style:UITableViewStyleGrouped];
     }else{
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 40, kScreenWidth - 20, kScreenHeight - 49 - 64 - 44 - 40) style:UITableViewStyleGrouped];
     }

@@ -17,9 +17,11 @@ static NSString * const cateGoryCell = @"CateGoryTableViewCell";
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *dataSource;
 @property (nonatomic, assign) NSInteger thePage;
 
 @property (nonatomic, strong) UIButton *addCategoryBT;
+
 
 @end
 
@@ -30,6 +32,12 @@ static NSString * const cateGoryCell = @"CateGoryTableViewCell";
         _dataArray = [NSMutableArray arrayWithCapacity:0];
     }
     return _dataArray;
+}
+- (NSMutableArray *)dataSource{
+    if (!_dataSource) {
+        _dataSource = [NSMutableArray arrayWithCapacity:0];
+    }
+    return _dataSource;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -47,11 +55,7 @@ static NSString * const cateGoryCell = @"CateGoryTableViewCell";
     
 }
 - (void)setNavigationController{
-    
-  //  [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"backcolor"] forBarMetrics:UIBarMetricsDefault];
-    
     self.navigationItem.title = @"分类管理";
-    
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18],NSForegroundColorAttributeName:[UIColor whiteColor]}] ;
     
 }
@@ -60,41 +64,44 @@ static NSString * const cateGoryCell = @"CateGoryTableViewCell";
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = kColor(240, 240, 240);
     
-     CGFloat commen = kNav_H + kTabbar_H;
     if (iPhoneX) {
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - commen - 50) style:UITableViewStylePlain];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, _count * 50) style:UITableViewStylePlain];
     }else{
-    
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - 110) style:UITableViewStylePlain];
+        
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, _count * 50) style:UITableViewStylePlain];
     }
-    self.tableView.backgroundColor = kColor(240, 240, 240);
-    self.tableView.tableFooterView = [[UIView alloc]init];
+    
     [self.tableView registerClass:[CateGoryTableViewCell class] forCellReuseIdentifier:cateGoryCell];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
+    self.tableView.layer.masksToBounds = YES;
+    self.tableView.layer.cornerRadius = 8;
     [self.view addSubview:self.tableView];
     
-    self.addCategoryBT = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.addCategoryBT setTitle:@"添加分类" forState:UIControlStateNormal];
-    self.addCategoryBT.frame = CGRectMake(0, CGRectGetMaxY(self.tableView.frame), kScreenWidth, 50);
- //   [self.addCategoryBT setImage:[UIImage imageNamed:@"addButton"] forState:UIControlStateNormal];
-      [self.addCategoryBT setImage:[[UIImage imageNamed:@"addButton"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+
+    self.addCategoryBT = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.addCategoryBT.frame = CGRectMake(10, CGRectGetMaxY(self.tableView.frame) + 10, kScreenWidth - 20, 50);
+    [self.addCategoryBT setTitle:@" 添加品类" forState:UIControlStateNormal];
     [self.addCategoryBT setBackgroundColor:[UIColor whiteColor]];
-    [self.addCategoryBT setTintColor:[UIColor blackColor]];
+    self.addCategoryBT.layer.masksToBounds = YES;
+    self.addCategoryBT.layer.cornerRadius = 8;
+    [self.addCategoryBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.addCategoryBT setImage:[UIImage imageNamed:@"addCategory"] forState:UIControlStateNormal];
     [self.addCategoryBT addTarget:self action:@selector(addCategoryBT:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.addCategoryBT];
     
     [self setRefresh];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setRefresh) name:@"notiEdit" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestData) name:@"notiEdit" object:nil];
     
     // Do any additional setup after loading the view.
 }
+
 
 - (void)setRefresh {
     
@@ -115,7 +122,6 @@ static NSString * const cateGoryCell = @"CateGoryTableViewCell";
     
 }
 
-
 - (void)requestData{
     NSDictionary *partner = @{
                               @"token":KUSERID
@@ -129,10 +135,10 @@ static NSString * const cateGoryCell = @"CateGoryTableViewCell";
     [manager POST:[NSString stringWithFormat:@"%@/appproduct/category/findallall",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-    //    NSLog(@"%@",responseObject);
+     //   NSLog(@"%@",responseObject);
         
         if ([responseObject[@"status"] integerValue] == 200) {
-            if (self->_thePage == 1) {
+            if (_thePage == 1) {
                 [self.dataArray removeAllObjects];
             }
             NSArray *arr = responseObject[@"data"];
@@ -142,7 +148,7 @@ static NSString * const cateGoryCell = @"CateGoryTableViewCell";
                 [model setValuesForKeysWithDictionary:dic];
                 [self.dataArray addObject:model];
             }
-            if (self->_thePage == 1) {
+            if (_thePage == 1) {
                 [self.tableView.mj_header endRefreshing];
             }else{
                 if (arr.count == 0) {
@@ -162,7 +168,18 @@ static NSString * const cateGoryCell = @"CateGoryTableViewCell";
     }];
     
 }
-
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    return [UIView new];
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    return [UIView new];
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 50;
 }
@@ -175,18 +192,19 @@ static NSString * const cateGoryCell = @"CateGoryTableViewCell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    LeftDataModel *model = self.dataArray[indexPath.row];
-    CateGoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cateGoryCell forIndexPath:indexPath];
+  
+        LeftDataModel *model = self.dataArray[indexPath.row];
+        CateGoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cateGoryCell forIndexPath:indexPath];
     
-    cell.index = indexPath.row;
-    [cell cellDataFromModel:model];
-    
-    __weak typeof(self)weakSelf = self;
-    cell.block = ^(NSInteger index, NSInteger buttonTag) {
-        [weakSelf editCateGoryWith:index ButtonTag:buttonTag];
-    };
-    
-    return cell;
+        cell.index = indexPath.row;
+        [cell cellDataFromModel:model];
+        
+        __weak typeof(self)weakSelf = self;
+        cell.block = ^(NSInteger index, NSInteger buttonTag) {
+            [weakSelf editCateGoryWith:index ButtonTag:buttonTag];
+        };
+        
+        return cell;
     
 }
 /** 编辑按钮操作事件 */
@@ -204,20 +222,8 @@ static NSString * const cateGoryCell = @"CateGoryTableViewCell";
 /** 添加分类按钮事件 */
 - (void)addCategoryBT:(UIButton *)sender{
     
-    UIAlertController *aler = [UIAlertController alertControllerWithTitle:@"添加分类" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    UIAlertAction *add = [UIAlertAction actionWithTitle:@"添加" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-        AddCateGoryViewController *addVC = [AddCateGoryViewController new];
-        [self.navigationController pushViewController:addVC animated:YES];
-        
-    }];
-    
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-    [aler addAction:add];
-    [aler addAction:cancel];
-    [self presentViewController:aler animated:YES completion:nil];
-    
+    AddCateGoryViewController *addVC = [AddCateGoryViewController new];
+    [self.navigationController pushViewController:addVC animated:YES];
     
 }
 

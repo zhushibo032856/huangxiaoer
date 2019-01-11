@@ -89,6 +89,10 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
     [self setCollectionView];
     
     [self requestDataForToday];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestDataForToday) name:@"postnote" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestDataForToday) name:@"notiEdit" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestShopManager) name:@"notiEdit" object:nil];
     // Do any additional setup after loading the view.
 }
 
@@ -203,18 +207,18 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
 - (void)setCollectionView{
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    layout.itemSize = CGSizeMake(kScreenWidth / 3 - 12, 100);
+    layout.itemSize = CGSizeMake((kScreenWidth - 30) / 3, 100);
     
     layout.minimumLineSpacing = 2.0;//设置最小行间距
     layout.minimumInteritemSpacing = 2;//item间距(最小值)
     layout.sectionInset = UIEdgeInsetsMake(1, 1, 10, 1);
     
-    _firstCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(_headView.frame) - 40, kScreenWidth - 30, 90) collectionViewLayout:layout];
+    _firstCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(_headView.frame) - 40, kScreenWidth - 20, 90) collectionViewLayout:layout];
     _firstCollectionView.backgroundColor = [UIColor whiteColor];
     _firstCollectionView.scrollEnabled = NO;
     _firstCollectionView.layer.cornerRadius = 10;
     _firstCollectionView.layer.masksToBounds = NO;
-    _firstCollectionView.layer.shadowColor = [UIColor blackColor].CGColor;
+    _firstCollectionView.layer.shadowColor = kColor(200, 200, 200).CGColor;
     _firstCollectionView.layer.shadowOffset = CGSizeMake(0, 0);
     _firstCollectionView.layer.shadowOpacity = 0.5;
     _firstCollectionView.layer.shadowRadius = 5;
@@ -222,7 +226,7 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
     _firstCollectionView.dataSource = self;
     [_firstCollectionView registerClass:[ManagerCollectionViewCell class] forCellWithReuseIdentifier:managerCell];
     for (int i = 1; i < 3; i ++) {
-        UILabel *lableFirst = [[UILabel alloc]initWithFrame:CGRectMake((kScreenWidth - 30 - 4) / 3 * i, 10, 1, 80)];
+        UILabel *lableFirst = [[UILabel alloc]initWithFrame:CGRectMake((kScreenWidth - 20 - 4) / 3 * i, 10, 1, 80)];
         lableFirst.backgroundColor = kColor(240, 240, 240);
         [_firstCollectionView addSubview:lableFirst];
         
@@ -233,17 +237,17 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
     
     UICollectionViewFlowLayout *secondLayout = [[UICollectionViewFlowLayout alloc]init];
     secondLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    secondLayout.itemSize = CGSizeMake(kScreenWidth / 3 - 12, kScreenWidth / 3 - 12);
+    secondLayout.itemSize = CGSizeMake((kScreenWidth - 30) / 3, (kScreenWidth - 24) / 3);
     
     secondLayout.minimumLineSpacing = 2.0;//设置最小行间距
     secondLayout.minimumInteritemSpacing = 2;//item间距(最小值)
     secondLayout.sectionInset = UIEdgeInsetsMake(1, 1, 10, 1);
     
-    _secondCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(_firstCollectionView.frame) + 20, kScreenWidth - 30, kScreenWidth - 30) collectionViewLayout:secondLayout];
+    _secondCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(_firstCollectionView.frame) + 10, kScreenWidth - 20, kScreenWidth - 20) collectionViewLayout:secondLayout];
     _secondCollectionView.backgroundColor = [UIColor whiteColor];
     _secondCollectionView.layer.cornerRadius = 10;
     _secondCollectionView.layer.masksToBounds = NO;
-    _secondCollectionView.layer.shadowColor = [UIColor blackColor].CGColor;
+    _secondCollectionView.layer.shadowColor = kColor(200, 200, 200).CGColor;
     _secondCollectionView.layer.shadowOffset = CGSizeMake(0, -3);
     _secondCollectionView.layer.shadowOpacity = 0.5;
     _secondCollectionView.layer.shadowRadius = 10;
@@ -254,14 +258,14 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
     [self.view addSubview:_secondCollectionView];
     
     for (int i = 1; i < 3; i ++) {
-        UILabel *lableOne = [[UILabel alloc]initWithFrame:CGRectMake((kScreenWidth - 30 - 4) / 3 * i, 0, 1, kScreenWidth - 30)];
+        UILabel *lableOne = [[UILabel alloc]initWithFrame:CGRectMake((kScreenWidth - 24) / 3 * i, 0, 1, kScreenWidth - 20)];
         lableOne.backgroundColor = kColor(240, 240, 240);
         [_secondCollectionView addSubview:lableOne];
         
     }
     
     for (int a = 1; a < 3; a ++) {
-        UILabel *lineLable = [[UILabel alloc]initWithFrame:CGRectMake(0, (kScreenWidth - 30 - 4) / 3 * a, kScreenWidth - 30, 1)];
+        UILabel *lineLable = [[UILabel alloc]initWithFrame:CGRectMake(0, (kScreenWidth - 24) / 3 * a, kScreenWidth - 20, 1)];
         lineLable.backgroundColor = kColor(240, 240, 240);
         [_secondCollectionView addSubview:lineLable];
     }

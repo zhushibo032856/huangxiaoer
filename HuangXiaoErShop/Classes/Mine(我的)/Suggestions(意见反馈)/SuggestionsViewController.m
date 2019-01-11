@@ -48,53 +48,58 @@
     [super viewDidLoad];
     self.view.backgroundColor = kColor(240, 240, 240);
     
-    self.suggestView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, 250)];
+    self.suggestView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, 230)];
     self.suggestView.backgroundColor = [UIColor whiteColor];
+    self.suggestView.layer.masksToBounds = YES;
+    self.suggestView.layer.cornerRadius = 8;
     [self.view addSubview:self.suggestView];
     
-    UILabel *phoneLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
-    phoneLable.text = @"客服热线";
-    phoneLable.font = [UIFont systemFontOfSize:15];
-    [self.suggestView addSubview:phoneLable];
+//    UILabel *phoneLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
+//    phoneLable.text = @"客服热线";
+//    phoneLable.font = [UIFont systemFontOfSize:15];
+//    [self.suggestView addSubview:phoneLable];
+//
+//    UIImageView *phoneImage = [[UIImageView alloc]initWithFrame:CGRectMake(kScreenWidth * 0.55, 17.5, 15, 15)];
+//    [phoneImage setImage:[UIImage imageNamed:@"callPhone"]];
+//    [self.suggestView addSubview:phoneImage];
+//
+//    UIButton *phoneButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    phoneButton.frame = CGRectMake(CGRectGetMaxX(phoneImage.frame) , 10, kScreenWidth * 0.35, 30);
+//    [phoneButton setTitle:@"0371-56033072" forState:UIControlStateNormal];
+//    [phoneButton setTintColor:[UIColor blueColor]];
+//    phoneButton.titleLabel.font = [UIFont systemFontOfSize:15];
+//    [phoneButton addTarget:self action:@selector(CallPhoneNumber) forControlEvents:UIControlEventTouchUpInside];
+//    [self.suggestView addSubview:phoneButton];
+//
+//    UILabel *lineLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, kScreenWidth - 40, 1)];
+//    lineLable.backgroundColor = kColor(240, 240, 240);
+//    [self.suggestView addSubview:lineLable];
+//
+//    UILabel *feedbackLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, 100, 20)];
+//    feedbackLable.text = @"在线反馈";
+//    // feedbackLable.textColor = kColor(150, 150, 150);
+//    feedbackLable.font = [UIFont systemFontOfSize:15];
+//    [self.suggestView addSubview:feedbackLable];
     
-    UIImageView *phoneImage = [[UIImageView alloc]initWithFrame:CGRectMake(kScreenWidth * 0.55, 17.5, 15, 15)];
-    [phoneImage setImage:[UIImage imageNamed:@"callPhone"]];
-    [self.suggestView addSubview:phoneImage];
-    
-    UIButton *phoneButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    phoneButton.frame = CGRectMake(CGRectGetMaxX(phoneImage.frame) , 10, kScreenWidth * 0.35, 30);
-    [phoneButton setTitle:@"0371-56033072" forState:UIControlStateNormal];
-    [phoneButton setTintColor:[UIColor blueColor]];
-    phoneButton.titleLabel.font = [UIFont systemFontOfSize:15];
-    [phoneButton addTarget:self action:@selector(CallPhoneNumber) forControlEvents:UIControlEventTouchUpInside];
-    [self.suggestView addSubview:phoneButton];
-    
-    UILabel *lineLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, kScreenWidth - 40, 1)];
-    lineLable.backgroundColor = kColor(240, 240, 240);
-    [self.suggestView addSubview:lineLable];
-    
-    UILabel *feedbackLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, 100, 20)];
-    feedbackLable.text = @"在线反馈";
-    // feedbackLable.textColor = kColor(150, 150, 150);
-    feedbackLable.font = [UIFont systemFontOfSize:15];
-    [self.suggestView addSubview:feedbackLable];
-    
-    self.suggestTF = [[UITextView alloc]initWithFrame:CGRectMake(10, 80, kScreenWidth - 40, 150)];
+    self.suggestTF = [[UITextView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 40, 160)];
     self.suggestTF.font = [UIFont systemFontOfSize:17];
-    self.suggestTF.placeholder = @"请输入您的反馈";
+    self.suggestTF.layer.masksToBounds = YES;
+    self.suggestTF.layer.cornerRadius = 8;
+    self.suggestTF.placeholder = @"请输入您的意见和建议(100字)";
+    self.suggestTF.backgroundColor = kColor(240, 240, 240);
     self.suggestTF.limitLength = @100;
     [self.suggestView addSubview:self.suggestTF];
     
     self.submitButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.submitButton.frame = CGRectMake(10, 270, kScreenWidth - 20, 40);
+    self.submitButton.frame = CGRectMake(30, 180, kScreenWidth - 80, 40);
     [self.submitButton setTitle:@"提交" forState:UIControlStateNormal];
-    [self.submitButton setTintColor:[UIColor whiteColor]];
+    [self.submitButton setTintColor:[UIColor blackColor]];
     self.submitButton.layer.masksToBounds = YES;
-    self.submitButton.layer.cornerRadius = 5;
+    self.submitButton.layer.cornerRadius = 20;
     self.submitButton.titleLabel.font = [UIFont systemFontOfSize:18];
     [self.submitButton addTarget:self action:@selector(submitMessage) forControlEvents:UIControlEventTouchUpInside];
-    self.submitButton.backgroundColor = kColor(255, 230, 0);
-    [self.view addSubview:self.submitButton];
+    self.submitButton.backgroundColor = kColor(255, 210, 0);
+    [self.suggestView addSubview:self.submitButton];
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fingerTapped:)];
     [self.view addGestureRecognizer:singleTap];

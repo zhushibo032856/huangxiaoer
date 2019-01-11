@@ -46,6 +46,8 @@
     [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge categories:nil]];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
     
+    
+    
     IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
     manager.enable = YES; // 控制整个功能是否启用。
     manager.shouldResignOnTouchOutside =YES; // 控制点击背景是否收起键盘
@@ -161,6 +163,11 @@
     
     NSDictionary *dataDic = userInfo[@"data"];
     NSString *orderNum = dataDic[@"orderNum"];
+    
+//    UILocalNotification *localNote = [[UILocalNotification alloc] init];
+//    localNote.alertBody = [NSString stringWithFormat:@"%@",dataDic[@"sttring"]];
+//    localNote.alertTitle = @"你有一条新通知";
+//    [[UIApplication sharedApplication] scheduleLocalNotification:localNote];
 
     if (!kStringIsEmpty(orderNum)) {
         
@@ -239,7 +246,7 @@
         if ([responseObject[@"status"] integerValue] == 200) {
             
             NSDictionary *dic = responseObject[@"data"];
-            NSLog(@"%@",dic);
+       //     NSLog(@"%@",dic);
             BOOL x = [responseObject[@"data"] isKindOfClass:[NSDictionary class]];
             
             if (x == 1) {

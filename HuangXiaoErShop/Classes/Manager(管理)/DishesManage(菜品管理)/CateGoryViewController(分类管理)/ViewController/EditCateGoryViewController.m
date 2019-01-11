@@ -62,7 +62,12 @@
 }
 - (void)leftBarBtnClicked:(UIButton *)btn
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    for (UIViewController *controlle in self.navigationController.viewControllers) {
+        if ([controlle isKindOfClass:[DishesManagerViewController class]]) {
+            [self.navigationController popToViewController:controlle animated:YES];
+        }
+    }
+ // [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewDidLoad {
@@ -71,6 +76,8 @@
     
     self.addView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, 50)];
     self.addView.backgroundColor = [UIColor whiteColor];
+    self.addView.layer.masksToBounds = YES;
+    self.addView.layer.cornerRadius = 8;
     [self.view addSubview:self.addView];
     
     UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 150, 30)];
@@ -83,8 +90,10 @@
     [self.addView addSubview:self.keepTF];
     
     self.keepButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.keepButton.frame = CGRectMake(10, 70, kScreenWidth - 20, 40);
-    [self.keepButton setTitle:@"删除" forState:UIControlStateNormal];
+    self.keepButton.layer.masksToBounds = YES;
+    self.keepButton.layer.cornerRadius = 8;
+    self.keepButton.frame = CGRectMake(10, 70, kScreenWidth - 20, 50);
+    [self.keepButton setTitle:@"删除品类" forState:UIControlStateNormal];
     [self.keepButton setBackgroundColor:[UIColor whiteColor]];
     [self.keepButton setTintColor:[UIColor redColor]];
     [self.keepButton addTarget:self action:@selector(delegateButton:) forControlEvents:UIControlEventTouchUpInside];

@@ -2,8 +2,8 @@
 //  SumTableViewCell.h
 //  HuangXiaoErShop
 //
-//  Created by apple on 2018/12/26.
-//  Copyright © 2018年 aladdin. All rights reserved.
+//  Created by apple on 2019/1/7.
+//  Copyright © 2019年 aladdin. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -11,8 +11,11 @@
 
 @interface SumTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) UILabel *todayNumberLable;
-@property (nonatomic, strong) UILabel *sunNumberLable;
+@property (weak, nonatomic) IBOutlet UILabel *NewCustomLable;
+
+@property (weak, nonatomic) IBOutlet UILabel *CustomLable;
+
+
 
 - (void)setdataForCellWith:(MemberModel *)model;
 

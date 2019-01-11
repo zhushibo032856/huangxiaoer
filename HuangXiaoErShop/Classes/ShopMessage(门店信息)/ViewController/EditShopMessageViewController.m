@@ -67,6 +67,8 @@
     
     self.addOneView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, 130)];
     self.addOneView.backgroundColor = [UIColor whiteColor];
+    self.addOneView.layer.masksToBounds = YES;
+    self.addOneView.layer.cornerRadius = 10;
     [self.view addSubview:self.addOneView];
     
     UILabel *messageLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 100, 15)];
@@ -106,6 +108,8 @@
     
     self.addTwoView = [[UIView alloc]initWithFrame:CGRectMake(10, 150, kScreenWidth - 20, 280)];
     self.addTwoView.backgroundColor = [UIColor whiteColor];
+    self.addTwoView.layer.masksToBounds = YES;
+    self.addTwoView.layer.cornerRadius = 10;
     [self.view addSubview:self.addTwoView];
     
     UILabel *introduceLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 100, 20)];
@@ -161,12 +165,12 @@
     [self.addTwoView addSubview:self.contentTextView];
     
     self.keepButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.keepButton.layer.cornerRadius = 5;
+    self.keepButton.layer.cornerRadius = 25;
     self.keepButton.layer.masksToBounds = YES;
-    self.keepButton.frame = CGRectMake(10, CGRectGetMaxY(self.addTwoView.frame) + 10, kScreenWidth -20, 40);
-    [self.keepButton setTintColor:[UIColor whiteColor]];
+    self.keepButton.frame = CGRectMake(30, CGRectGetMaxY(self.addTwoView.frame) + 15, kScreenWidth - 60, 50);
+    [self.keepButton setTintColor:[UIColor blackColor]];
     [self.keepButton setTitle:@"保存" forState:UIControlStateNormal];
-    self.keepButton.backgroundColor = kColor(255, 230, 0);
+    self.keepButton.backgroundColor = kColor(255, 210, 0);
     self.keepButton.titleLabel.font = [UIFont systemFontOfSize:18];
     [self.keepButton addTarget:self action:@selector(changeMessage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.keepButton];

@@ -200,6 +200,7 @@
         
         if ([responseObject[@"status"] integerValue] == 200) {
             [MBProgressHUD showSuccess:responseObject[@"msg"]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ReadAlreadyToUnread" object:nil];
         }else{
             [MBProgressHUD showSuccess:responseObject[@"msg"]];
         }

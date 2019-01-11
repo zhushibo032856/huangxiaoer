@@ -55,7 +55,7 @@
     UIView *view = [UIView new];
     view.frame = frame;
     
-    UILabel *titleLb = [[UILabel alloc] initWithFrame:(CGRectMake(0, 5, view.frame.size.width - 100, view.frame.size.height - 10))];
+    UILabel *titleLb = [[UILabel alloc] initWithFrame:(CGRectMake(5, 5, view.frame.size.width - 100, view.frame.size.height - 10))];
     titleLb.font = [UIFont systemFontOfSize:15];
     [view addSubview:titleLb];
     titleLb.text = title;

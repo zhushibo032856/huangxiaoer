@@ -163,7 +163,7 @@ static NSString * const reviewCell = @"shopTableviewCell";
     [self.headView addSubview:_productLable];
 }
 - (void)initTableView{
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 105, kScreenWidth - 20, kScreenHeight - kNavHeight - 85) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 110, kScreenWidth - 20, kScreenHeight - kNavHeight - 100) style:UITableViewStyleGrouped];
     _tableView.backgroundColor = kColor(240, 240, 240);
     
     _tableView.delegate = self;
@@ -235,6 +235,13 @@ static NSString * const reviewCell = @"shopTableviewCell";
         [MBProgressHUD showError:@"连接不到服务器"];
     }];
     
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    return [UIView new];
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 10;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{

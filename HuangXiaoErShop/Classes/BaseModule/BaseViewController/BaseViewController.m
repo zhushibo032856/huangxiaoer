@@ -8,11 +8,14 @@
 
 #import "BaseViewController.h"
 
-@interface BaseViewController ()
+@interface BaseViewController ()<UIGestureRecognizerDelegate>
 
 @end
 
 @implementation BaseViewController
+
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];

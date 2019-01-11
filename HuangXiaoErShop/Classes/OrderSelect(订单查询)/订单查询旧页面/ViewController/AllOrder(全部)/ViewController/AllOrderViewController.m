@@ -241,7 +241,7 @@ static NSString * const noneCell = @"NoneDataCell";
 #pragma mark 创建结算视图展示数据
 - (void)initIncomeView{
     
-    self.jiesuanView = [[UITableView alloc]initWithFrame:CGRectMake(0, 10, kScreenWidth, 50) style:UITableViewStylePlain];
+    self.jiesuanView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 50) style:UITableViewStylePlain];
     self.jiesuanView.delegate = self;
     self.jiesuanView.dataSource = self;
     self.jiesuanView.scrollEnabled = NO;
@@ -255,9 +255,9 @@ static NSString * const noneCell = @"NoneDataCell";
     [self.view addSubview:lineView];
 
     if(iPhoneX){
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 70, kScreenWidth - 20, kScreenHeight - 86 - 59 - 44 - 60) style:UITableViewStyleGrouped];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 60, kScreenWidth - 20, kScreenHeight - 86 - 59 - 44 - 80) style:UITableViewStyleGrouped];
     }else{
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 70, kScreenWidth - 20, kScreenHeight - 64 - 49 - 44 - 60) style:UITableViewStyleGrouped];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 60, kScreenWidth - 20, kScreenHeight - 64 - 49 - 44 - 50) style:UITableViewStyleGrouped];
     }
     [self.tableView registerNib:[UINib nibWithNibName:@"AllOrderTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:allOrderCell];
     self.tableView.delegate = self;
@@ -320,18 +320,15 @@ static NSString * const noneCell = @"NoneDataCell";
                 lable.text = [NSString stringWithFormat:@"取餐号 %@",model.takeNum];
             }
         }else{//堂食
-            if (model.deskNum.length < 2) {
-                lable.text = [NSString stringWithFormat:@"桌号 0%@",model.deskNum];
-            }else{
-                lable.text = [NSString stringWithFormat:@"桌号 %@",model.deskNum];
-            }
+
+            lable.text = [NSString stringWithFormat:@"桌号:%@",model.deskNum];
         }
         
         [headerView addSubview:lable];
         
         
         /* 拼团图片 */
-        UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 7, 20, 20)];
+        UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(15, 7, 20, 20)];
         if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
             [typeImageView setImage:[UIImage imageNamed:@"APPOINTMENT"]];
         }else{//堂食
@@ -363,7 +360,7 @@ static NSString * const noneCell = @"NoneDataCell";
         
         
         /* 用户名 */
-        UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(lable.frame) + 15, kScreenWidth * 0.6, 15)];
+        UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(lable.frame) + 15, kScreenWidth * 0.6, 15)];
         if (kStringIsEmpty(model.nickName)) {
             nameLable.text = [NSString stringWithFormat:@"黄小二"];
         }else{
@@ -387,7 +384,7 @@ static NSString * const noneCell = @"NoneDataCell";
         [headerView addSubview:phoneButton];
         
         /*预计到店时间*/
-        UILabel *appointLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(nameLable.frame) + 12.5, kScreenWidth * 0.4, 15)];
+        UILabel *appointLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(nameLable.frame) + 12.5, kScreenWidth * 0.4, 15)];
         appointLable.text = @"预计到店时间";
         appointLable.font = [UIFont systemFontOfSize:15];
         [headerView addSubview:appointLable];
@@ -403,7 +400,7 @@ static NSString * const noneCell = @"NoneDataCell";
         }
         [headerView addSubview:timeLable];
         /* 订单 */
-        UILabel *orderLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(nameLable.frame) + 45, 50, 15)];
+        UILabel *orderLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(nameLable.frame) + 45, 50, 15)];
         orderLable.text = @"订单";
         orderLable.font = [UIFont systemFontOfSize:13];
         orderLable.textColor = kColor(190, 190, 190);
@@ -411,7 +408,7 @@ static NSString * const noneCell = @"NoneDataCell";
         
         /* 菜单名 */
         OrderCaiModel *caiModel = model.arr.firstObject;
-        self.foodLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(orderLable.frame) + 15, 150, 15)];
+        self.foodLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(orderLable.frame) + 15, 150, 15)];
         self.foodLable.text = [NSString stringWithFormat:@"%@ ···",caiModel.goodsName];
         self.foodLable.font = [UIFont systemFontOfSize:15];
         
@@ -462,7 +459,7 @@ static NSString * const noneCell = @"NoneDataCell";
     headerView.backgroundColor = [UIColor whiteColor];
 
     /* 取餐号 */
-    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(40, 10, 150, 15)];
+    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(45, 10, 150, 15)];
     lable.font = [UIFont systemFontOfSize:20];
     if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
         if (model.takeNum.length == 0) {
@@ -480,7 +477,7 @@ static NSString * const noneCell = @"NoneDataCell";
     
     
     /* 拼团图片 */
-    UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 7, 20, 20)];
+    UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(15, 7, 20, 20)];
     if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
         [typeImageView setImage:[UIImage imageNamed:@"APPOINTMENT"]];
     }else{//堂食
@@ -512,7 +509,7 @@ static NSString * const noneCell = @"NoneDataCell";
 
 
     /* 用户名 */
-    UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(lable.frame) + 15, kScreenWidth * 0.6, 15)];
+    UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(lable.frame) + 15, kScreenWidth * 0.6, 15)];
     if (kStringIsEmpty(model.nickName)) {
         nameLable.text = [NSString stringWithFormat:@"黄小二"];
     }else{
@@ -536,7 +533,7 @@ static NSString * const noneCell = @"NoneDataCell";
     [headerView addSubview:phoneButton];
     
     /* 订单 */
-    UILabel *orderLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(nameLable.frame) + 15, 50, 15)];
+    UILabel *orderLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(nameLable.frame) + 15, 50, 15)];
     orderLable.text = @"订单";
     orderLable.font = [UIFont systemFontOfSize:13];
     orderLable.textColor = kColor(190, 190, 190);
@@ -544,7 +541,7 @@ static NSString * const noneCell = @"NoneDataCell";
 
     /* 菜单名 */
     OrderCaiModel *caiModel = model.arr.firstObject;
-    self.foodLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(orderLable.frame) + 15, 150, 15)];
+    self.foodLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(orderLable.frame) + 15, 150, 15)];
     self.foodLable.text = [NSString stringWithFormat:@"%@ ···",caiModel.goodsName];
     self.foodLable.font = [UIFont systemFontOfSize:15];
 
@@ -626,13 +623,13 @@ static NSString * const noneCell = @"NoneDataCell";
     CellModel *model = self.dataSource[section];
     view.backgroundColor = kColor(255, 255, 255);
     
-    UILabel *priceLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, 85, 20)];
+    UILabel *priceLable = [[UILabel alloc]initWithFrame:CGRectMake(15, 5, 85, 20)];
     priceLable.text = @"本单预计收入";
     priceLable.font = [UIFont systemFontOfSize:13];
     [view addSubview:priceLable];
     
     UIButton *detailBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    detailBtn.frame = CGRectMake(95, 5, 20, 20);
+    detailBtn.frame = CGRectMake(100, 5, 20, 20);
     [detailBtn setTag:1000 + section];
     [detailBtn addTarget:self action:@selector(messageSelectWtih:) forControlEvents:UIControlEventTouchUpInside];
     [detailBtn setBackgroundImage:[UIImage imageNamed:@"detailBtn"] forState:UIControlStateNormal];

@@ -10,6 +10,7 @@
 #import "SetUpTableViewCell.h"
 #import "ChangePhoneViewController.h"
 #import "ChangePasswordViewController.h"
+#import "PhoneTableViewCell.h"
 
 @interface SetUpViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -18,6 +19,7 @@
 @end
 
 static NSString * const setupCell = @"setUpTableViewCell";
+static NSString * const phoneCell = @"PhoneTableViewCell";
 
 @implementation SetUpViewController
 
@@ -44,44 +46,71 @@ static NSString * const setupCell = @"setUpTableViewCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = kColor(250, 250, 250);
+    self.view.backgroundColor = kColor(240, 240, 240);
     
-    self.setupTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 118) style:UITableViewStylePlain];
+    self.setupTableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, 120) style:UITableViewStyleGrouped];
     self.setupTableView.scrollEnabled = NO;
+    self.setupTableView.separatorStyle = NO;
     [self.setupTableView registerClass:[SetUpTableViewCell class] forCellReuseIdentifier:setupCell];
+    [self.setupTableView registerNib:[UINib nibWithNibName:@"PhoneTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:phoneCell];
     self.setupTableView.delegate = self;
     self.setupTableView.dataSource = self;
     [self.view addSubview:self.setupTableView];
     // Do any additional setup after loading the view.
 }
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 10;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    return [UIView new];
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    return [UIView new];
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 60;
+    if (indexPath.section == 0) {
+        return 60;
+    }
+    return 50;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return 2;
+    return 1;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    SetUpTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:setupCell forIndexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    if (indexPath.row == 0) {
-        cell.textLabel.text = @"修改手机号";
+    if (indexPath.section == 0) {
+        PhoneTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:phoneCell forIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.PhoneLable.text = KUSERPHONE;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.layer.masksToBounds = YES;
+        cell.layer.cornerRadius = 8;
+        return cell;
     }else{
+        SetUpTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:setupCell forIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.layer.masksToBounds = YES;
+        cell.layer.cornerRadius = 8;
         cell.textLabel.text = @"修改密码";
+        cell.textLabel.textColor = kColor(50, 50, 50);
+        return cell;
     }
-    return cell;
-    
+
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     self.hidesBottomBarWhenPushed = YES;
-    if (indexPath.row == 0) {
+    if (indexPath.section == 0) {
         ChangePhoneViewController *phoneVC = [ChangePhoneViewController new];
         [self.navigationController pushViewController:phoneVC animated:YES];
     }else{

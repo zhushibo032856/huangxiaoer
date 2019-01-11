@@ -94,16 +94,16 @@ static NSString * const noneCell = @"NoneDataCell";
 
 - (void)initView{
     
-    _sumTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 15, kScreenWidth, 70) style:UITableViewStyleGrouped];
+    _sumTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 50) style:UITableViewStyleGrouped];
     _sumTableView.delegate = self;
     _sumTableView.dataSource = self;
     _sumTableView.separatorStyle = NO;
     _sumTableView.scrollEnabled = NO;
     _sumTableView.backgroundColor = kColor(240, 240, 240);
-    [_sumTableView registerClass:[SumTableViewCell class] forCellReuseIdentifier:sumCell];
+    [_sumTableView registerNib:[UINib nibWithNibName:@"SumTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:sumCell];
     [self.view addSubview:_sumTableView];
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(15, 80, kScreenWidth - 30, kScreenHeight - kNavHeight - 80) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(15, 60, kScreenWidth - 30, kScreenHeight - kNavHeight - 60) style:UITableViewStyleGrouped];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = NO;
@@ -176,9 +176,9 @@ static NSString * const noneCell = @"NoneDataCell";
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     if (tableView == _sumTableView) {
-        return 15;
+        return 0;
     }
-    return 15;
+    return 10;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIView *view = [UIView new];
@@ -214,6 +214,7 @@ static NSString * const noneCell = @"NoneDataCell";
     if (tableView == _sumTableView) {
         MemberModel *model = self.dataArr.firstObject;
         SumTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:sumCell forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell setdataForCellWith:model];
         return cell;
     }

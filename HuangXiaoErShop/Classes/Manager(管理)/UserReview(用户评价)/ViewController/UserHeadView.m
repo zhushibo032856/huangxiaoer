@@ -11,9 +11,11 @@
 @implementation UserHeadView
 
 + (instancetype)SetHeadView {
+    
     return [[[NSBundle mainBundle] loadNibNamed:@"UserHeadView" owner:nil options:nil] firstObject];
 }
 - (void)headViewSetDataWith:(UserReviewModel *)model{
+    
     self.userImage.layer.masksToBounds = YES;
     self.userImage.layer.cornerRadius = 25;
     [self.userImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",model.userImage]] placeholderImage:[UIImage imageNamed:@"userName"]];

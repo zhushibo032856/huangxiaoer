@@ -10,4 +10,6 @@
 
 @interface CateGoryViewController : BaseViewController
 
+@property (nonatomic, assign) NSInteger count;
+
 @end

@@ -77,37 +77,152 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = kColor(240, 240, 240);
+    [self initView];
     
-    UILabel *messageLable = [[UILabel alloc]initWithFrame:CGRectMake(20, 10, 80, 30)];
-    messageLable.text = @"基本信息";
-    [self.view addSubview:messageLable];
     
-    UIView *firstView = [[UIView alloc]initWithFrame:CGRectMake(10, 50, kScreenWidth - 20, 120)];
+//    UILabel *messageLable = [[UILabel alloc]initWithFrame:CGRectMake(20, 10, 80, 30)];
+//    messageLable.text = @"基本信息";
+//    [self.view addSubview:messageLable];
+//
+//    UIView *firstView = [[UIView alloc]initWithFrame:CGRectMake(10, 50, kScreenWidth - 20, 120)];
+//    firstView.backgroundColor = [UIColor whiteColor];
+//    firstView.layer.masksToBounds = YES;
+//    firstView.layer.cornerRadius = 8;
+//    [self.view addSubview:firstView];
+//
+//    UILabel *imageLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 20, 100, 30)];
+//    imageLable.text = @"菜品图片";
+//    [firstView addSubview:imageLable];
+//
+//
+//    self.foodImage = [[UIImageView alloc]initWithFrame:CGRectMake(kScreenWidth - 90, 5, 60, 60)];
+//    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(uploadImage)];
+//    [self.foodImage addGestureRecognizer:tapGesture];
+//    self.foodImage.userInteractionEnabled = YES;
+//
+//    [self.foodImage setImage:[UIImage imageNamed:@"addBackImage"]];
+//    [firstView addSubview:self.foodImage];
+//
+//    UILabel *lineLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 70, kScreenWidth - 40, 1)];
+//    lineLable.backgroundColor = kColor(240, 240, 240);
+//    [firstView addSubview:lineLable];
+//
+//    UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 80, 100, 30)];
+//    nameLable.text = @"菜品名称";
+//    [firstView addSubview:nameLable];
+//
+//    self.nameTF = [[UITextView alloc]initWithFrame:CGRectMake(kScreenWidth * 0.4, 80, kScreenWidth * 0.54, 40)];
+//
+//    self.nameTF.font = [UIFont systemFontOfSize:15];
+//    self.nameTF.placeholder = @"请填写菜品名称,最多22个字";
+//    self.nameTF.textAlignment = NSTextAlignmentRight;
+//    self.nameTF.limitLength = @22;
+//    [firstView addSubview:self.nameTF];
+    
+//    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(20, 180, kScreenWidth - 40, 30)];
+//    lable.text = @"菜品规格";
+//    [self.view addSubview:lable];
+//
+//    UIView *twoView = [[UIView alloc]initWithFrame:CGRectMake(10, 220, kScreenWidth - 20, 200)];
+//    twoView.backgroundColor = [UIColor whiteColor];
+//    [self.view addSubview:twoView];
+//
+//    UILabel *priceLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
+//    priceLable.text = @"原定价";
+//    [twoView addSubview:priceLable];
+//
+//    self.priceTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 10, kScreenWidth * 0.4, 30)];
+//    self.priceTF.textAlignment = NSTextAlignmentRight;
+//    self.priceTF.placeholder = @"商品原价";
+//    [twoView addSubview:self.priceTF];
+//
+//    UILabel *activeLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, kScreenWidth * 0.6, 30)];
+//    activeLable.text = @"优惠价";
+//    [twoView addSubview:activeLable];
+//
+//    UILabel *lineLableTwo = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, kScreenWidth - 40, 1)];
+//    lineLableTwo.backgroundColor = kColor(240, 240, 240);
+//    [twoView addSubview:lineLableTwo];
+//
+//    self.activeTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 60, kScreenWidth * 0.4, 30)];
+//    self.activeTF.textAlignment = NSTextAlignmentRight;
+//    self.activeTF.placeholder = @"实际展示价格";
+//    [twoView addSubview:self.activeTF];
+//
+//    UILabel *lineLableThree = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, kScreenWidth - 40, 1)];
+//    lineLableThree.backgroundColor = kColor(240, 240, 240);
+//    [twoView addSubview:lineLableThree];
+//
+//    UILabel *categoryLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 110, 100, 30)];
+//    categoryLable.text = @"分类";
+//    [twoView addSubview:categoryLable];
+//
+//    [self setupCategoryTF:twoView];
+//    [twoView addSubview:self.cateGoryTF];
+//
+//    UILabel *lineLableFour = [[UILabel alloc]initWithFrame:CGRectMake(10, 150, kScreenWidth - 40, 1)];
+//    lineLableFour.backgroundColor = kColor(240, 240, 240);
+//    [twoView addSubview:lineLableFour];
+//
+//    UILabel *packLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 160, 100, 30)];
+//    packLable.text = @"餐盒费";
+//    [twoView addSubview:packLable];
+//
+//    self.packTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 160, kScreenWidth * 0.4, 30)];
+//    self.packTF.placeholder = @"0";
+//    self.packTF.textAlignment = NSTextAlignmentRight;
+//    [twoView addSubview:self.packTF];
+//
+//
+//    self.keepButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    self.keepButton.frame = CGRectMake(10, 430, kScreenWidth - 20, 50);
+//    [self.keepButton setTitle:@"保存" forState:UIControlStateNormal];
+//    [self.keepButton setTintColor:[UIColor blackColor]];
+//    [self.keepButton addTarget:self action:@selector(KeepButton:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.keepButton setBackgroundColor:[UIColor whiteColor]];
+//    [self.view addSubview:self.keepButton];
+//
+//    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fingerTapped:)];
+//    [self.view addGestureRecognizer:singleTap];
+    // Do any additional setup after loading the view.
+}
+
+- (void)initView{
+    
+    UIView *firstView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, 150)];
     firstView.backgroundColor = [UIColor whiteColor];
+    firstView.layer.masksToBounds = YES;
+    firstView.layer.cornerRadius = 8;
     [self.view addSubview:firstView];
     
-    UILabel *imageLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 20, 100, 30)];
+    UILabel *messageLable = [[UILabel alloc]initWithFrame:CGRectMake(15, 10, 80, 20)];
+    messageLable.textColor = kColor(210, 210, 210);
+    messageLable.font = [UIFont systemFontOfSize:15];
+    messageLable.text = @"基本信息";
+    [firstView addSubview:messageLable];
+    
+    UILabel *imageLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, 100, 30)];
     imageLable.text = @"菜品图片";
     [firstView addSubview:imageLable];
-
     
-    self.foodImage = [[UIImageView alloc]initWithFrame:CGRectMake(kScreenWidth - 90, 5, 60, 60)];
+    
+    self.foodImage = [[UIImageView alloc]initWithFrame:CGRectMake(kScreenWidth - 90, 35, 60, 60)];
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(uploadImage)];
     [self.foodImage addGestureRecognizer:tapGesture];
     self.foodImage.userInteractionEnabled = YES;
-   
+    
     [self.foodImage setImage:[UIImage imageNamed:@"addBackImage"]];
     [firstView addSubview:self.foodImage];
     
-    UILabel *lineLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 70, kScreenWidth - 40, 1)];
+    UILabel *lineLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, kScreenWidth - 40, 1)];
     lineLable.backgroundColor = kColor(240, 240, 240);
     [firstView addSubview:lineLable];
     
-    UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 80, 100, 30)];
+    UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 110, 100, 30)];
     nameLable.text = @"菜品名称";
     [firstView addSubview:nameLable];
     
-    self.nameTF = [[UITextView alloc]initWithFrame:CGRectMake(kScreenWidth * 0.4, 80, kScreenWidth * 0.55, 40)];
+    self.nameTF = [[UITextView alloc]initWithFrame:CGRectMake(kScreenWidth * 0.4, 110, kScreenWidth * 0.54, 40)];
     
     self.nameTF.font = [UIFont systemFontOfSize:15];
     self.nameTF.placeholder = @"请填写菜品名称,最多22个字";
@@ -115,73 +230,80 @@
     self.nameTF.limitLength = @22;
     [firstView addSubview:self.nameTF];
     
-    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(20, 180, kScreenWidth - 40, 30)];
-    lable.text = @"菜品规格";
-    [self.view addSubview:lable];
-    
-    UIView *twoView = [[UIView alloc]initWithFrame:CGRectMake(10, 220, kScreenWidth - 20, 200)];
+    UIView *twoView = [[UIView alloc]initWithFrame:CGRectMake(10, 180, kScreenWidth - 20, 230)];
     twoView.backgroundColor = [UIColor whiteColor];
+    twoView.layer.masksToBounds = YES;
+    twoView.layer.cornerRadius = 10;
     [self.view addSubview:twoView];
     
-    UILabel *priceLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 100, 30)];
+    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(15, 10, kScreenWidth - 40, 20)];
+    lable.textColor = kColor(210, 210, 210);
+    lable.font = [UIFont systemFontOfSize:15];
+    lable.text = @"菜品规格";
+    [twoView addSubview:lable];
+    
+    UILabel *priceLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 40, 100, 30)];
     priceLable.text = @"原定价";
     [twoView addSubview:priceLable];
     
-    self.priceTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 10, kScreenWidth * 0.4, 30)];
+    self.priceTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 40, kScreenWidth * 0.4, 30)];
     self.priceTF.textAlignment = NSTextAlignmentRight;
     self.priceTF.placeholder = @"商品原价";
     [twoView addSubview:self.priceTF];
     
-    UILabel *activeLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, kScreenWidth * 0.6, 30)];
+    UILabel *activeLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 90, kScreenWidth * 0.6, 30)];
     activeLable.text = @"优惠价";
     [twoView addSubview:activeLable];
     
-    UILabel *lineLableTwo = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, kScreenWidth - 40, 1)];
+    UILabel *lineLableTwo = [[UILabel alloc]initWithFrame:CGRectMake(10, 80, kScreenWidth - 40, 1)];
     lineLableTwo.backgroundColor = kColor(240, 240, 240);
     [twoView addSubview:lineLableTwo];
     
-    self.activeTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 60, kScreenWidth * 0.4, 30)];
+    self.activeTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 90, kScreenWidth * 0.4, 30)];
     self.activeTF.textAlignment = NSTextAlignmentRight;
     self.activeTF.placeholder = @"实际展示价格";
     [twoView addSubview:self.activeTF];
     
-    UILabel *lineLableThree = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, kScreenWidth - 40, 1)];
+    UILabel *lineLableThree = [[UILabel alloc]initWithFrame:CGRectMake(10, 130, kScreenWidth - 40, 1)];
     lineLableThree.backgroundColor = kColor(240, 240, 240);
     [twoView addSubview:lineLableThree];
     
-    UILabel *categoryLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 110, 100, 30)];
+    UILabel *categoryLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 140, 100, 30)];
     categoryLable.text = @"分类";
     [twoView addSubview:categoryLable];
     
     [self setupCategoryTF:twoView];
     [twoView addSubview:self.cateGoryTF];
     
-    UILabel *lineLableFour = [[UILabel alloc]initWithFrame:CGRectMake(10, 150, kScreenWidth - 40, 1)];
+    UILabel *lineLableFour = [[UILabel alloc]initWithFrame:CGRectMake(10, 180, kScreenWidth - 40, 1)];
     lineLableFour.backgroundColor = kColor(240, 240, 240);
     [twoView addSubview:lineLableFour];
     
-    UILabel *packLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 160, 100, 30)];
+    UILabel *packLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 190, 100, 30)];
     packLable.text = @"餐盒费";
     [twoView addSubview:packLable];
     
-    self.packTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 160, kScreenWidth * 0.4, 30)];
+    self.packTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 190, kScreenWidth * 0.4, 30)];
     self.packTF.placeholder = @"0";
     self.packTF.textAlignment = NSTextAlignmentRight;
     [twoView addSubview:self.packTF];
     
-
+    
     self.keepButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.keepButton.frame = CGRectMake(10, 430, kScreenWidth - 20, 50);
+    self.keepButton.frame = CGRectMake(30, 430, kScreenWidth - 60, 40);
+    self.keepButton.layer.masksToBounds = YES;
+    self.keepButton.layer.cornerRadius = 20;
     [self.keepButton setTitle:@"保存" forState:UIControlStateNormal];
     [self.keepButton setTintColor:[UIColor blackColor]];
     [self.keepButton addTarget:self action:@selector(KeepButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.keepButton setBackgroundColor:[UIColor whiteColor]];
+    [self.keepButton setBackgroundColor:kColor(255, 210, 0)];
     [self.view addSubview:self.keepButton];
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fingerTapped:)];
     [self.view addGestureRecognizer:singleTap];
-    // Do any additional setup after loading the view.
 }
+
+
 
 -(void)fingerTapped:(UITapGestureRecognizer *)gestureRecognizer{
     [self.view endEditing:YES];
@@ -298,10 +420,10 @@
 
 - (BRTextField *)getTextField:(UIView *)view{
     
-    BRTextField *textField = [[BRTextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.65, 110, kScreenWidth * 0.3, 30)];
+    BRTextField *textField = [[BRTextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.65, 140, kScreenWidth * 0.3, 30)];
     textField.backgroundColor = [UIColor clearColor];
     textField.font = [UIFont systemFontOfSize:17];
-    textField.textAlignment = NSTextAlignmentLeft;
+    textField.textAlignment = NSTextAlignmentCenter;
     textField.delegate = self;
     [view addSubview:textField];
     return textField;

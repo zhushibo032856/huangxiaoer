@@ -68,9 +68,9 @@ static NSString * const NoneCell = @"NoneDataCell";
 - (void)creatTableView{
     
     if (iPhoneX) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth - 20, kScreenHeight - 64 - kNavHeight - 44) style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth - 20, kScreenHeight - 86 - 59 - 44 - 30) style:UITableViewStyleGrouped];
     }else{
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth - 20, kScreenHeight - 64 - kNavHeight - 44) style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth - 20, kScreenHeight - 64 - 49 - 44) style:UITableViewStyleGrouped];
     }
     _tableView.backgroundColor = kColor(240, 240, 240);
     _tableView.delegate = self;

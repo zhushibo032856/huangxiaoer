@@ -44,8 +44,10 @@
 }
 - (UIButton *)editButton{
     if (!_editButton) {
-        _editButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        _editButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_editButton setTag:100];
+        _editButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_editButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_editButton setTitle:@"编辑" forState:UIControlStateNormal];
         [_editButton addTarget:self action:@selector(editButton:) forControlEvents:UIControlEventTouchUpInside];
     }

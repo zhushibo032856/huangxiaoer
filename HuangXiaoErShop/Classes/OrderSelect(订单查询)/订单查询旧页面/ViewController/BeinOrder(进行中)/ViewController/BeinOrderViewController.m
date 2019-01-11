@@ -168,11 +168,10 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
     lineView.backgroundColor = kColor(240, 240, 240);
     [self.view addSubview:lineView];
     
-    CGFloat commen = kNav_H + kTabbar_H;
     if(iPhoneX){
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, kScreenHeight - 30 - commen - 100) style:UITableViewStyleGrouped];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, kScreenHeight - 86 - 59 - 44 - 30) style:UITableViewStyleGrouped];
     }else{
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, kScreenHeight - 30 - 64 - 49) style:UITableViewStyleGrouped];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, kScreenHeight - 64 - 49 - 44) style:UITableViewStyleGrouped];
     }
     [self.tableView registerNib:[UINib nibWithNibName:@"AllOrderTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:allOrderCell];
     self.tableView.delegate = self;
@@ -215,7 +214,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         headerView.backgroundColor = [UIColor whiteColor];
         
         /* 取餐号 */
-        UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(40, 10, 150, 15)];
+        UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(45, 10, 150, 15)];
         lable.font = [UIFont systemFontOfSize:20];
         if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
             if (model.takeNum.length == 0) {
@@ -237,7 +236,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         
         
         /* 拼团图片 */
-        UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 7, 20, 20)];
+        UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(15, 7, 20, 20)];
         if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
             [typeImageView setImage:[UIImage imageNamed:@"APPOINTMENT"]];
         }else{//堂食
@@ -269,7 +268,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         
         
         /* 用户名 */
-        UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(lable.frame) + 15, kScreenWidth * 0.6, 15)];
+        UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(lable.frame) + 15, kScreenWidth * 0.6, 15)];
         if (kStringIsEmpty(model.nickName)) {
             nameLable.text = [NSString stringWithFormat:@"黄小二"];
         }else{
@@ -293,7 +292,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         [headerView addSubview:phoneButton];
         
         /*预计到店时间*/
-        UILabel *appointLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(nameLable.frame) + 12.5, kScreenWidth * 0.4, 15)];
+        UILabel *appointLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(nameLable.frame) + 12.5, kScreenWidth * 0.4, 15)];
         appointLable.text = @"预计到店时间";
         appointLable.font = [UIFont systemFontOfSize:15];
         [headerView addSubview:appointLable];
@@ -309,7 +308,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         }
         [headerView addSubview:timeLable];
         /* 订单 */
-        UILabel *orderLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(nameLable.frame) + 45, 50, 15)];
+        UILabel *orderLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(nameLable.frame) + 45, 50, 15)];
         orderLable.text = @"订单";
         orderLable.font = [UIFont systemFontOfSize:13];
         orderLable.textColor = kColor(190, 190, 190);
@@ -317,7 +316,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         
         /* 菜单名 */
         OrderCaiModel *caiModel = model.arr.firstObject;
-        self.foodLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(orderLable.frame) + 15, 150, 15)];
+        self.foodLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(orderLable.frame) + 15, 150, 15)];
         self.foodLable.text = [NSString stringWithFormat:@"%@ ···",caiModel.goodsName];
         self.foodLable.font = [UIFont systemFontOfSize:15];
         
@@ -368,7 +367,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         headerView.backgroundColor = [UIColor whiteColor];
         
         /* 取餐号 */
-        UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(40, 10, 150, 15)];
+        UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(45, 10, 150, 15)];
         lable.font = [UIFont systemFontOfSize:20];
         if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
             if (model.takeNum.length == 0) {
@@ -386,7 +385,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         
         
         /* 拼团图片 */
-        UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 7, 20, 20)];
+        UIImageView *typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(15, 7, 20, 20)];
         if ([model.orderType isEqualToString:@"APPOINTMENT"] ||[model.orderType isEqualToString:@"SECKILL"]) {
             [typeImageView setImage:[UIImage imageNamed:@"APPOINTMENT"]];
         }else{//堂食
@@ -418,7 +417,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         
         
         /* 用户名 */
-        UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(lable.frame) + 15, kScreenWidth * 0.6, 15)];
+        UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(lable.frame) + 15, kScreenWidth * 0.6, 15)];
         if (kStringIsEmpty(model.nickName)) {
             nameLable.text = [NSString stringWithFormat:@"黄小二"];
         }else{
@@ -442,7 +441,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         [headerView addSubview:phoneButton];
         
         /* 订单 */
-        UILabel *orderLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(nameLable.frame) + 15, 50, 15)];
+        UILabel *orderLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(nameLable.frame) + 15, 50, 15)];
         orderLable.text = @"订单";
         orderLable.font = [UIFont systemFontOfSize:13];
         orderLable.textColor = kColor(190, 190, 190);
@@ -450,7 +449,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
         
         /* 菜单名 */
         OrderCaiModel *caiModel = model.arr.firstObject;
-        self.foodLable = [[UILabel alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(orderLable.frame) + 15, 150, 15)];
+        self.foodLable = [[UILabel alloc]initWithFrame:CGRectMake(15, CGRectGetMaxY(orderLable.frame) + 15, 150, 15)];
         self.foodLable.text = [NSString stringWithFormat:@"%@ ···",caiModel.goodsName];
         self.foodLable.font = [UIFont systemFontOfSize:15];
         
@@ -518,7 +517,7 @@ static NSString * const allOrderCell = @"AllOrderTableViewCell";
     CellModel *model = self.dataSource[section];
     view.backgroundColor = kColor(255, 255, 255);
     
-    UILabel *priceLable = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, kScreenWidth * 0.3, 20)];
+    UILabel *priceLable = [[UILabel alloc]initWithFrame:CGRectMake(15, 5, kScreenWidth * 0.3, 20)];
     priceLable.text = @"本单预计收入";
     priceLable.font = [UIFont systemFontOfSize:13];
     [view addSubview:priceLable];

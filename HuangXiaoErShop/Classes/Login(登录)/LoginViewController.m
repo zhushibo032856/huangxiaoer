@@ -45,12 +45,12 @@ static CGFloat const lineHeight = 0.8f;
 - (void)creatLoginView {
     
     //logo
-    self.logoView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight * 0.36)];
+    self.logoView = [[UIImageView alloc]initWithFrame:CGRectMake(0, kScreenWidth * 0.1, kScreenWidth, kScreenWidth * 0.64)];
     self.logoView.image = [UIImage imageNamed:@"logo"];
     [self.view addSubview:self.logoView];
     
     //手机号
-    self.phoneTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.13, kScreenHeight * 0.36, kScreenWidth * 0.74, kScreenHeight * 0.076)];
+    self.phoneTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.13, kScreenWidth * 0.75, kScreenWidth * 0.74, kScreenHeight * 0.076)];
     self.phoneTF.placeholder = @"请输入手机号";
     [self.view addSubview:self.phoneTF];
     
@@ -59,14 +59,14 @@ static CGFloat const lineHeight = 0.8f;
     [self.view addSubview:lineLable];
     
     //密码
-    self.passWordTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.13, kScreenHeight * 0.436, kScreenWidth * 0.5, kScreenHeight * 0.076)];
+    self.passWordTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.13, self.phoneTF.y + kScreenHeight * 0.076, kScreenWidth * 0.5, kScreenHeight * 0.076)];
     self.passWordTF.placeholder = @"请输入密码";
     self.passWordTF.secureTextEntry = YES;
     [self.view addSubview:self.passWordTF];
     
     
     self.imageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.imageButton.frame = CGRectMake(kScreenWidth * 0.75, CGRectGetHeight(self.passWordTF.frame) / 3 + kScreenHeight * 0.436, CGRectGetHeight(self.passWordTF.frame) / 3, CGRectGetHeight(self.passWordTF.frame) / 3);
+    self.imageButton.frame = CGRectMake(kScreenWidth * 0.75, self.phoneTF.y + kScreenHeight * 0.076 / 3 + kScreenHeight * 0.076, CGRectGetHeight(self.passWordTF.frame) / 3, CGRectGetHeight(self.passWordTF.frame) / 3);
     [self.imageButton setBackgroundImage:[UIImage imageNamed:@"passImage-1"] forState:UIControlStateNormal];
     [self.imageButton setTag:1000];
     [self.imageButton addTarget:self action:@selector(changeImageWithTag) forControlEvents:UIControlEventTouchUpInside];
@@ -80,12 +80,12 @@ static CGFloat const lineHeight = 0.8f;
     
     //登录
     self.loginButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.loginButton.frame = CGRectMake(kScreenWidth * 0.13, kScreenHeight * 0.574, kScreenWidth * 0.74, kScreenHeight * 0.067);
+    self.loginButton.frame = CGRectMake(kScreenWidth * 0.13, line.y + kScreenWidth * 0.1, kScreenWidth * 0.74, 50);
     [self.loginButton setTitle:@"登录" forState:UIControlStateNormal];
     [self.loginButton setTintColor:[UIColor blackColor]];
     
     [self.loginButton setBackgroundImage:[UIImage imageNamed:@"login"] forState:UIControlStateNormal];
-    self.loginButton.layer.cornerRadius = kScreenHeight * 0.067 / 2;
+    self.loginButton.layer.cornerRadius = kScreenHeight * 0.055 / 2;
     self.loginButton.layer.masksToBounds = YES;
     [self.loginButton addTarget:self action:@selector(handleUserLoginAction:) forControlEvents:(UIControlEventTouchUpInside)];
     [self.view addSubview:self.loginButton];

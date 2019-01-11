@@ -49,8 +49,7 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
     
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = NO;
-    
-    
+
     UIButton * leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.frame = CGRectMake(0, 0, 30, 30);
     [leftBtn setBackgroundImage:[UIImage imageNamed:@"itemBack"] forState:UIControlStateNormal];
@@ -76,7 +75,7 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = kColor(240, 240, 240);
     self.rightArr = [NSMutableArray array];
     
     [self creatAutoLayout];
@@ -125,12 +124,13 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
     if (iPhoneX) {
         _leftTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth * 0.3, kScreenHeight - commen - 50)];
     }else{
-    _leftTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth * 0.3, kScreenHeight -110)];
+    _leftTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth * 0.3, kScreenHeight - 110)];
     }
     
     [_leftTableView setSeparatorColor:kColor(240, 240, 240)];
     _leftTableView.delegate = self;
     _leftTableView.dataSource = self;
+    _leftTableView.backgroundColor = kColor(240, 240, 240);
     [_leftTableView registerClass:[DishesManagerTableViewCell class] forCellReuseIdentifier:dishesCell];
     _leftTableView.tableFooterView = [[UIView alloc] init];
     [self.view addSubview:self.leftTableView];
@@ -151,16 +151,18 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
 
     /** 分类管理 */
     _leftButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    _leftButton.frame = CGRectMake(0, CGRectGetMaxY(self.leftTableView.frame), kScreenWidth * 0.3, 50);
-    [_leftButton setTitle:@"分类管理" forState:UIControlStateNormal];
+    [_leftButton setBackgroundColor:[UIColor whiteColor]];
+    _leftButton.frame = CGRectMake(0, self.leftTableView.height, kScreenWidth * 0.3, 50);
+    [_leftButton setTitle:@"品类管理" forState:UIControlStateNormal];
     [_leftButton setTintColor:[UIColor blackColor]];
     [_leftButton addTarget:self action:@selector(classMessage:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_leftButton];
     
     /** 上架商品 */
-    _rightButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    _rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _rightButton.frame = CGRectMake(CGRectGetMaxX(_leftButton.frame), CGRectGetMaxY(self.rightTableView.frame), kScreenWidth * 0.7, 50);
-    [_rightButton setTitle:@"上架商品" forState:UIControlStateNormal];
+    [_rightButton setTitle:@" 添加商品" forState:UIControlStateNormal];
+    [_rightButton setImage:[UIImage imageNamed:@"addShop"] forState:UIControlStateNormal];
     [_rightButton setTintColor:[UIColor whiteColor]];
     [_rightButton addTarget:self action:@selector(addCellForEdit) forControlEvents:UIControlEventTouchUpInside];
     [_rightButton setBackgroundImage:[UIImage imageNamed:@"backcolor"] forState:UIControlStateNormal];
@@ -197,6 +199,7 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
     
     self.hidesBottomBarWhenPushed = YES;
     CateGoryViewController *cateVC = [[CateGoryViewController alloc]init];
+    cateVC.count = self.leftDataArr.count;
     [self.navigationController pushViewController:cateVC animated:YES];
 
 }

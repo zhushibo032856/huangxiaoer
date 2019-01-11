@@ -20,6 +20,7 @@
 #import "QRViewController.h"
 #import "AppointmentDateViewController.h"
 #import "UuidObject.h"
+#import "ShopSettingViewController.h"
 
 #import "MarketManagerModel.h"
 
@@ -81,64 +82,17 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     NSString *uuid = [UuidObject getUUID];
     NSLog(@"UUID = %@",uuid);
     
-    _mineTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, kScreenHeight / 5, kScreenWidth, kScreenHeight / 5 * 4) style:UITableViewStyleGrouped];
-  //  _mineTableView.scrollEnabled = NO;
-    [_mineTableView registerClass:[MineTableViewCell class] forCellReuseIdentifier:mineCell];
-    [_mineTableView registerClass:[MineOneTableViewCell class] forCellReuseIdentifier:mineOneCell];
-    [_mineTableView registerClass:[MineTwoTableViewCell class] forCellReuseIdentifier:mineTwoCell];
     
-    _mineTableView.sectionHeaderHeight = 5;
-    _mineTableView.sectionFooterHeight = 5;
-    _mineTableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0.0f,0.0f,kScreenWidth,10)];
-    
-    [self.view addSubview:_mineTableView];
-    
-    _mineTableView.delegate = self;
-    _mineTableView.dataSource = self;
     
     [self creatHeadViewLayout];
     [self setDetailView];
+    [self initTableView];
     [self requestShopManager];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestShopManager) name:@"notiEdit" object:nil];
     // Do any additional setup after loading the view.
 }
-- (void)submitTokenToSocket{
-    
-    if (kStringIsEmpty(KDEVICETOKEN)) {
-     //   [MBProgressHUD showError:@"注册deviceToken失败"];
-        return;
-    }
-  //  NSLog(@"%@",KDEVICETOKEN);
-    NSString *string = [NSString stringWithFormat:@"%@",KUSERSHOPID];
-    if (kStringIsEmpty(string)) {
-        return;
-    }
-    if (kStringIsEmpty(KUSERID)) {
-        return;
-    }
 
-    NSDictionary *partner = @{
-                              @"phoneId": KDEVICETOKEN,
-                              @"phoneType": @"IPHONE",
-                              @"sys_user_id": KUSERSHOPID,
-                              @"token": KUSERID
-                              };
-    
- //   NSLog(@"%@",partner);
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
-
-    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/addcommericalpush",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
-
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-    //    NSLog(@"%@",responseObject);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-
-    }];
-}
 
 /** 头视图布局 */
 - (void)creatHeadViewLayout{
@@ -170,6 +124,65 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     [_detailButton addTarget:self action:@selector(pushDetailShopView:) forControlEvents:UIControlEventTouchUpInside];
     [_headView addSubview:_detailButton];
     
+}
+
+- (void)initTableView{
+    
+    _mineTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, _headView.bottom, kScreenWidth, kScreenHeight) style:UITableViewStyleGrouped];
+    _mineTableView.backgroundColor = kColor(240, 240, 240);
+    //_mineTableView.scrollEnabled = NO;
+
+    [_mineTableView registerClass:[MineTableViewCell class] forCellReuseIdentifier:mineCell];
+    [_mineTableView registerClass:[MineOneTableViewCell class] forCellReuseIdentifier:mineOneCell];
+    [_mineTableView registerClass:[MineTwoTableViewCell class] forCellReuseIdentifier:mineTwoCell];
+    
+//    _mineTableView.sectionFooterHeight = 10;
+//    _mineTableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectMake(0.0f,0.0f,kScreenWidth,10)];
+//    _mineTableView.sectionHeaderHeight = 0;
+//    _mineTableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 0)];
+    
+    [self.view addSubview:_mineTableView];
+    
+    _mineTableView.delegate = self;
+    _mineTableView.dataSource = self;
+    
+}
+
+- (void)submitTokenToSocket{
+    
+    if (kStringIsEmpty(KDEVICETOKEN)) {
+        //   [MBProgressHUD showError:@"注册deviceToken失败"];
+        return;
+    }
+    //  NSLog(@"%@",KDEVICETOKEN);
+    NSString *string = [NSString stringWithFormat:@"%@",KUSERSHOPID];
+    if (kStringIsEmpty(string)) {
+        return;
+    }
+    if (kStringIsEmpty(KUSERID)) {
+        return;
+    }
+    
+    NSDictionary *partner = @{
+                              @"phoneId": KDEVICETOKEN,
+                              @"phoneType": @"IPHONE",
+                              @"sys_user_id": KUSERSHOPID,
+                              @"token": KUSERID
+                              };
+    
+    //   NSLog(@"%@",partner);
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/addcommericalpush",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //    NSLog(@"%@",responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
 //请求主页信息
 - (void)requestShopManager{
@@ -234,9 +247,21 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    return [UIView new];
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 10;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    return [UIView new];
+}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     
-    return 3;
+    return 4;
     
 }
 
@@ -245,7 +270,9 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     if (section == 0) {
         return 1;
     } else if (section == 1){
-        return 7;
+        return 2;
+    }else if (section == 2){
+        return 3;
     }
     return 1;
 }
@@ -259,12 +286,12 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.section == 0) {
-        MineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:mineCell forIndexPath:indexPath];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        
-        
-        UITapGestureRecognizer *tapGestureRecognizer1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scanBigImageClick1:)];
-        [cell.imageViewTwo addGestureRecognizer:tapGestureRecognizer1];
+        MineOneTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:mineOneCell forIndexPath:indexPath];
+        cell.voiceLable.text = @"语音播报";
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        [cell.voiceimageView setImage:[UIImage imageNamed:@"voiceImage"]];
+//        UITapGestureRecognizer *tapGestureRecognizer1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scanBigImageClick1:)];
+//        [cell.imageViewTwo addGestureRecognizer:tapGestureRecognizer1];
         //让UIImageView和它的父类开启用户交互属性
     //    [cell.imageViewTwo setUserInteractionEnabled:YES];
         
@@ -272,38 +299,54 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     }else if (indexPath.section == 1){
         MineOneTableViewCell *cellOne = [tableView dequeueReusableCellWithIdentifier:mineOneCell forIndexPath:indexPath];
         cellOne.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//        if (indexPath.row == 0) {
-//            cellOne.voiceLable.text = @"语音播报";
-//            cellOne.accessoryType = UITableViewCellAccessoryNone;
-//            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"voiceImage"]];
-//        }else
-            if(indexPath.row == 0){
-            cellOne.voiceLable.text = @"商户信息";
+
+        if(indexPath.row == 0){
+            cellOne.voiceLable.text = @"账户信息";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"shopMessage"]];
-        }else if(indexPath.row == 1){
-            cellOne.voiceLable.text = @"票机管理";
+        }
+//        }else if(indexPath.row == 1){
+//            cellOne.voiceLable.text = @"票机管理";
+//            cellOne.voiceSwitch.hidden = YES;
+//            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"piaoji"]];
+//        }else if(indexPath.row == 2){
+//            cellOne.voiceLable.text = @"店铺收款码";
+//            cellOne.voiceSwitch.hidden = YES;
+//            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"codeImage"]];
+//        }else if(indexPath.row == 3){
+//            cellOne.voiceLable.text = @"预约时间";
+//            cellOne.voiceSwitch.hidden = YES;
+//            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"yuyueTime"]];
+//        }else if(indexPath.row == 4){
+//            cellOne.voiceLable.text = @"意见反馈";
+//            cellOne.voiceSwitch.hidden = YES;
+//            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"Suggestions"]];
+//        }else if(indexPath.row == 5){
+//            cellOne.voiceLable.text = @"联系客服";
+//            cellOne.voiceSwitch.hidden = YES;
+//            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"kufu"]];
+//        }
+        else{
+            cellOne.voiceLable.text = @"店铺设置";
             cellOne.voiceSwitch.hidden = YES;
-            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"piaoji"]];
-        }else if(indexPath.row == 2){
-            cellOne.voiceLable.text = @"店铺收款码";
-            cellOne.voiceSwitch.hidden = YES;
-            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"codeImage"]];
-        }else if(indexPath.row == 3){
-            cellOne.voiceLable.text = @"预约时间";
-            cellOne.voiceSwitch.hidden = YES;
-            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"yuyueTime"]];
-        }else if(indexPath.row == 4){
+            [cellOne.voiceimageView setImage:[UIImage imageNamed:@"shopImage"]];
+        }
+        
+        return cellOne;
+        
+    }else if (indexPath.section == 2){
+        MineOneTableViewCell *cellOne = [tableView dequeueReusableCellWithIdentifier:mineOneCell forIndexPath:indexPath];
+        cellOne.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        if(indexPath.row == 0){
             cellOne.voiceLable.text = @"意见反馈";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"Suggestions"]];
-        }else if(indexPath.row == 5){
+        }else if(indexPath.row == 1){
             cellOne.voiceLable.text = @"联系客服";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"kufu"]];
-        }
-        else{
-            cellOne.voiceLable.text = @"联系经理";
+        }else{
+            cellOne.voiceLable.text = @"市场经理";
             cellOne.voiceSwitch.hidden = YES;
             [cellOne.voiceimageView setImage:[UIImage imageNamed:@"jingli"]];
         }
@@ -366,50 +409,86 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+//    if (indexPath.section == 0) {
+//        self.hidesBottomBarWhenPushed=YES;
+//
+//        EditShopMessageViewController *editShopMessageVC = [[EditShopMessageViewController alloc]init];
+//        editShopMessageVC.model = [self.dataArray firstObject];
+//        [self.navigationController pushViewController:editShopMessageVC animated:YES];
+//        self.hidesBottomBarWhenPushed = NO;
+//    }else if (indexPath.section == 1){
+//        if (indexPath.row == 0){
+//            self.hidesBottomBarWhenPushed = YES;
+//            SetUpViewController *setUpVC = [SetUpViewController new];
+//            [self.navigationController pushViewController:setUpVC animated:YES];
+//            self.hidesBottomBarWhenPushed = NO;
+//        }else if (indexPath.row == 1){
+//            self.hidesBottomBarWhenPushed=YES;
+//            MachinesManagerViewController *macVC = [[MachinesManagerViewController alloc]init];
+//            [self.navigationController pushViewController:macVC animated:YES];
+//            self.hidesBottomBarWhenPushed = NO;
+//        }else if (indexPath.row == 2){
+//            self.hidesBottomBarWhenPushed=YES;
+//            QRViewController *qrVC = [[QRViewController alloc]init];
+//            [self.navigationController pushViewController:qrVC animated:YES];
+//            self.hidesBottomBarWhenPushed = NO;
+//        }else if (indexPath.row == 3){
+//            [self selectIsOpen];
+//
+//        }else if (indexPath.row == 4){
+//            self.hidesBottomBarWhenPushed = YES;
+//            SuggestionsViewController *suggestVC = [[SuggestionsViewController alloc]init];
+//            [self.navigationController pushViewController:suggestVC animated:YES];
+//            self.hidesBottomBarWhenPushed = NO;
+//        }else if (indexPath.row == 5){
+//        //    [MBProgressHUD showSuccess:@"联系客服"];
+//            NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:0371-56033072"];
+//            UIWebView *callWebview = [[UIWebView alloc] init];
+//            [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
+//            [self.view addSubview:callWebview];
+//
+//        }else if (indexPath.row == 6){
+//         //   [MBProgressHUD showSuccess:@"联系经理"];
+//            [self requestPhone];
+//        }
+//    }
+    
     if (indexPath.section == 0) {
-        self.hidesBottomBarWhenPushed=YES;
+
         
-        EditShopMessageViewController *editShopMessageVC = [[EditShopMessageViewController alloc]init];
-        editShopMessageVC.model = [self.dataArray firstObject];
-        [self.navigationController pushViewController:editShopMessageVC animated:YES];
-        self.hidesBottomBarWhenPushed = NO;
     }else if (indexPath.section == 1){
-        if (indexPath.row == 0){
+        if (indexPath.row == 0) {
             self.hidesBottomBarWhenPushed = YES;
             SetUpViewController *setUpVC = [SetUpViewController new];
             [self.navigationController pushViewController:setUpVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
-        }else if (indexPath.row == 1){
-            self.hidesBottomBarWhenPushed=YES;
-            MachinesManagerViewController *macVC = [[MachinesManagerViewController alloc]init];
-          //  macVC.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:macVC animated:YES];
-            self.hidesBottomBarWhenPushed = NO;
-        }else if (indexPath.row == 2){
-            self.hidesBottomBarWhenPushed=YES;
-            QRViewController *qrVC = [[QRViewController alloc]init];
-            [self.navigationController pushViewController:qrVC animated:YES];
-            self.hidesBottomBarWhenPushed = NO;
-        }else if (indexPath.row == 3){
-            [self selectIsOpen];
-
-        }else if (indexPath.row == 4){
+        }else{
+            ShopSettingViewController *shopVC = [ShopSettingViewController new];
+            shopVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:shopVC animated:YES];
+            shopVC.hidesBottomBarWhenPushed = NO;
+        }
+    }else if (indexPath.section == 2){
+        if (indexPath.row == 0) {
             self.hidesBottomBarWhenPushed = YES;
             SuggestionsViewController *suggestVC = [[SuggestionsViewController alloc]init];
             [self.navigationController pushViewController:suggestVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
-        }else if (indexPath.row == 5){
-        //    [MBProgressHUD showSuccess:@"联系客服"];
+
+        }else if (indexPath.row == 1){
+
             NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:0371-56033072"];
             UIWebView *callWebview = [[UIWebView alloc] init];
             [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
             [self.view addSubview:callWebview];
-            
-        }else if (indexPath.row == 6){
-         //   [MBProgressHUD showSuccess:@"联系经理"];
+        }else{
+
             [self requestPhone];
         }
+    }else{
+        
     }
+ 
 }
 
 #pragma mark 商户预约权限查询
