@@ -89,7 +89,7 @@
         return;
     }
     if (self.passWord.text.length < 5) {
-        [MBProgressHUD showError:@"密码格式有误，请重新输入"];
+        [MBProgressHUD showError:@"密码长度不能小于5个字符"];
         return;
     }
     [self submitWithPassword:self.passWord.text OldPassword:self.oldPassWord.text];

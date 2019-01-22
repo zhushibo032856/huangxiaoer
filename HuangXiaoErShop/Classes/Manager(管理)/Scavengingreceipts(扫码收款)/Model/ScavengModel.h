@@ -12,7 +12,7 @@
 
 @property (nonatomic, copy) NSString *payType;
 @property (nonatomic, copy) NSString *orderNum;
-@property (nonatomic, copy) NSString *realFee;
+@property (nonatomic, assign) CGFloat realFee;
 @property (nonatomic, copy) NSString *createTime;
 
 @end

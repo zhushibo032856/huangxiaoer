@@ -81,8 +81,6 @@
 }
 - (void)setNavigationController{
     
- //   [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"backcolor"] forBarMetrics:UIBarMetricsDefault];
-    
     self.navigationItem.title = @"商品编辑";
     
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18],NSForegroundColorAttributeName:[UIColor whiteColor]}] ;
@@ -164,6 +162,7 @@
     [twoView addSubview:priceLable];
     
     self.priceTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 40, kScreenWidth * 0.4, 30)];
+    self.priceTF.keyboardType = UIKeyboardTypeDecimalPad;
     self.priceTF.text = [NSString stringWithFormat:@"%@",model.activityPrice];
     self.priceTF.textAlignment = NSTextAlignmentRight;
     [twoView addSubview:self.priceTF];
@@ -177,6 +176,7 @@
     [twoView addSubview:activeLable];
     
     self.activeTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 90, kScreenWidth * 0.4, 30)];
+    self.activeTF.keyboardType = UIKeyboardTypeDecimalPad;
     self.activeTF.textAlignment = NSTextAlignmentRight;
     self.activeTF.text = [NSString stringWithFormat:@"%@",model.sellPrice];
     [twoView addSubview:self.activeTF];
@@ -208,6 +208,7 @@
     [twoView addSubview:packLable];
     
     self.packTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 190, kScreenWidth * 0.4, 30)];
+    self.packTF.keyboardType = UIKeyboardTypeDecimalPad;
     self.packTF.text = [NSString stringWithFormat:@"%@",model.packFee];
     self.packTF.textAlignment = NSTextAlignmentRight;
     [twoView addSubview:self.packTF];
@@ -264,7 +265,7 @@
         vc.nameString = _nameTF.text;
         vc.hidesBottomBarWhenPushed = YES;
         vc.block = ^(NSString *imgUrl) {
-            NSLog(@"%@",imgUrl);
+         //   NSLog(@"%@",imgUrl);
             
             [self.foodImage sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:[UIImage imageNamed:@"userName"]];
             self.uploadImageUrl = imgUrl;
@@ -274,8 +275,8 @@
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
     [aler addAction:cancel];
-    [aler addAction:album];
     [aler addAction:camera];
+    [aler addAction:album];
     [aler addAction:RecommendedGallery];
     [self presentViewController:aler animated:YES completion:nil];
     

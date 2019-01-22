@@ -2,19 +2,20 @@
 //  QRTableViewCell.h
 //  HuangXiaoErShop
 //
-//  Created by apple on 2018/8/7.
-//  Copyright © 2018年 aladdin. All rights reserved.
+//  Created by apple on 2019/1/21.
+//  Copyright © 2019年 aladdin. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-@class QRModel;
+#import "QRModel.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface QRTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) UIImageView *machImageView;
-@property (nonatomic, strong) UILabel *nameLable;
-@property (nonatomic, strong) UILabel *numLable;
-
+@property (weak, nonatomic) IBOutlet UILabel *NumberLable;
 - (void)setDataForCellWithModel:(QRModel *)model;
 
 @end
+
+NS_ASSUME_NONNULL_END

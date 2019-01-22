@@ -79,11 +79,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     
     [super viewDidLoad];
     
-    NSString *uuid = [UuidObject getUUID];
-    NSLog(@"UUID = %@",uuid);
-    
-    
-    
+
     [self creatHeadViewLayout];
     [self setDetailView];
     [self initTableView];
@@ -149,17 +145,23 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
 }
 
 - (void)submitTokenToSocket{
+    NSString *uuid = [UuidObject getUUID];
+    NSLog(@"UUID = %@",uuid);
     
     if (kStringIsEmpty(KDEVICETOKEN)) {
         //   [MBProgressHUD showError:@"注册deviceToken失败"];
+        NSLog(@"1");
         return;
     }
     //  NSLog(@"%@",KDEVICETOKEN);
     NSString *string = [NSString stringWithFormat:@"%@",KUSERSHOPID];
     if (kStringIsEmpty(string)) {
+        NSLog(@"2");
         return;
+        
     }
     if (kStringIsEmpty(KUSERID)) {
+        NSLog(@"3");
         return;
     }
     
@@ -170,7 +172,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
                               @"token": KUSERID
                               };
     
-    //   NSLog(@"%@",partner);
+  //  NSLog(@"%@",partner);
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -179,9 +181,9 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
     [manager POST:[NSString stringWithFormat:@"%@/appcommercial/addcommericalpush",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        //    NSLog(@"%@",responseObject);
+   //         NSLog(@"%@",responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
+        NSLog(@"%@",error);
     }];
 }
 //请求主页信息
@@ -200,7 +202,7 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-      //     NSLog(@"%@",responseObject);
+     //      NSLog(@"%@",responseObject);
         
         if ([responseObject[@"status"] integerValue] == 200) {
             [self.dataArray removeAllObjects];
@@ -241,8 +243,11 @@ static NSString * const mineTwoCell = @"mineTwoTableViewCell";
 - (void)pushDetailShopView :(UIButton *)sender{
     
     self.hidesBottomBarWhenPushed = YES;
-    ShopMessageViewController *shopMessageVC = [[ShopMessageViewController alloc]init];
-    [self.navigationController pushViewController:shopMessageVC animated:YES];
+//    ShopMessageViewController *shopMessageVC = [[ShopMessageViewController alloc]init];
+//    [self.navigationController pushViewController:shopMessageVC animated:YES];
+    EditShopMessageViewController *editVC = [[EditShopMessageViewController alloc]init];
+    editVC.model = self.dataArray.firstObject;
+    [self.navigationController pushViewController:editVC animated:YES];
     self.hidesBottomBarWhenPushed = NO;
     
 }

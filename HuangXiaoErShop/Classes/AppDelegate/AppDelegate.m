@@ -8,10 +8,13 @@
 //  
 #import "AppDelegate.h"
 #import "BaseTabBarController.h"
+#import "BaseNavigationController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <UserNotifications/UserNotifications.h>
 #import <AVFoundation/AVFoundation.h>
 
+#import "RegisterViewController.h"
+#import "ForgetViewController.h"
 
 #import "PostOrderModel.h"
 
@@ -63,17 +66,17 @@
         [Manager didUpdateState:^(NSInteger state) {
             switch (state) {
                 case CBManagerStateUnsupported:
-                    NSLog(@"The platform/hardware doesn't support Bluetooth Low Energy.");
+             //       NSLog(@"The platform/hardware doesn't support Bluetooth Low Energy.");
                     break;
                 case CBManagerStateUnauthorized:
-                    NSLog(@"The app is not authorized to use Bluetooth Low Energy.");
+             //       NSLog(@"The app is not authorized to use Bluetooth Low Energy.");
                     break;
                 case CBManagerStatePoweredOff:
-                    NSLog(@"Bluetooth is currently powered off.");
+            //        NSLog(@"Bluetooth is currently powered off.");
                     break;
                 case CBManagerStatePoweredOn:
                     [self connectLastPrint];
-                    NSLog(@"Bluetooth power on");
+            //        NSLog(@"Bluetooth power on");
                     break;
                 case CBManagerStateUnknown:
                 default:
@@ -91,7 +94,7 @@
     if (KBLUETOOTH) {
         [Manager scanForPeripheralsWithServices:nil options:nil discover:^(CBPeripheral * _Nullable peripheral, NSDictionary<NSString *,id> * _Nullable advertisementData, NSNumber * _Nullable RSSI) {
             if ([peripheral.identifier.UUIDString isEqualToString:KBLUETOOTH]) {
-                NSLog(@"相同则开始连接此蓝牙");
+         //       NSLog(@"相同则开始连接此蓝牙");
                 [Manager connectPeripheral:peripheral options:nil timeout:50 connectBlack:^(ConnectState state) {
                     if (state == CONNECT_STATE_CONNECTED) {
                         [Manager stopScan];
@@ -102,7 +105,7 @@
                     
                 }];
             }else{
-                NSLog(@"未找到该设备");
+         //       NSLog(@"未找到该设备");
             }
         }];
     }else{
@@ -121,7 +124,7 @@
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     LoginViewController *loginVC = [[LoginViewController alloc]init];
     loginVC.view.backgroundColor = [UIColor whiteColor];
-    self.window.rootViewController = loginVC;
+    self.window.rootViewController = [[BaseNavigationController alloc]initWithRootViewController:loginVC];
     [self.window makeKeyAndVisible];
     
 }
@@ -133,13 +136,14 @@
     [self.window makeKeyAndVisible];
 }
 
+
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 
     NSString *deviceTokenStr = [[[[deviceToken description]
                                   stringByReplacingOccurrencesOfString:@"<" withString:@""]
                                  stringByReplacingOccurrencesOfString:@">" withString:@""]
                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"%@",deviceTokenStr);
+ //   NSLog(@"%@",deviceTokenStr);
 
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     [user setValue:deviceTokenStr forKey:@"deviceToken"];
@@ -488,7 +492,7 @@
 //声明的任务ID
 UIBackgroundTaskIdentifier taskId;
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    NSLog(@"进入后台");
+  //  NSLog(@"进入后台");
     taskId = [application beginBackgroundTaskWithExpirationHandler:^{
         
     }];
@@ -517,7 +521,7 @@ UIBackgroundTaskIdentifier taskId;
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     [self print];
-    NSLog(@"进入前台");
+ //   NSLog(@"进入前台");
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

@@ -110,8 +110,6 @@
 }
 - (void)setNavigationController{
     
-  //  [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"backcolor"] forBarMetrics:UIBarMetricsDefault];
-    
     self.navigationItem.title = @"修改账户信息";
     
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18],NSForegroundColorAttributeName:[UIColor whiteColor]}] ;
@@ -127,13 +125,6 @@
     
     self.view.backgroundColor = kColor(240, 240, 240);
     
-//    UIWebView *webView = [[UIWebView alloc]initWithFrame:self.view.frame];
-//    NSString *string = [NSString stringWithFormat:@"http://51hxe.com/hxeweb/shanghudemo.html?id=%@&token=%@",KUSERSHOPID,KUSERID];
-//    NSURL *url = [NSURL URLWithString:string];
-//    NSLog(@"%@",url);
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//    [webView loadRequest:request];
-//    [self.view addSubview:webView];
     [self creatAutoLayout];
     
     [self getDataForProvince];

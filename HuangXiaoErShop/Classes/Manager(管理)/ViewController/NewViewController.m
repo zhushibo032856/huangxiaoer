@@ -16,6 +16,7 @@
 #import "TodayOrderViewController.h"
 #import "TodayTurnoverViewController.h"
 #import "ShopMessageViewController.h"
+#import "EditShopMessageViewController.h"
 #import "ManagerModel.h"
 #import "TodayDataModel.h"
 #import "SettlementViewController.h"
@@ -24,6 +25,7 @@
 #import "BusinessanalysisViewController.h"
 #import "MessageTypeViewController.h"
 #import "MemberCenterViewController.h"
+#import "JieSuanViewController.h"
 
 @interface NewViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -147,7 +149,7 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
             [MBProgressHUD showError:responseObject[@"msg"]];
             
         }
-        NSLog(@"%@%@",KUSERNAME,KUSERIMAGEURL);
+     //   NSLog(@"%@%@",KUSERNAME,KUSERIMAGEURL);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         
@@ -175,7 +177,7 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
     [_headView addSubview:_shopPhotoView];
     
     _nameLable = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_shopPhotoView.frame) + 20, CGRectGetHeight(_headView.frame) / 3 , kScreenWidth - _shopPhotoView.frame.size.width - 20 - _businessButton.frame.size.width - 30, 30)];
-    NSLog(@"%@%@",KUSERNAME,KUSERIMAGEURL);
+   // NSLog(@"%@%@",KUSERNAME,KUSERIMAGEURL);
     _nameLable.text = KUSERNAME;
     [_nameLable setFont:[UIFont fontWithName:@"Helvetica-Bold" size:20]];
     _nameLable.textAlignment = NSTextAlignmentLeft;
@@ -275,8 +277,11 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
 - (void)pushDetailShopView :(UIButton *)sender{
     
     self.hidesBottomBarWhenPushed = YES;
-    ShopMessageViewController *shopMessageVC = [ShopMessageViewController new];
-    [self.navigationController pushViewController:shopMessageVC animated:YES];
+//    ShopMessageViewController *shopMessageVC = [ShopMessageViewController new];
+//    [self.navigationController pushViewController:shopMessageVC animated:YES];
+    EditShopMessageViewController *editVC = [[EditShopMessageViewController alloc]init];
+    editVC.model = [self.dataArray firstObject];
+    [self.navigationController pushViewController:editVC animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }
 
@@ -444,42 +449,46 @@ static NSString * const managerTwoCell = @"managerTwoCollectionViewCell";
             
         }else if (indexPath.row == 3){
             //   [MBProgressHUD showError:@"该功能暂未开放"];
-            SettlementViewController *settlementVC = [[SettlementViewController alloc]init];
             
-            EditViewController *editVC = [EditViewController new];
-            NSDictionary *partner = @{
-                                      @"token": KUSERID
-                                      };
-            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-            manager.responseSerializer = [AFJSONResponseSerializer serializer];
-            manager.requestSerializer = [AFJSONRequestSerializer serializer];
+            JieSuanViewController *jiesuanVC = [[JieSuanViewController alloc]init];
+            [self.navigationController pushViewController:jiesuanVC animated:YES];
             
-            manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
-            [manager POST:[NSString stringWithFormat:@"%@/appcommercial/findBankAccount",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
-                
-            } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                
-                NSLog(@"%@",responseObject);
-                NSMutableArray *arr = [NSMutableArray array];
-                if ([responseObject[@"status"] integerValue] == 200) {
-                    arr = responseObject[@"data"];
-                }
-                if (arr.count == 0) {
-                    self.hidesBottomBarWhenPushed = YES;
-                    [self.navigationController pushViewController:settlementVC animated:YES];
-                    editVC.datArray = arr;
-                    self.hidesBottomBarWhenPushed = NO;
-                    
-                }else{
-                    self.hidesBottomBarWhenPushed = YES;
-                    [self.navigationController pushViewController:editVC animated:YES];
-                    self.hidesBottomBarWhenPushed = NO;
-                }
-                
-            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                
-            }];
-            
+//            SettlementViewController *settlementVC = [[SettlementViewController alloc]init];
+//
+//            EditViewController *editVC = [EditViewController new];
+//            NSDictionary *partner = @{
+//                                      @"token": KUSERID
+//                                      };
+//            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//            manager.responseSerializer = [AFJSONResponseSerializer serializer];
+//            manager.requestSerializer = [AFJSONRequestSerializer serializer];
+//
+//            manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
+//            [manager POST:[NSString stringWithFormat:@"%@/appcommercial/findBankAccount",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+//
+//            } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//
+//           //     NSLog(@"%@",responseObject);
+//                NSMutableArray *arr = [NSMutableArray array];
+//                if ([responseObject[@"status"] integerValue] == 200) {
+//                    arr = responseObject[@"data"];
+//                }
+//                if (arr.count == 0) {
+//                    self.hidesBottomBarWhenPushed = YES;
+//                    [self.navigationController pushViewController:settlementVC animated:YES];
+//                    editVC.datArray = arr;
+//                    self.hidesBottomBarWhenPushed = NO;
+//
+//                }else{
+//                    self.hidesBottomBarWhenPushed = YES;
+//                    [self.navigationController pushViewController:editVC animated:YES];
+//                    self.hidesBottomBarWhenPushed = NO;
+//                }
+//
+//            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//
+//            }];
+//            
             
         }else if (indexPath.row == 2){
             // self.hidesBottomBarWhenPushed = YES;

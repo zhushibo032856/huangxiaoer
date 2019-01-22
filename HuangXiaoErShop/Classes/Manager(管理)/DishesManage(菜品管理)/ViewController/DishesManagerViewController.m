@@ -58,6 +58,16 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
     [self setNavigationController];
     
 }
+- (void)setNavigationController{
+    
+    self.navigationItem.title = @"菜品管理";
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18],NSForegroundColorAttributeName:[UIColor whiteColor]}] ;
+    
+}
+- (void)leftBarBtnClicked:(UIButton *)btn
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (NSMutableArray *)leftDataArr{
     if (!_leftDataArr) {
@@ -180,19 +190,7 @@ static NSString * const dishesRightCell = @"rightCellIdentifier";
 
 }
 
-- (void)setNavigationController{
-    
-  //  [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"backcolor"] forBarMetrics:UIBarMetricsDefault];
-    
-    self.navigationItem.title = @"菜品管理";
-    
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18],NSForegroundColorAttributeName:[UIColor whiteColor]}] ;
-    
-}
-- (void)leftBarBtnClicked:(UIButton *)btn
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
+
 
 /** 分类管理 */
 - (void)classMessage:(UIButton *)sender{

@@ -712,7 +712,8 @@ static NSString * const noneCell = @"NoneDataCell";
         _cellView.vhShow = NO;
         _cellView.optionType = MLMOptionSelectViewTypeArrow;
 
-        [_cellView showOffSetScale:0.5 viewWidth:kScreenWidth targetView:sender direction:MLMOptionSelectViewTop];
+        _cellView.edgeInsets = UIEdgeInsetsMake(64, 10, 10, 10);
+        [_cellView showOffSetScale:0.5 viewWidth:kScreenWidth - 20 targetView:sender direction:MLMOptionSelectViewTop];
     }];
 }
 

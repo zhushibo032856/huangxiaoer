@@ -5,8 +5,10 @@
 //  Created by apple on 2018/8/1.
 //  Copyright © 2018年 aladdin. All rights reserved.
 //
-//750  1334
+
 #import "LoginViewController.h"
+#import "RegisterViewController.h"
+#import "ForgetViewController.h"
 
 static CGFloat const lineHeight = 0.8f;
 
@@ -24,7 +26,11 @@ static CGFloat const lineHeight = 0.8f;
 
 @implementation LoginViewController
 
-
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES];
+    // self.navigationController.navigationBarHidden = YES;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,13 +51,14 @@ static CGFloat const lineHeight = 0.8f;
 - (void)creatLoginView {
     
     //logo
-    self.logoView = [[UIImageView alloc]initWithFrame:CGRectMake(0, kScreenWidth * 0.1, kScreenWidth, kScreenWidth * 0.64)];
+    self.logoView = [[UIImageView alloc]initWithFrame:CGRectMake(0, kScreenWidth * 0.01, kScreenWidth, kScreenWidth * 0.64)];
     self.logoView.image = [UIImage imageNamed:@"logo"];
     [self.view addSubview:self.logoView];
     
     //手机号
-    self.phoneTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.13, kScreenWidth * 0.75, kScreenWidth * 0.74, kScreenHeight * 0.076)];
+    self.phoneTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.13, kScreenWidth * 0.7, kScreenWidth * 0.74, kScreenHeight * 0.076)];
     self.phoneTF.placeholder = @"请输入手机号";
+    self.phoneTF.keyboardType = UIKeyboardTypePhonePad;
     [self.view addSubview:self.phoneTF];
     
     UILabel *lineLable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.13, CGRectGetMaxY(self.phoneTF.frame), kScreenWidth * 0.74, lineHeight)];
@@ -92,7 +99,12 @@ static CGFloat const lineHeight = 0.8f;
     
     //成为商户
     self.signButton = [UIButton buttonWithType:UIButtonTypeCustom];
-
+    self.signButton.frame = CGRectMake(kScreenWidth * 0.13, self.loginButton.bottom + 20, 80, 30);
+    [self.signButton setTitle:@"成为商户" forState:UIControlStateNormal];
+    self.signButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    [self.signButton setTitleColor:kColor(51, 51, 51) forState:UIControlStateNormal];
+    [self.signButton addTarget:self action:@selector(pushToRegisterVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.signButton];
     
     
     
@@ -100,17 +112,20 @@ static CGFloat const lineHeight = 0.8f;
     
     //忘记密码
     
-    
-    
-    
-    
+    self.forgetPassword = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.forgetPassword.frame = CGRectMake(self.loginButton.right - 80, CGRectGetMaxY(self.loginButton.frame) + 20, 80, 30);
+    self.forgetPassword.titleLabel.font = [UIFont systemFontOfSize:15];
+    [self.forgetPassword setTitleColor:kColor(51, 51, 51) forState:UIControlStateNormal];
+    [self.forgetPassword setTitle:@"忘记密码" forState:UIControlStateNormal];
+    [self.forgetPassword addTarget:self action:@selector(pushToForgetVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.forgetPassword];
     
     
     if (!kStringIsEmpty(KUSERPHONE)) {
         self.phoneTF.text = KUSERPHONE;
     }
-        if (!kStringIsEmpty(KUSERPASSWORD)) {
-            self.passWordTF.text = KUSERPASSWORD;
+    if (!kStringIsEmpty(KUSERPASSWORD)) {
+        self.passWordTF.text = KUSERPASSWORD;
     }
 }
 
@@ -142,7 +157,7 @@ static CGFloat const lineHeight = 0.8f;
         return;
     }
     if (self.passWordTF.text.length < 5) {
-        [MBProgressHUD showError:@"密码格式有误，请重新输入"];
+        [MBProgressHUD showError:@"密码长度不能小于5个字符"];
         return;
     }
     
@@ -155,31 +170,28 @@ static CGFloat const lineHeight = 0.8f;
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
-
+    
     [manager POST:[NSString stringWithFormat:@"%@/appcommercialUser/login",HXELOGIN] parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-    //    NSLog(@"%@",responseObject);
+        //    NSLog(@"%@",responseObject);
         
         if ([responseObject[@"status"] integerValue] == 200) {
-           
+            
             [MBProgressHUD showSuccess:@"登录成功"];
             NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
             [user setValue:self.phoneTF.text forKey:@"phone"];
             [user setValue:self.passWordTF.text forKey:@"password"];
             [user setValue:responseObject[@"data"] forKey:@"data"];
             [user synchronize];
-       //     [self requestShopManagerWith:responseObject[@"data"]];
             [[AppDelegate mainAppDelegate] showHomeView];
-           
+            
         }
         if([responseObject[@"status"] integerValue] == 400){
             [MBProgressHUD showError:responseObject[@"msg"]];
             
         }
         
-    
-
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         [MBProgressHUD showMessage:@"登录失败，请重新登录"];
@@ -189,48 +201,21 @@ static CGFloat const lineHeight = 0.8f;
     
 }
 
-
-- (void)requestShopManagerWith:(NSString *)token{
-    
-    NSDictionary *partner = @{
-                              @"token":token
-                              };
-    
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json", @"text/javascript",@"text/html", nil];
-    
-    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/findbytoken",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-             NSLog(@"%@",responseObject);
-        
-        if ([responseObject[@"status"] integerValue] == 200) {
-            NSDictionary *dic = responseObject[@"data"];
-            
-            NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-            [user setObject:dic[@"logoImage"] forKey:@"imageurl"];
-            [user setObject:dic[@"shopSign"] forKey:@"shopName"];
-            [user setObject:dic[@"address"] forKey:@"shopAddress"];
-            [user setObject:dic[@"id"] forKey:@"shopId"];;
-            [user setObject:dic[@"userName"] forKey:@"userName"];
-            [user synchronize];
-        }else if ([responseObject[@"status"] integerValue] == 301){
-            [[AppDelegate mainAppDelegate] showLoginView];
-        }
-        else{
-            [MBProgressHUD showMessage:responseObject[@"msg"]];
-        }
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-    }];
-    
+#pragma mark 注册商户
+- (void)pushToRegisterVC{
+    [MBProgressHUD showError:@"该功能暂未开放"];
+    //    RegisterViewController *registerVC = [[RegisterViewController alloc]init];
+    //    [self.navigationController pushViewController:registerVC animated:YES];
     
 }
 
+#pragma mark 忘记密码
+- (void)pushToForgetVC{
+    
+    ForgetViewController *forgetVC = [[ForgetViewController alloc]init];
+    [self.navigationController pushViewController:forgetVC animated:YES];
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -238,13 +223,13 @@ static CGFloat const lineHeight = 0.8f;
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

@@ -248,6 +248,7 @@
     
     self.priceTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 40, kScreenWidth * 0.4, 30)];
     self.priceTF.textAlignment = NSTextAlignmentRight;
+    self.priceTF.keyboardType = UIKeyboardTypeDecimalPad;
     self.priceTF.placeholder = @"商品原价";
     [twoView addSubview:self.priceTF];
     
@@ -261,6 +262,7 @@
     
     self.activeTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 90, kScreenWidth * 0.4, 30)];
     self.activeTF.textAlignment = NSTextAlignmentRight;
+    self.activeTF.keyboardType = UIKeyboardTypeDecimalPad;
     self.activeTF.placeholder = @"实际展示价格";
     [twoView addSubview:self.activeTF];
     
@@ -286,6 +288,7 @@
     self.packTF = [[UITextField alloc]initWithFrame:CGRectMake(kScreenWidth * 0.5, 190, kScreenWidth * 0.4, 30)];
     self.packTF.placeholder = @"0";
     self.packTF.textAlignment = NSTextAlignmentRight;
+    self.packTF.keyboardType = UIKeyboardTypeDecimalPad;
     [twoView addSubview:self.packTF];
     
     
@@ -347,8 +350,8 @@
     
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
     [aler addAction:cancel];
-    [aler addAction:album];
     [aler addAction:camera];
+    [aler addAction:album];
     [aler addAction:RecommendedGallery];
     [self presentViewController:aler animated:YES completion:nil];
     

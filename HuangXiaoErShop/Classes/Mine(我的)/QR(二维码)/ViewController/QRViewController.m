@@ -10,11 +10,14 @@
 #import "QRModel.h"
 #import "ImageModel.h"
 #import "QRTableViewCell.h"
+#import "HeadTableViewCell.h"
 #import "BindingViewController.h"
 #import "QRImageViewController.h"
+#import "BindQRViewController.h"
 
 @interface QRViewController ()<UITableViewDataSource,UITableViewDelegate>
 
+@property (nonatomic, strong) UITableView *HeadTableView;
 @property (nonatomic, strong) UITableView *QRTableView;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -23,6 +26,7 @@
 
 @end
 
+static NSString * const headCell = @"HeadTableViewCell";
 static NSString * const QRcell = @"QRTableViewCell";
 
 @implementation QRViewController
@@ -79,39 +83,20 @@ static NSString * const QRcell = @"QRTableViewCell";
 }
 - (void)creatAutoLauout{
     
-    UIView *heaadView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 60)];
-    heaadView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:heaadView];
+    self.HeadTableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, 100) style:UITableViewStylePlain];
+    self.HeadTableView.layer.masksToBounds = YES;
+    self.HeadTableView.layer.cornerRadius = 8;
+    self.HeadTableView.delegate = self;
+    self.HeadTableView.dataSource = self;
+    [self.HeadTableView registerNib:[UINib nibWithNibName:@"HeadTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:headCell];
+    [self.view addSubview:self.HeadTableView];
     
-    UIImageView *shopImage = [[UIImageView alloc]initWithFrame:CGRectMake(20, 20, 20, 20)];
-    [shopImage setImage:[UIImage imageNamed:@"ShopImage-1"]];
-    [heaadView addSubview:shopImage];
-    
-    UILabel *nameLable = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxY(shopImage.frame) + 20, 20, 80, 20)];
-    nameLable.text = @"店铺名称";
-    nameLable.font = [UIFont systemFontOfSize:15];
-    [heaadView addSubview:nameLable];
-    
-    UILabel *shopNameLable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.4, 20, kScreenWidth * 0.56, 20)];
-    shopNameLable.text = KUSERNAME;
-    shopNameLable.font = [UIFont systemFontOfSize:15];
-    shopNameLable.textAlignment = NSTextAlignmentRight;
-    shopNameLable.textColor = kColor(210, 210, 210);
-    [heaadView addSubview:shopNameLable];
-    
-    
-    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    if (iPhoneX) {
-        addButton.frame = CGRectMake(0, self.view.bottom - 50 - 86, kScreenWidth, 50);
-    } else {
-        addButton.frame = CGRectMake(0, self.view.bottom - 50 - 64, kScreenWidth, 50);
-    }
-    [addButton setBackgroundColor:kColor(255, 210, 0)];
-    [addButton setTitle:@"绑定机具号" forState:UIControlStateNormal];
-    [addButton setTintColor:[UIColor whiteColor]];
-    [addButton addTarget:self action:@selector(pushToBindingViewController) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:addButton];
-    
+    _QRTableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 120, kScreenWidth - 20, kScreenHeight - 120 - kNavHeight) style:UITableViewStyleGrouped];
+    _QRTableView.backgroundColor = kColor(240, 240, 240);
+    [_QRTableView registerNib:[UINib nibWithNibName:@"QRTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:QRcell];
+    _QRTableView.delegate = self;
+    _QRTableView.dataSource = self;
+    [self.view addSubview:_QRTableView];
 }
 
 - (void)pushToBindingViewController{
@@ -145,12 +130,7 @@ static NSString * const QRcell = @"QRTableViewCell";
                 [model setValuesForKeysWithDictionary:dic];
                 [self.dataArray addObject:model];
             }
-            _QRTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 60, kScreenWidth, kScreenHeight - 120 - 64) style:UITableViewStylePlain];
-            _QRTableView.backgroundColor = kColor(240, 240, 240);
-            [_QRTableView registerClass:[QRTableViewCell class] forCellReuseIdentifier:QRcell];
-            _QRTableView.delegate = self;
-            _QRTableView.dataSource = self;
-            [self.view addSubview:_QRTableView];
+           
         }else{
             [MBProgressHUD showError:responseObject[@"msg"]];
         }
@@ -162,22 +142,65 @@ static NSString * const QRcell = @"QRTableViewCell";
     
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.dataArray.count;
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (tableView == self.HeadTableView) {
+        return 0;
+    }else{
+        return 10;
+    }
 }
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    return [UIView new];
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    return [UIView new];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (tableView == self.HeadTableView) {
+        return 2;
+    }
     return 1;
 }
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    
+    if (tableView == self.HeadTableView) {
+        return 1;
+    }
+    return self.dataArray.count;
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 60;
+    return 50;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    QRTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:QRcell forIndexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    QRModel *model = self.dataArray[indexPath.row];
-    [cell setDataForCellWithModel:model];
-    return cell;
+    if (tableView == self.HeadTableView) {
+        HeadTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:headCell forIndexPath:indexPath];
+        cell.selectionStyle = NO;
+        if (indexPath.row == 0) {
+            [cell.TypeImage setImage:[UIImage imageNamed:@"ShopImage-1"]];
+            cell.NameLable.text = @"店铺名称";
+            cell.HeadLable.text = KUSERNAME;
+        }else{
+            [cell.TypeImage setImage:[UIImage imageNamed:@"machImage"]];
+            cell.NameLable.text = @"机具号";
+            cell.HeadLable.text = @"点击绑定机具号";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        return cell;
+    }else{
+        QRTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:QRcell forIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.selectionStyle = NO;
+        cell.layer.masksToBounds = YES;
+        cell.layer.cornerRadius = 8;
+        QRModel *model = self.dataArray[indexPath.section];
+        [cell setDataForCellWithModel:model];
+        return cell;
+    }
     
 }
 
@@ -196,7 +219,7 @@ static NSString * const QRcell = @"QRTableViewCell";
     [manager POST:[NSString stringWithFormat:@"%@/appcommercial/findMachineNum_QrCodeById",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"%@",responseObject);
+      //  NSLog(@"%@",responseObject);
         if ([responseObject[@"status"] integerValue] == 200) {
             NSMutableArray *arr = responseObject[@"data"];
             for (NSDictionary *dic in arr) {
@@ -204,7 +227,7 @@ static NSString * const QRcell = @"QRTableViewCell";
                 [model setValuesForKeysWithDictionary:dic];
                 [self.imageDataArray addObject:model];
             }
-            NSLog(@"%@",self.imageDataArray);
+        //    NSLog(@"%@",self.imageDataArray);
         }else{
             [MBProgressHUD showError:responseObject[@"msg"]];
         }
@@ -216,13 +239,18 @@ static NSString * const QRcell = @"QRTableViewCell";
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-        self.hidesBottomBarWhenPushed = YES;
-        QRImageViewController *imageVC = [[QRImageViewController alloc]init];
-        imageVC.model = self.dataArray[indexPath.row];
-    //    imageVC.imageModel = self.imageDataArray[indexPath.row];
-        [self.navigationController pushViewController:imageVC animated:YES];
-//    [MBProgressHUD showError:@"该功能暂未开放"];
     
+    self.hidesBottomBarWhenPushed = YES;
+    if (tableView == self.HeadTableView) {
+        if (indexPath.row == 1) {
+            BindQRViewController *bindvc = [BindQRViewController new];
+            [self.navigationController pushViewController:bindvc animated:YES];
+        }
+    }else{
+        QRImageViewController *imageVC = [[QRImageViewController alloc]init];
+        imageVC.model = self.dataArray[indexPath.section];
+        [self.navigationController pushViewController:imageVC animated:YES];
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

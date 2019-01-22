@@ -113,7 +113,7 @@ static NSString * const noneCell = @"noneCell";
     NSDictionary *partner = @{
                               @"token":KUSERID
                               };
-    NSLog(@"%@",partner);
+   // NSLog(@"%@",partner);
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -147,11 +147,31 @@ static NSString * const noneCell = @"noneCell";
     
     if (_isAuto == 1) {
         [self closedAutoJiedanWithIsAuto:2];
+        
+        
     }else if (_isAuto == 2){
-        [self closedAutoJiedanWithIsAuto:1];
+        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:@"注意" message:@"是否开启自动接单?" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.AutoSwitch setOn:YES animated:YES];
+            [self closedAutoJiedanWithIsAuto:1];
+            
+        }];
+        
+        UIAlertAction *actionOne = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+            [self.AutoSwitch setOn:NO animated:YES];
+        }];
+        
+        
+        [alertView addAction:action];
+        [alertView addAction:actionOne];
+        [self presentViewController:alertView animated:YES completion:nil];
+        
     }
     
 }
+
 
 - (void)closedAutoJiedanWithIsAuto:(NSInteger )isAuto{
     
@@ -172,7 +192,7 @@ static NSString * const noneCell = @"noneCell";
         if ([responseObject[@"status"] integerValue] == 200) {
             
             [MBProgressHUD showSuccess:responseObject[@"msg"]];
-            
+            [self jieDanZhuangTai];
         }else{
             [MBProgressHUD showError:responseObject[@"msg"]];
         }

@@ -86,7 +86,8 @@
     if (!_bankDic) {
         _bankDic = [NSMutableDictionary dictionaryWithCapacity:0];
     }
-    return _bankDic;}
+    return _bankDic;
+}
 
 - (NSMutableDictionary *)childBankDic{
     if (!_childBankDic) {
@@ -276,8 +277,8 @@
     }
     
     //提交按钮
-    self.submitButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.submitButton.frame = CGRectMake(kScreenWidth * 0.3, CGRectGetMaxY(self.addView.frame) + 10, kScreenWidth * 0.4, kScreenWidth * 0.4 * 0.25);
+    self.submitButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.submitButton.frame = CGRectMake(kScreenWidth * 0.3, 330, kScreenWidth * 0.4, kScreenWidth * 0.4 * 0.25);
     [self.submitButton setBackgroundImage:[UIImage imageNamed:@"submit"] forState:UIControlStateNormal];
     [self.submitButton addTarget:self action:@selector(submit) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.submitButton];

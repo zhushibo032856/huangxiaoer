@@ -16,8 +16,7 @@
     NSString * strUUID = (NSString *)[KeyChainStore load:@"com.cloud.app"];
     
     //首次执行该方法时，uuid为空
-    
-    if ([strUUID isEqualToString:@""] || !strUUID)
+            if ([strUUID isEqualToString:@""] || !strUUID)
         
     {
         

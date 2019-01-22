@@ -9,7 +9,7 @@
 #import "ScavengingreceiptsViewController.h"
 #import "BirthdayView.h"
 #import "ScavengingTableViewCell.h"
-
+#import "ScavengModel.h"
 
 @interface ScavengingreceiptsViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -17,7 +17,7 @@
     UIButton *selectTimeButton;
 }
 @property (nonatomic, strong) LVDatePickerModel *birth;
-@property (nonatomic, strong) UIView *titleView;
+
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -25,7 +25,10 @@
 @property (nonatomic, assign) NSInteger thePage;
 
 @end
+
 static NSString * const scavengCell = @"ScavengingTableViewCell";
+static NSString * const noneCell = @"NoneDataCell";
+
 @implementation ScavengingreceiptsViewController
 
 - (NSMutableArray *)dataArray{
@@ -50,8 +53,6 @@ static NSString * const scavengCell = @"ScavengingTableViewCell";
     
 }
 - (void)setNavigationController{
-    
- //   [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"backcolor"] forBarMetrics:UIBarMetricsDefault];
     
     UIView *timeView = [[UIView alloc]initWithFrame:CGRectMake(20, 20, 160, 30)];
     self.navigationItem.titleView = timeView;
@@ -117,46 +118,19 @@ static NSString * const scavengCell = @"ScavengingTableViewCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = kColor(230, 230, 230);
-    
-    self.titleView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 50)];
-    self.titleView.backgroundColor = [UIColor whiteColor];
-    
-    [self.view addSubview:self.titleView];
-    
-    UILabel *payTypeLable = [[UILabel alloc]initWithFrame:CGRectMake(20, 10, kScreenWidth * 0.2, 30)];
-    payTypeLable.text = @"支付方式";
-    payTypeLable.font = [UIFont systemFontOfSize:14];
-    payTypeLable.textAlignment = NSTextAlignmentCenter;
-    [self.titleView addSubview:payTypeLable];
-    
-    UILabel *timeLable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.3, 10, kScreenWidth * 0.1, 30)];
-    timeLable.textAlignment = NSTextAlignmentCenter;
-    timeLable.text = @"时间";
-    timeLable.font = [UIFont systemFontOfSize:14];
-    [self.titleView addSubview:timeLable];
-    
-    UILabel *moneyLable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.55, 10, kScreenWidth * 0.1, 30)];
-    moneyLable.textAlignment = NSTextAlignmentCenter;
-    moneyLable.text = @"金额";
-    moneyLable.font = [UIFont systemFontOfSize:14];
-    [self.titleView addSubview:moneyLable];
-    
-    UILabel *orderNumberLable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.75, 10, kScreenWidth * 0.2, 30)];
-    orderNumberLable.textAlignment = NSTextAlignmentCenter;
-    orderNumberLable.text = @"订单尾号";
-    orderNumberLable.font = [UIFont systemFontOfSize:14];
-    [self.titleView addSubview:orderNumberLable];
-    
-    CGFloat commen = kNav_H + kTabbar_H;
+    self.view.backgroundColor = kColor(240, 240, 240);
+
     if (iPhoneX) {
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(10, 60, kScreenWidth - 20, kScreenHeight - commen - 60) style:(UITableViewStylePlain)];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, kScreenHeight - 86) style:(UITableViewStyleGrouped)];
     }else{
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(10, 60, kScreenWidth - 20, kScreenHeight - 64 - 60) style:(UITableViewStylePlain)];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(10, 10, kScreenWidth - 20, kScreenHeight - 64) style:(UITableViewStyleGrouped)];
     }
-    [self.tableView registerClass:[ScavengingTableViewCell class] forCellReuseIdentifier:scavengCell];
+    self.tableView.backgroundColor = kColor(240, 240, 240);
+    [self.tableView registerNib:[UINib nibWithNibName:@"ScavengingTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:scavengCell];
+    [_tableView registerClass:[NoneDataTableViewCell class] forCellReuseIdentifier:noneCell];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.separatorStyle = NO;
     [self.view addSubview:self.tableView];
     
     NSDate *date=[NSDate date];
@@ -241,34 +215,45 @@ static NSString * const scavengCell = @"ScavengingTableViewCell";
     
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (self.dataArray.count == 0) {
-        return self.tableView.frame.size.height;
-    }else{
-        return 0;
-    }
+    return 10;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    UIView *view = [[UIView alloc]initWithFrame:self.tableView.frame];
-    UILabel *lable = [[UILabel alloc]initWithFrame:CGRectMake(kScreenWidth * 0.2, kScreenWidth * 0.2, kScreenWidth * 0.6, 30)];
-    lable.text = @"今天没有扫码支付哦";
-    lable.textAlignment = NSTextAlignmentCenter;
-    lable.textColor = kColor(210, 210, 210);
-    [view addSubview:lable];
-    return view;
+
+    return [UIView new];
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    return [UIView new];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 50;
+    if (kArrayIsEmpty(self.dataArray)) {
+        return self.tableView.height;
+    }
+    return 75;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
+    if (kArrayIsEmpty(self.dataArray)) {
+        return 1;
+    }
+    return _dataArray.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.dataArray.count;
+    return 1;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    ScavengModel *model = self.dataArray[indexPath.row];
+    if (kArrayIsEmpty(self.dataArray)) {
+        NoneDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:noneCell forIndexPath:indexPath];
+        [cell showNoDataWithImgurl:@"remind-3" andTipString:@"暂无收款记录"];
+        return cell;
+    }
+    ScavengModel *model = self.dataArray[indexPath.section];
     ScavengingTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:scavengCell forIndexPath:indexPath];
+    cell.selectionStyle = NO;
+    cell.layer.masksToBounds = YES;
+    cell.layer.cornerRadius = 8;
     [cell cellSetDataWith:model];
     return cell;
 }

@@ -75,6 +75,7 @@ static NSString * const Cell = @"RecommendedCollectionViewCell";
     if (kStringIsEmpty(self.nameString)) {
         return;
     }else{
+        _serachBar.text = self.nameString;
         [self setRefreshWith:self.nameString];
     }
     // Do any additional setup after loading the view.
@@ -149,7 +150,7 @@ static NSString * const Cell = @"RecommendedCollectionViewCell";
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-            NSLog(@"%@",responseObject);
+         //   NSLog(@"%@",responseObject);
         NSDictionary *data = responseObject[@"data"];
         if ([responseObject[@"status"] integerValue] == 200) {
             

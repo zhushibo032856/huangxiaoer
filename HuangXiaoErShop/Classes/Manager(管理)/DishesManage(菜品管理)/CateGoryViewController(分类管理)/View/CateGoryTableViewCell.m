@@ -28,7 +28,7 @@
 - (void)creatAutoLayOut{
     
     self.nameLable.frame = CGRectMake(20, 10, 150, 30);
-    self.editButton.frame = CGRectMake(kScreenWidth * 0.8, 10, kScreenWidth * 0.15, 30);
+    self.editButton.frame = CGRectMake(kScreenWidth * 0.8 - 10, 10, kScreenWidth * 0.15, 30);
     
     [self.contentView addSubview:self.nameLable];
     [self.contentView addSubview:self.editButton];

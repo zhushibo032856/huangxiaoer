@@ -20,6 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    __weak typeof (self) weakSelf = self;
+    self.navigationController.interactivePopGestureRecognizer.delegate = weakSelf;
  //   [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notifi:) name:AFNetworkingReachabilityDidChangeNotification object:nil];
     // Do any additional setup after loading the view.
 }
@@ -56,6 +58,17 @@
     self.view.backgroundColor = [UIColor cyanColor];
     
 }
+#pragma mark- UIGestureRecognizerDelegate
+//- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+//    NSLog(@"%u",self.navigationController.viewControllers.count);
+//    //判断是否是导航条的第一个子视图控制器
+////    if (self.navigationController && [self.navigationController.viewControllers count] >= 2) {
+////        return YES;
+////    }else{
+////        return NO;
+////    }
+//    return YES;
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

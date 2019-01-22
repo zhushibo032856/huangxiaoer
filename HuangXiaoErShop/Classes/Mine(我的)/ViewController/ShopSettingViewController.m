@@ -164,9 +164,9 @@ static NSString *const mineCell = @"MineOneTableViewCell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (_tableView == tableView) {
-        
+        self.hidesBottomBarWhenPushed=YES;
         EditShopMessageViewController *editShopMessageVC = [[EditShopMessageViewController alloc]init];
-        editShopMessageVC.hidesBottomBarWhenPushed = YES;
+       // editShopMessageVC.hidesBottomBarWhenPushed = YES;
         editShopMessageVC.model = [self.dataArray firstObject];
         [self.navigationController pushViewController:editShopMessageVC animated:YES];
       //  editShopMessageVC.hidesBottomBarWhenPushed = NO;

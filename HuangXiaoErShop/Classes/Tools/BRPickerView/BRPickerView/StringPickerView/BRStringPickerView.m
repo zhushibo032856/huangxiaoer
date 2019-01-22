@@ -289,6 +289,10 @@
     }
 }
 
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
+    return 50;
+}
+
 #pragma mark - UIPickerViewDelegate
 - (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     if (self.isSingleColumn) {
@@ -297,6 +301,7 @@
         return ((NSArray*)_dataSource[component])[row];
     }
 }
+
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     if (self.isSingleColumn) {
