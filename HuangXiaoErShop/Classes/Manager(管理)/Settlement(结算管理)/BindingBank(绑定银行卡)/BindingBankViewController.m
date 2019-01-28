@@ -195,8 +195,8 @@
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
-    
-    [manager POST:@"http://bei.51hxe.com:9002/appcommercial/bindBankAccount" parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+    //@"http://bei.51hxe.com:9002/appcommercial/bindBankAccount"
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/bindBankAccount",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"%@",responseObject);

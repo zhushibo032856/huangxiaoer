@@ -11,9 +11,11 @@
 #import "OutShopTableViewCell.h"
 #import "BindingWXViewController.h"
 #import "BindingAliPayViewController.h"
+#import "EditAliPayViewController.h"
 #import "BindingBankViewController.h"
 #import "EditBankViewController.h"
 #import "BindModel.h"
+#import "AliPayModel.h"
 
 @interface JieSuanViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -21,6 +23,8 @@
 @property (nonatomic, strong) UITableView *shopTableView;
 
 @property (nonatomic, strong) NSMutableArray *dataArr;
+
+@property (nonatomic, strong) NSMutableArray *selectArr;
 
 @end
 
@@ -34,6 +38,13 @@ static NSString * const shopCell = @"OutShopTableViewCell";
         _dataArr = [NSMutableArray arrayWithCapacity:0];
     }
     return _dataArr;
+}
+
+- (NSMutableArray *)selectArr{
+    if (!_selectArr) {
+        _selectArr = [NSMutableArray arrayWithCapacity:0];
+    }
+    return _selectArr;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -74,8 +85,7 @@ static NSString * const shopCell = @"OutShopTableViewCell";
     }else{
         [self creatShopTableView];
     }
-    
-    
+
     // Do any additional setup after loading the view.
 }
 
@@ -141,15 +151,68 @@ static NSString * const shopCell = @"OutShopTableViewCell";
             BindingWXViewController * wxVC = [[BindingWXViewController alloc]init];
             [self.navigationController pushViewController:wxVC animated:YES];
         }else{
-            self.hidesBottomBarWhenPushed = YES;
-            BindingAliPayViewController *aliVC = [[BindingAliPayViewController alloc]init];
-            [self.navigationController pushViewController:aliVC animated:YES];
+            [self selectDataFromNet];
         }
     }else{
         [self getDataFromNet];
     }
     
 }
+
+#pragma mark 跳转绑定或者编辑支付宝账户页面
+
+- (void)selectDataFromNet{
+    MBProgressHUD *hud = [[MBProgressHUD alloc]init];
+    hud.frame = CGRectMake(0, 0, kScreenWidth, kScreenWidth);
+    hud.minSize = CGSizeMake(100, 100);
+    hud.mode = MBProgressHUDModeIndeterminate;
+    [self.view addSubview:hud];
+    [hud showAnimated:YES];
+    
+    NSDictionary *partner = @{
+                              @"id": KUSERSHOPID,
+                              @"token": KUSERID
+                              };
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
+    //@"http://bei.51hxe.com:9002/appcommercial/selectUserAlipay"
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/selectUserAlipay",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    //    NSLog(@"%@",responseObject);
+         NSDictionary *dic = responseObject[@"data"];
+        
+        if ([responseObject[@"status"] integerValue] == 200) {
+            [self.selectArr removeAllObjects];
+           
+            AliPayModel *model = [[AliPayModel alloc]init];
+            [model setValuesForKeysWithDictionary:dic];
+            [self.selectArr addObject:model];
+            
+            if (self.selectArr.count == 0) {
+                self.hidesBottomBarWhenPushed = YES;
+                BindingAliPayViewController *aliVC = [[BindingAliPayViewController alloc]init];
+                [self.navigationController pushViewController:aliVC animated:YES];
+                [hud hideAnimated:YES afterDelay:0.5];
+            }else{
+                self.hidesBottomBarWhenPushed = YES;
+                EditAliPayViewController *editVC = [[EditAliPayViewController alloc]init];
+                editVC.model = self.selectArr.firstObject;
+                [self.navigationController pushViewController:editVC animated:YES];
+                [hud hideAnimated:YES afterDelay:0.5];
+            }
+        }else{
+            [MBProgressHUD showError:responseObject[@"msg"]];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+}
+
+
 
 #pragma mark 跳转绑定或者编辑银行卡页面
 - (void)getDataFromNet{
@@ -182,7 +245,6 @@ static NSString * const shopCell = @"OutShopTableViewCell";
                 [model setValuesForKeysWithDictionary:dic];
                 [self.dataArr addObject:model];
             }
-            NSLog(@"%@",self.dataArr);
             if (self.dataArr.count == 0) {
                 self.hidesBottomBarWhenPushed = YES;
                 BindingBankViewController *bankVC = [[BindingBankViewController alloc]init];
@@ -201,11 +263,7 @@ static NSString * const shopCell = @"OutShopTableViewCell";
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
-    
-    
-
-    
-    
+  
 }
 
 

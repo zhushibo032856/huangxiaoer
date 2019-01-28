@@ -168,8 +168,8 @@
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
-
-    [manager POST:@"http://bei.51hxe.com:9002/appcommercial/changePasswordSmsVerify" parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+//@"http://bei.51hxe.com:9002/appcommercial/changePasswordSmsVerify"
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/changePasswordSmsVerify",HXECOMMEN] parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
     //    NSLog(@"%@",responseObject);
@@ -237,8 +237,8 @@
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
-
-    [manager POST:@"http://bei.51hxe.com:9002/appcommercial/commercialChangePassword" parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
+//@"http://bei.51hxe.com:9002/appcommercial/commercialChangePassword"
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/commercialChangePassword",HXECOMMEN] parameters:parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
      //   NSLog(@"%@",responseObject);

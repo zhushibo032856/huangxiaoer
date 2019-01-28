@@ -118,6 +118,7 @@
                 [model setValuesForKeysWithDictionary:dic];
                 [self.bankArr addObject:model];
             }
+            
             [self.SecondView addSubview:self.bankTF];
             [self setupBankTF:self.SecondView];
             
@@ -148,6 +149,7 @@
             [arr addObject:model.bankName];
             [self.bankDic setObject:model.bankId forKey:model.bankName];
         }
+        
         _bankTF.placeholder = kStringIsEmpty([arr firstObject])?@"请选择银行":[arr firstObject];
         _bankTF.tapAcitonBlock = ^{
             [BRStringPickerView showStringPickerWithTitle:@"银行" dataSource:arr defaultSelValue:nil isAutoSelect:YES resultBlock:^(id selectValue) {
@@ -198,7 +200,8 @@
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
-    [manager POST:@"http://bei.51hxe.com:9002/appcommercial/changeBankAccount" parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+    //@"http://bei.51hxe.com:9002/appcommercial/changeBankAccount"
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/changeBankAccount",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"%@",responseObject);

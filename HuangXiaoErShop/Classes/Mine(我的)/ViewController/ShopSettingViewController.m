@@ -189,6 +189,14 @@ static NSString *const mineCell = @"MineOneTableViewCell";
 }
 #pragma mark 商户预约权限查询
 - (void)selectIsOpen{
+    
+    MBProgressHUD *hud = [[MBProgressHUD alloc]init];
+    hud.frame = CGRectMake(0, 0, kScreenWidth, kScreenWidth);
+    hud.minSize = CGSizeMake(100, 100);
+    hud.mode = MBProgressHUDModeIndeterminate;
+    [self.view addSubview:hud];
+    [hud showAnimated:YES];
+    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
@@ -208,6 +216,7 @@ static NSString *const mineCell = @"MineOneTableViewCell";
                 AppointmentDateViewController *appointmentVC = [[AppointmentDateViewController alloc]init];
                 [self.navigationController pushViewController:appointmentVC animated:YES];
              //   self.hidesBottomBarWhenPushed = NO;
+                [hud hideAnimated:YES afterDelay:0.5];
             }
         }else{
             [MBProgressHUD showError:responseObject[@"msg"]];

@@ -122,6 +122,9 @@
 		18C176C4217DCD01004DEF4D /* AppointmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C176C3217DCD01004DEF4D /* AppointmentTableViewCell.m */; };
 		18C2C8AB21DF0E8600F9953F /* TodayIncomeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C2C8AA21DF0E8600F9953F /* TodayIncomeTableViewCell.m */; };
 		18C2C8AE21DF450900F9953F /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C2C8AD21DF450900F9953F /* NewViewController.m */; };
+		18C3955A21F838EA00CC8E6B /* EditAliPayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C3955821F838EA00CC8E6B /* EditAliPayViewController.m */; };
+		18C3955B21F838EA00CC8E6B /* EditAliPayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18C3955921F838EA00CC8E6B /* EditAliPayViewController.xib */; };
+		18C3955E21F83B9000CC8E6B /* AliPayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C3955D21F83B9000CC8E6B /* AliPayModel.m */; };
 		18C5C12021DDB4D900B13CCF /* XHInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C5C11F21DDB4D900B13CCF /* XHInputView.m */; };
 		18D0706021A8EFAC00FA4B61 /* PostOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D0705F21A8EFAC00FA4B61 /* PostOrderModel.m */; };
 		18D0706221A9274000FA4B61 /* HeadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D0706121A9273F00FA4B61 /* HeadView.xib */; };
@@ -531,6 +534,11 @@
 		18C2C8AA21DF0E8600F9953F /* TodayIncomeTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayIncomeTableViewCell.m; sourceTree = "<group>"; };
 		18C2C8AC21DF450900F9953F /* NewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
 		18C2C8AD21DF450900F9953F /* NewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
+		18C3955721F838EA00CC8E6B /* EditAliPayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditAliPayViewController.h; sourceTree = "<group>"; };
+		18C3955821F838EA00CC8E6B /* EditAliPayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditAliPayViewController.m; sourceTree = "<group>"; };
+		18C3955921F838EA00CC8E6B /* EditAliPayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditAliPayViewController.xib; sourceTree = "<group>"; };
+		18C3955C21F83B9000CC8E6B /* AliPayModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AliPayModel.h; sourceTree = "<group>"; };
+		18C3955D21F83B9000CC8E6B /* AliPayModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AliPayModel.m; sourceTree = "<group>"; };
 		18C5C11E21DDB4D900B13CCF /* XHInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHInputView.h; sourceTree = "<group>"; };
 		18C5C11F21DDB4D900B13CCF /* XHInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHInputView.m; sourceTree = "<group>"; };
 		18D0705E21A8EFAC00FA4B61 /* PostOrderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostOrderModel.h; sourceTree = "<group>"; };
@@ -2602,6 +2610,8 @@
 				18ED4A1E21199F2D007DC4C1 /* ProvinceModel.m */,
 				186BB1D821F6F268000C6D77 /* BindModel.h */,
 				186BB1D921F6F268000C6D77 /* BindModel.m */,
+				18C3955C21F83B9000CC8E6B /* AliPayModel.h */,
+				18C3955D21F83B9000CC8E6B /* AliPayModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2660,6 +2670,9 @@
 				18ABBA2F21EEC9C400E4E8FD /* BindingAliPayViewController.h */,
 				18ABBA3021EEC9C400E4E8FD /* BindingAliPayViewController.m */,
 				18ABBA3121EEC9C400E4E8FD /* BindingAliPayViewController.xib */,
+				18C3955721F838EA00CC8E6B /* EditAliPayViewController.h */,
+				18C3955821F838EA00CC8E6B /* EditAliPayViewController.m */,
+				18C3955921F838EA00CC8E6B /* EditAliPayViewController.xib */,
 			);
 			path = "BindingAlipay(绑定支付宝)";
 			sourceTree = "<group>";
@@ -3023,6 +3036,7 @@
 				18DFCA1F210EEA6600796DF6 /* LaunchScreen.storyboard in Resources */,
 				18ED493C21197F3B007DC4C1 /* AllOrderTableViewCell.xib in Resources */,
 				18ABBA4221EF192400E4E8FD /* ScavengingTableViewCell.xib in Resources */,
+				18C3955B21F838EA00CC8E6B /* EditAliPayViewController.xib in Resources */,
 				18E97F6621D49DBE00D2B380 /* UserView.xib in Resources */,
 				18ABBA3821EEFA6200E4E8FD /* EditBankViewController.xib in Resources */,
 				18A0FC2921CCB57100C5FF4C /* placeHolderImage.png in Resources */,
@@ -3177,6 +3191,7 @@
 				18ED4A3721199F2D007DC4C1 /* FirstViewController.m in Sources */,
 				18B1261121883F4400FD38EC /* ConnecterManager.m in Sources */,
 				1878670921D46ABB00DAFAAF /* UserHeadView.m in Sources */,
+				18C3955A21F838EA00CC8E6B /* EditAliPayViewController.m in Sources */,
 				18ABAD4B218047C800AE22C7 /* SYAlertView.m in Sources */,
 				18777F0E21BB93A20000B9FC /* MarketManagerModel.m in Sources */,
 				18ED488621192FF4007DC4C1 /* MachinesModel.m in Sources */,
@@ -3215,6 +3230,7 @@
 				18956889217AC00600947B87 /* WSDatePickerView.m in Sources */,
 				18ED488021192FB2007DC4C1 /* MachinesManagerViewController.m in Sources */,
 				18A0FC2A21CCB57100C5FF4C /* UICollectionView+PlaceHolderView.m in Sources */,
+				18C3955E21F83B9000CC8E6B /* AliPayModel.m in Sources */,
 				18ED4A2521199F2D007DC4C1 /* AvaBalanceViewController.m in Sources */,
 				18E2C70A21B676B800F5CD4C /* MessageThreeViewController.m in Sources */,
 				18D3D94021C73EC400B360A6 /* NewCancelTableViewCell.m in Sources */,

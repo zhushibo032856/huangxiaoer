@@ -1,14 +1,14 @@
 //
-//  BindingAliPayViewController.m
+//  EditAliPayViewController.m
 //  HuangXiaoErShop
 //
-//  Created by apple on 2019/1/16.
+//  Created by apple on 2019/1/23.
 //  Copyright © 2019年 aladdin. All rights reserved.
 //
 
-#import "BindingAliPayViewController.h"
+#import "EditAliPayViewController.h"
 
-@interface BindingAliPayViewController ()
+@interface EditAliPayViewController ()
 @property (weak, nonatomic) IBOutlet UIView *BackView;
 
 @property (weak, nonatomic) IBOutlet UITextField *NumberTF;
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation BindingAliPayViewController
+@implementation EditAliPayViewController
 - (void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
@@ -34,7 +34,7 @@
 }
 - (void)setNavigationController{
     
-    self.navigationItem.title = @"绑定支付宝";
+    self.navigationItem.title = @"修改支付宝";
     
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18],NSForegroundColorAttributeName:[UIColor whiteColor]}] ;
     
@@ -45,15 +45,24 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.view.backgroundColor = kColor(240, 240, 240);
+    [self initView];
+    // Do any additional setup after loading the view from its nib.
+}
+
+- (void)initView{
     
     self.BackView.layer.masksToBounds = YES;
     self.BackView.layer.cornerRadius = 8;
     
+    [self.SubmitBT setBackgroundColor:kColor(255, 210, 0)];
     self.SubmitBT.layer.masksToBounds = YES;
     self.SubmitBT.layer.cornerRadius = 25;
-    self.SubmitBT.backgroundColor = kColor(255, 210, 0);
-    // Do any additional setup after loading the view from its nib.
+    
+    self.NumberTF.text = self.model.payeeAccount;
+    self.NameTF.text = self.model.trueName;
+    
 }
 
 - (IBAction)SubmitData:(UIButton *)sender {
@@ -68,7 +77,9 @@
     }
     
     [self requestDataWithCount:self.NumberTF.text Name:self.NameTF.text];
+    
 }
+
 
 - (void)requestDataWithCount:(NSString *)count
                         Name:(NSString *)name{
@@ -84,11 +95,11 @@
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
-    //@"http://bei.51hxe.com:9002/appcommercial/bindUserAlipay"
-    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/bindUserAlipay",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
+    //@"http://bei.51hxe.com:9002/appcommercial/updateUserAlipay"
+    [manager POST:[NSString stringWithFormat:@"%@/appcommercial/updateUserAlipay",HXECOMMEN] parameters:partner progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-    //    NSLog(@"%@",responseObject);
+      //  NSLog(@"%@",responseObject);
         if ([responseObject[@"status"] integerValue] == 200) {
             [MBProgressHUD showSuccess:responseObject[@"msg"]];
         }else{
@@ -99,5 +110,14 @@
     }];
     
 }
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 
 @end
